@@ -8,6 +8,11 @@ class HerniScena extends Phaser.Scene {
     this.hrac = new DogMan(this, start.x, start.y);
     this.seznamNepratel = this.seznamNepratel || [];
 
+    // scéna se při dalším spuštění používá znovu: pauza z minula nesmí zůstat zapnutá
+    this.pozastaveno = false;
+    this.prvkyPauzy = [];
+    this.time.paused = false;
+
     this.kyslik = N.KYSLIK.max;
     this.varovaniKysliku = false;
     this.hafPripravenOd = 0;
