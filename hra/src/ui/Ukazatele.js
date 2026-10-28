@@ -32,7 +32,7 @@ class Ukazatele {
 
     this.menu = scene.add.text(N.SIRKA - 16, 12, '☰', { ...styl, fontSize: '34px' })
       .setOrigin(1, 0).setScrollFactor(0).setDepth(100).setInteractive({ useHandCursor: true });
-    this.menu.on('pointerdown', () => scene.doMenu());
+    this.menu.on('pointerdown', () => scene.pauza());
     this.rozmisti();
   }
 

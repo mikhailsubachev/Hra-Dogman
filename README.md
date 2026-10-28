@@ -29,7 +29,8 @@ Užitečné přepínače v adrese: `?dotyk=1` zapne dotykové ovládání i na P
 | Chůze | šipky nebo A / D | táhni palcem v levé půlce (čím dál, tím rychleji) |
 | Skok | mezerník, šipka nahoru nebo W | ťukni kamkoli v pravé půlce, držením vyskočíš výš |
 | Štěkot (omráčí roboty, stojí kyslík) | X nebo K | dvakrát rychle ťukni v pravé půlce |
-| Zpět do menu | Esc | ☰ |
+| Zpět do menu | Esc | ☰ → Hlavní menu |
+| Pauza (Pokračovat, Hlavní menu, zrušit celou obrazovku) | ☰ | ☰ |
 
 ## Co hra už umí
 

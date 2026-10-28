@@ -41,6 +41,7 @@ class HerniScena extends Phaser.Scene {
 
   // společná část update(): ovládání, kyslík, stopky. Vrací ovládání, nebo null při odchodu do menu.
   zakladniUpdate(cas, delta) {
+    if (this.pozastaveno) return null;
     const ov = this.ctiOvladani();
     if (Phaser.Input.Keyboard.JustDown(this.klavesy.ESC)) { this.doMenu(); return null; }
     this.hrac.update(ov, cas);
@@ -167,6 +168,59 @@ class HerniScena extends Phaser.Scene {
   prizpusobSirce() {
     this.cameras.main.setSize(N.SIRKA, N.VYSKA);
     this.ukazatele.rozmisti();
+    if (this.pozastaveno) this.vykresliPauzu();
+  }
+
+  // ☰: pauza s tlačítky Pokračovat, Hlavní menu a (na mobilu) celá obrazovka
+  pauza() {
+    if (this.pozastaveno || this.hotovo) return;
+    this.pozastaveno = true;
+    this.pauzaOd = this.time.now;
+    this.physics.pause();
+    this.tweens.pauseAll();
+    this.time.paused = true;
+    Zvuky.klik();
+    this.vykresliPauzu();
+  }
+
+  pokracuj() {
+    if (!this.pozastaveno) return;
+    this.pozastaveno = false;
+    if (this.zacatek !== null) this.zacatek += this.time.now - this.pauzaOd; // pauza se do času nepočítá
+    this.physics.resume();
+    this.tweens.resumeAll();
+    this.time.paused = false;
+    this.predchozi = { skok: true, haf: true }; // ťuknutí na Pokračovat nespustí skok
+    (this.prvkyPauzy || []).forEach((o) => o.destroy());
+    this.prvkyPauzy = [];
+  }
+
+  vykresliPauzu() {
+    (this.prvkyPauzy || []).forEach((o) => o.destroy());
+    const S = N.SIRKA;
+    const prvky = [];
+    const pridej = (o) => { prvky.push(o.setScrollFactor(0).setDepth(300)); return o; };
+    pridej(this.add.rectangle(0, 0, S, N.VYSKA, 0x0b2a55, 0.8).setOrigin(0).setInteractive()); // pod pauzou se nehraje
+    pridej(this.add.text(S / 2, 100, 'PAUZA', {
+      fontFamily: N.PISMO_NADPIS, fontSize: '72px', color: '#ffd43b', stroke: '#1b1b1b', strokeThickness: 10,
+    }).setOrigin(0.5));
+    const tlacitko = (y, popis, akce) => {
+      const r = pridej(this.add.rectangle(S / 2, y, 440, 74, 0xff922b).setStrokeStyle(6, 0x1b1b1b).setInteractive({ useHandCursor: true }));
+      pridej(this.add.text(S / 2, y + 2, popis, {
+        fontFamily: N.PISMO_NADPIS, fontSize: '38px', color: '#ffffff', stroke: '#1b1b1b', strokeThickness: 7,
+      }).setOrigin(0.5));
+      r.on('pointerup', () => { Zvuky.klik(); akce(); });
+    };
+    // po přepnutí celé obrazovky se tlačítka přeskládají (jiný popis, jiná šířka)
+    const poPrepnuti = () => setTimeout(() => this.pozastaveno && this.vykresliPauzu(), 300);
+    tlacitko(210, '▶ POKRAČOVAT', () => this.pokracuj());
+    tlacitko(300, 'HLAVNÍ MENU', () => this.doMenu());
+    if (document.fullscreenElement) {
+      tlacitko(390, 'ZRUŠIT CELOU OBRAZOVKU', () => document.exitFullscreen().catch(() => {}).then(poPrepnuti));
+    } else if (document.fullscreenEnabled && this.dotyk) {
+      tlacitko(390, '⛶ CELÁ OBRAZOVKA', () => naCelouObrazovku().then(poPrepnuti));
+    }
+    this.prvkyPauzy = prvky;
   }
 
   doMenu() {

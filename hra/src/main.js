@@ -11,6 +11,17 @@ function sirkaPodleObrazovky() {
 }
 N.SIRKA = sirkaPodleObrazovky();
 
+// Komiksové písmo Bangers je skloněné a Phaser měří text bez přesahu,
+// takže by se poslednímu písmenu uřízl kraj. Nadpisy proto dostanou okraj.
+const puvodniText = Phaser.GameObjects.GameObjectFactory.prototype.text;
+Phaser.GameObjects.GameObjectFactory.prototype.text = function (x, y, text, styl) {
+  if (styl && styl.fontFamily === N.PISMO_NADPIS && !styl.padding) {
+    const velikost = parseInt(styl.fontSize, 10) || 30;
+    styl = { ...styl, padding: { x: Math.ceil(velikost * 0.15), y: 2 } };
+  }
+  return puvodniText.call(this, x, y, text, styl);
+};
+
 const KONFIGURACE = {
   type: Phaser.AUTO,
   parent: 'hra',
@@ -44,8 +55,8 @@ function prizpusobSirku() {
 // Na mobilu: první dotyk zapne celou obrazovku (zmizí adresní řádek) a zamkne šířku.
 function naCelouObrazovku() {
   const el = document.documentElement;
-  if (document.fullscreenElement || !el.requestFullscreen) return;
-  el.requestFullscreen({ navigationUI: 'hide' })
+  if (document.fullscreenElement || !el.requestFullscreen) return Promise.resolve();
+  return el.requestFullscreen({ navigationUI: 'hide' })
     .then(() => screen.orientation && screen.orientation.lock && screen.orientation.lock('landscape').catch(() => {}))
     .catch(() => {});
 }

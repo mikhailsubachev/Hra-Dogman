@@ -70,11 +70,15 @@ class MenuScena extends Phaser.Scene {
       fontFamily: N.PISMO, fontSize: '26px', color: '#d0ebff',
     }).setOrigin(0.5);
 
-    // na mobilu tlačítko na celou obrazovku (kdyby se ji podařilo omylem zavřít)
-    if (jeDotykoveZarizeni(this) && document.fullscreenEnabled && !document.fullscreenElement) {
-      this.add.text(16, 12, '⛶ celá obrazovka', {
+    // na mobilu přepínač celé obrazovky (zapnout, nebo ji zase zrušit)
+    if (jeDotykoveZarizeni(this) && document.fullscreenEnabled) {
+      const cela = !!document.fullscreenElement;
+      this.add.text(16, 12, cela ? '✕ zrušit celou obrazovku' : '⛶ celá obrazovka', {
         fontFamily: N.PISMO, fontSize: '28px', color: '#ffffff', stroke: '#0b2a55', strokeThickness: 6,
-      }).setInteractive({ useHandCursor: true }).on('pointerup', () => naCelouObrazovku());
+      }).setInteractive({ useHandCursor: true }).on('pointerup', () => {
+        const prepni = cela ? document.exitFullscreen().catch(() => {}) : naCelouObrazovku();
+        prepni.then(() => setTimeout(() => this.sys.isActive() && this.scene.restart(), 300));
+      });
     }
 
     // číslo verze, ať je poznat, jestli prohlížeč načetl tu nejnovější
