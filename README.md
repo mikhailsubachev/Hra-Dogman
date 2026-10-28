@@ -20,7 +20,7 @@ Server prohlížeči zakazuje ukládat soubory do mezipaměti, takže po úprav�
 
 Pak otevřít http://localhost:8123 v prohlížeči. Na mobilu ve stejné Wi-Fi: http://ADRESA-POČÍTAČE:8123.
 
-Užitečné přepínače v adrese: `?dotyk=1` ukáže dotyková tlačítka i na PC, `?debug=1` ukáže fyzikální obdélníky.
+Užitečné přepínače v adrese: `?dotyk=1` zapne dotykové ovládání i na PC, `?vse=1` odemkne všechny úrovně, `?debug=1` ukáže fyzikální obdélníky.
 
 ## Ovládání
 
@@ -34,6 +34,7 @@ Užitečné přepínače v adrese: `?dotyk=1` ukáže dotyková tlačítka i na 
 ## Co hra už umí
 
 - Menu, úvodní komiks (5 panelů), úroveň „Ponor 1: Dno přístavu“ a obrazovka „Mise splněna“.
+- Úroveň 2 „Souboj s Robo-chobotnicí“: odemkne se po dokončení Ponoru 1 (tlačítko DALŠÍ nebo v menu). Chobotnice třikrát udeří chapadlem (předem varuje „!“), od 2. kola střílí inkoust (nízký přeskoč, pod vysokým stůj). Pak se unaví a otevře kryt: skoč z prostřední plošiny na červený vypínač. Po 3 zásazích je poražena. Čuňas sedí v kabině, Bobánek fandí a ve 3. kole hází klíče. Štěk zruší chapadlo a rozprskne inkoust.
 - Komiksové postavy podle kreseb dětí. Dog Man chodí, skáče (krátké zmáčknutí = nízký skok) a štěká.
 - Štěk stojí 5 kyslíku a jiný limit nemá. Kdo vyštěká všechen kyslík, utone a vrátí se na poslední bójku.
 - Skok shora na nepřítele: rybku zničí, medúzu a Bobánka na chvíli omráčí. Se zmáčknutým skokem se Dog Man odrazí výš.
@@ -54,15 +55,16 @@ Hra/
 │   └── kresba_na_sprite.py   převod fotky kresby na obrázek bez pozadí
 └── hra/                      samotná hra, tahle složka se nahrává na web
     ├── index.html
-    ├── levels/ponor1.js      úroveň jako textová mřížka (děti mohou upravovat)
+    ├── levels/               úrovně jako textová mřížka (děti mohou upravovat): ponor1.js, chobotnice.js
     ├── assets/sprites/       kresby dětí převedené pro hru
     └── src/
         ├── nastaveni.js      rychlost, výška skoku, kyslík… (dá se ladit)
         ├── textury.js        dočasná grafika, dokud nejsou kresby
         ├── zvuky.js          zvuky vyrobené kódem
-        ├── entities/         Dog Man a nepřátelé
+        ├── postup.js         pořadí úrovní, komiksy mezi nimi, odemykání
+        ├── entities/         Dog Man, nepřátelé a Robo-chobotnice
         ├── ui/               dotyková tlačítka a horní lišta
-        └── scenes/           menu, komiks, ponor, konec mise
+        └── scenes/           menu, komiks, ponor, souboj s chobotnicí, konec mise
 ```
 
 ## Jak upravit úroveň

@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 300" width="340" height="300">
+  <!-- Robo-chobotnice: hlava (tělo) bez chapadel; kabina s Čuňasem a kryt s vypínačem se kreslí ve hře zvlášť -->
+  <g stroke-linejoin="round" stroke-linecap="round">
+    <!-- spodní sukně s objímkami pro chapadla -->
+    <path d="M58 228 L282 228 L304 286 L36 286 Z" fill="#6b52b0" stroke="#1b1622" stroke-width="9"/>
+    <path d="M58 250 L282 250 L292 276 L48 276 Z" fill="#1b1622" fill-opacity="0.25"/>
+    <g fill="#3d3550" stroke="#1b1622" stroke-width="6">
+      <circle cx="84" cy="282" r="16"/><circle cx="142" cy="286" r="16"/><circle cx="198" cy="286" r="16"/><circle cx="256" cy="282" r="16"/>
+    </g>
+    <!-- hlava -->
+    <path d="M40 186 C20 104 72 26 170 26 C268 26 320 104 300 186 C290 238 250 258 170 258 C90 258 50 238 40 186 Z" fill="#8e6fd6" stroke="#1b1622" stroke-width="10"/>
+    <path d="M262 60 C304 100 312 170 290 214 C270 246 230 254 190 256 C250 236 286 196 288 140 C290 110 280 82 262 60 Z" fill="#1b1622" fill-opacity="0.22"/>
+    <path d="M70 92 C86 60 112 44 140 38" fill="none" stroke="#ffffff" stroke-width="8" opacity="0.6"/>
+    <!-- plechový pás s nýty -->
+    <path d="M44 164 C120 178 222 178 298 164" fill="none" stroke="#1b1622" stroke-width="6"/>
+    <g fill="#d0bfff" stroke="#1b1622" stroke-width="3">
+      <circle cx="70" cy="172" r="5"/><circle cx="110" cy="177" r="5"/><circle cx="150" cy="179" r="5"/>
+      <circle cx="190" cy="179" r="5"/><circle cx="230" cy="177" r="5"/><circle cx="270" cy="172" r="5"/>
+    </g>
+    <!-- zlé oči -->
+    <ellipse cx="118" cy="128" rx="34" ry="28" fill="#ffe066" stroke="#1b1622" stroke-width="8"/>
+    <ellipse cx="222" cy="128" rx="34" ry="28" fill="#ffe066" stroke="#1b1622" stroke-width="8"/>
+    <circle cx="128" cy="134" r="12" fill="#1b1622"/><circle cx="212" cy="134" r="12" fill="#1b1622"/>
+    <circle cx="132" cy="129" r="4" fill="#ffffff"/><circle cx="216" cy="129" r="4" fill="#ffffff"/>
+    <path d="M76 92 L152 114 M264 92 L188 114" fill="none" stroke="#1b1622" stroke-width="16"/>
+    <!-- mřížka úst -->
+    <rect x="122" y="196" width="96" height="40" rx="12" fill="#3d3550" stroke="#1b1622" stroke-width="7"/>
+    <path d="M146 200 V232 M170 200 V232 M194 200 V232" stroke="#8e6fd6" stroke-width="5"/>
+  </g>
+</svg>

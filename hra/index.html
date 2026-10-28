@@ -34,17 +34,18 @@
     načte nové soubory a nepoužije staré uložené. Je vidět i v menu vpravo dole.
   -->
   <script>
-    const VERZE = '0.6';
+    const VERZE = '0.7';
     const SOUBORY_HRY = [
       // nastavení a pomocníci
       'src/nastaveni.js', 'src/mapa.js', 'src/ulozeni.js', 'src/zvuky.js', 'src/textury.js',
       // úrovně (děti je mohou upravovat)
-      'levels/ponor1.js',
+      'levels/ponor1.js', 'levels/chobotnice.js',
       // postavy a ovládání
-      'src/entities/DogMan.js', 'src/entities/Nepratele.js', 'src/ui/DotykoveOvladani.js', 'src/ui/Ukazatele.js',
+      'src/entities/DogMan.js', 'src/entities/Nepratele.js', 'src/entities/Chobotnice.js', 'src/ui/DotykoveOvladani.js', 'src/ui/Ukazatele.js',
       // scény
-      'src/scenes/ZavadeciScena.js', 'src/scenes/MenuScena.js', 'src/scenes/KomiksScena.js',
-      'src/scenes/PonorScena.js', 'src/scenes/KonecScena.js',
+      'src/scenes/HerniScena.js', 'src/scenes/ZavadeciScena.js', 'src/scenes/MenuScena.js', 'src/scenes/KomiksScena.js',
+      'src/scenes/PonorScena.js', 'src/scenes/ChobotniceScena.js', 'src/scenes/KonecScena.js',
+      'src/postup.js',
       'src/main.js',
     ];
     // document.write načte skripty po řadě, stejně jako obyčejné <script> značky

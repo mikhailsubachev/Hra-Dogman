@@ -1,12 +1,24 @@
-// Horní lišta: počet kostí, kyslík a tlačítko do menu.
+// Horní lišta: kosti (nebo životy bosse), stopky, kyslík a tlačítko do menu.
+// nastaveni: { kosti: celkem } pro běžnou úroveň, { boss: 'Jméno', zivoty: 3 } pro souboj.
 class Ukazatele {
-  constructor(scene, celkemKosti) {
+  constructor(scene, nastaveni = {}) {
     this.scene = scene;
-    this.celkem = celkemKosti;
+    this.celkem = nastaveni.kosti;
     const styl = { fontFamily: N.PISMO_NADPIS, fontSize: '30px', color: '#ffffff', stroke: '#0b2a55', strokeThickness: 6 };
+    this.styl = styl;
 
-    scene.add.image(34, 30, 'kost').setScrollFactor(0).setDepth(100).setScale(1.2);
-    this.kosti = scene.add.text(60, 12, '', styl).setScrollFactor(0).setDepth(100);
+    if (this.celkem !== undefined) {
+      scene.add.image(34, 30, 'kost').setScrollFactor(0).setDepth(100).setScale(1.2);
+      this.kosti = scene.add.text(60, 12, '', styl).setScrollFactor(0).setDepth(100);
+    }
+    if (nastaveni.boss) {
+      scene.add.text(16, 12, nastaveni.boss, { ...styl, color: '#e5dbff' }).setScrollFactor(0).setDepth(100);
+      this.srdce = [];
+      for (let i = 0; i < nastaveni.zivoty; i++) {
+        this.srdce.push(scene.add.text(16 + i * 34, 48, '⚙', { ...styl, fontSize: '32px', color: '#b197fc' })
+          .setScrollFactor(0).setDepth(100));
+      }
+    }
     this.stopky = scene.add.text(N.SIRKA / 2 - 20, 10, '', { ...styl, fontSize: '34px' })
       .setOrigin(0.5, 0).setScrollFactor(0).setDepth(100);
 
@@ -36,8 +48,16 @@ class Ukazatele {
     this.menu.setX(S - 16);
   }
 
+  // kolik životů bossovi zbývá (vypnuté ozubené kolečko = ztracený život)
+  zivotyBosse(zbyva) {
+    this.srdce.forEach((s, i) => {
+      s.setColor(i < zbyva ? '#b197fc' : '#495057').setAlpha(i < zbyva ? 1 : 0.6);
+      if (i === zbyva) this.scene.tweens.add({ targets: s, scale: { from: 1.8, to: 1 }, duration: 400 });
+    });
+  }
+
   update(kosti, kyslik, cas) {
-    this.kosti.setText(`${kosti} / ${this.celkem}`);
+    if (this.kosti) this.kosti.setText(`${kosti} / ${this.celkem}`);
     this.stopky.setText(`⏱ ${formatCas(cas)}`);
     if (this.pruh) {
       const podil = Phaser.Math.Clamp(kyslik / N.KYSLIK.max, 0, 1);

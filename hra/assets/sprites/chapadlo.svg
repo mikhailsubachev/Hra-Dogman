@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 92 440" width="92" height="440">
+  <!-- útočné chapadlo Robo-chobotnice (špička dole) -->
+  <g stroke-linejoin="round" stroke-linecap="round">
+    <path d="M6 0 L86 0 C84 140 76 300 60 392 C54 428 34 436 28 418 C20 300 12 140 6 0 Z" fill="#8e6fd6" stroke="#1b1622" stroke-width="9"/>
+    <path d="M62 0 L86 0 C84 140 76 300 60 392 C56 410 48 420 40 424 C52 380 60 300 64 160 C65 100 64 40 62 0 Z" fill="#1b1622" fill-opacity="0.22"/>
+    <path d="M14 50 Q46 60 78 50" fill="none" stroke="#1b1622" stroke-width="6"/><path d="M16 105 Q45 115 74 105" fill="none" stroke="#1b1622" stroke-width="6"/><path d="M19 160 Q45 170 71 160" fill="none" stroke="#1b1622" stroke-width="6"/><path d="M22 215 Q44 225 67 215" fill="none" stroke="#1b1622" stroke-width="6"/><path d="M25 270 Q44 280 63 270" fill="none" stroke="#1b1622" stroke-width="6"/><path d="M28 325 Q44 335 60 325" fill="none" stroke="#1b1622" stroke-width="6"/>
+    <circle cx="25" cy="78" r="8.0" fill="#ffd43b" stroke="#1b1622" stroke-width="4"/><circle cx="28" cy="133" r="7.3" fill="#ffd43b" stroke="#1b1622" stroke-width="4"/><circle cx="31" cy="188" r="6.7" fill="#ffd43b" stroke="#1b1622" stroke-width="4"/><circle cx="33" cy="243" r="6.0" fill="#ffd43b" stroke="#1b1622" stroke-width="4"/><circle cx="36" cy="298" r="5.3" fill="#ffd43b" stroke="#1b1622" stroke-width="4"/><circle cx="39" cy="353" r="4.6" fill="#ffd43b" stroke="#1b1622" stroke-width="4"/>
+  </g>
+</svg>

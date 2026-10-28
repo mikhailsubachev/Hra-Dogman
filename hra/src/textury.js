@@ -117,6 +117,37 @@ const Textury = {
     kresli('bojka', 34, 58, bojka(0xe03131));
     kresli('bojka_ok', 34, 58, bojka(0x37b24d));
 
+    // --- souboj s Robo-chobotnicí ---
+    kresli('inkoust', 40, 40, (g) => {
+      g.fillStyle(0x1b1622); g.fillCircle(20, 20, 17);
+      g.fillCircle(6, 12, 5); g.fillCircle(34, 30, 5); g.fillCircle(30, 6, 4);
+      g.fillStyle(0x5f3dc4, 0.8); g.fillCircle(17, 16, 7);
+      g.fillStyle(0xffffff, 0.8); g.fillCircle(14, 13, 3);
+    });
+    kresli('vypinac', 56, 36, (g) => {
+      g.fillStyle(0x1b1622); g.fillRoundedRect(0, 18, 56, 18, 6);
+      g.fillStyle(0xffd43b); g.fillRoundedRect(4, 21, 48, 12, 4);
+      g.fillStyle(0x1b1622); g.fillEllipse(28, 18, 44, 30);
+      g.fillStyle(0xe03131); g.fillEllipse(28, 17, 36, 24);
+      g.fillStyle(0xffffff, 0.7); g.fillEllipse(21, 11, 12, 6);
+    });
+    kresli('kryt', 76, 18, (g) => {
+      g.fillStyle(0x1b1622); g.fillRoundedRect(0, 0, 76, 18, 6);
+      g.fillStyle(0xadb5bd); g.fillRoundedRect(3, 3, 70, 12, 4);
+      g.fillStyle(0x495057); g.fillCircle(10, 9, 3); g.fillCircle(66, 9, 3);
+      g.lineStyle(2, 0xffd43b); g.lineBetween(20, 5, 28, 13); g.lineBetween(30, 5, 38, 13); g.lineBetween(40, 5, 48, 13);
+    });
+    kresli('klic', 40, 16, (g) => {
+      g.fillStyle(0x1b1622); g.fillRoundedRect(8, 4, 26, 8, 3); g.fillCircle(8, 8, 8); g.fillCircle(34, 8, 7);
+      g.fillStyle(0xced4da); g.fillRoundedRect(10, 6, 22, 4, 2); g.fillCircle(8, 8, 5.5); g.fillCircle(34, 8, 4.5);
+      g.fillStyle(0x1b1622); g.fillRect(2, 6, 6, 4); g.fillCircle(36, 8, 2);
+    });
+    kresli('pruduch', 64, 16, (g) => {
+      g.fillStyle(0x1b1622); g.fillRoundedRect(0, 0, 64, 16, 5);
+      g.fillStyle(0x868e96); g.fillRoundedRect(3, 3, 58, 10, 3);
+      g.fillStyle(0x343a40); [12, 24, 36, 48].forEach((x) => g.fillRect(x, 4, 5, 8));
+    });
+
     // sada dlaždic pro mapu: 0 = písek nahoře, 1 = kámen uvnitř
     if (!scene.textures.exists('sada_dna')) {
       const sada = scene.textures.createCanvas('sada_dna', 96, 48);

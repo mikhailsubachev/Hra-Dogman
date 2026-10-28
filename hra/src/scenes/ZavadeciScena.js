@@ -10,6 +10,8 @@ const POSTAVY = {
   petulka: { vyska: 240, pomer: 470 / 590 },
   ponorka: { vyska: 276, pomer: 1056 / 368 },
   tlusta:  { vyska: 300, pomer: 536 / 656 },
+  chobotnice: { vyska: 300, pomer: 340 / 300 },
+  chapadlo:   { vyska: 440, pomer: 92 / 440 },
 };
 
 class ZavadeciScena extends Phaser.Scene {

@@ -6,7 +6,8 @@ class KonecScena extends Phaser.Scene {
 
   create() {
     const S = N.ZAKLADNI_SIRKA; // rozvržení na 960, kamera ho na širší obrazovce vycentruje
-    const { uroven, kosti, celkem, cas, zniceno } = this.vysledek;
+    const { uroven, kosti, celkem, cas, zniceno, zasahu } = this.vysledek;
+    const souboj = celkem === undefined; // souboj s bossem nemá kosti
     this.uroven = uroven;
     this.cas = cas;
     this.kostiVysledek = kosti;
@@ -20,8 +21,10 @@ class KonecScena extends Phaser.Scene {
     }).setOrigin(0.5).setAngle(-2);
 
     // levá půlka: výsledek
-    const podil = celkem ? kosti / celkem : 1;
-    const hvezdy = podil >= 0.9 ? 3 : podil >= 0.5 ? 2 : 1;
+    // hvězdy: v běžné úrovni za kosti, v souboji za to, kolikrát Dog Mana něco zasáhlo
+    let hvezdy;
+    if (souboj) hvezdy = zasahu === 0 ? 3 : zasahu <= 2 ? 2 : 1;
+    else { const podil = celkem ? kosti / celkem : 1; hvezdy = podil >= 0.9 ? 3 : podil >= 0.5 ? 2 : 1; }
     for (let i = 0; i < 3; i++) {
       const h = this.add.text(240 + (i - 1) * 74, 140, '★', {
         fontFamily: 'sans-serif', fontSize: '70px', color: i < hvezdy ? '#ffd43b' : '#355070', stroke: '#1b1b1b', strokeThickness: 6,
@@ -30,8 +33,13 @@ class KonecScena extends Phaser.Scene {
     }
     const styl = { fontFamily: N.PISMO, fontSize: '32px', color: '#ffffff', stroke: '#0b2a55', strokeThickness: 6 };
     this.add.text(240, 215, `⏱ ${formatCas(cas)}`, { ...styl, fontFamily: N.PISMO_NADPIS, fontSize: '54px', color: '#ffd43b' }).setOrigin(0.5);
-    this.add.text(240, 270, `Kosti: ${kosti} / ${celkem}`, styl).setOrigin(0.5);
-    this.add.text(240, 308, `Zničené rybky: ${zniceno || 0}`, styl).setOrigin(0.5);
+    if (souboj) {
+      this.add.text(240, 270, 'Robo-chobotnice poražena!', styl).setOrigin(0.5);
+      this.add.text(240, 308, `Zásahy: ${zasahu || 0}`, styl).setOrigin(0.5);
+    } else {
+      this.add.text(240, 270, `Kosti: ${kosti} / ${celkem}`, styl).setOrigin(0.5);
+      this.add.text(240, 308, `Zničené rybky: ${zniceno || 0}`, styl).setOrigin(0.5);
+    }
 
     // pravá půlka: Síň slávy
     this.add.text(690, 112, 'SÍŇ SLÁVY', {
@@ -44,8 +52,10 @@ class KonecScena extends Phaser.Scene {
     else this.ukazTabulku(-1);
 
     this.prizpusobSirce();
-    this.tlacitko(160, 480, 'ZNOVU', () => this.scene.start('Ponor', { uroven }));
-    this.tlacitko(400, 480, 'MENU', () => this.scene.start('Menu'));
+    const dalsi = Postup.dalsi(uroven);
+    this.tlacitko(110, 488, 'ZNOVU', () => Postup.spust(this, uroven, false), 190, 70);
+    this.tlacitko(315, 488, 'MENU', () => this.scene.start('Menu'), 190, 70);
+    if (dalsi) this.tlacitko(520, 488, 'DALŠÍ ▶', () => Postup.spust(this, dalsi.id, true), 190, 70);
   }
 
   // obsah je rozvržený na šířku 960, na širší obrazovce ho kamera vycentruje
@@ -107,7 +117,7 @@ class KonecScena extends Phaser.Scene {
       }
     });
     this.time.delayedCall(400, () => {
-      this.input.keyboard.once('keydown-ENTER', () => this.scene.start('Ponor', { uroven: this.uroven }));
+      this.input.keyboard.once('keydown-ENTER', () => Postup.spust(this, this.uroven, false));
     });
   }
 

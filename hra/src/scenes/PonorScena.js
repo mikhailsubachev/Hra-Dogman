@@ -1,5 +1,5 @@
 // Skákací část mise: Dog Man pod vodou.
-class PonorScena extends Phaser.Scene {
+class PonorScena extends HerniScena {
   constructor() { super('Ponor'); }
 
   init(data) {
@@ -84,10 +84,10 @@ class PonorScena extends Phaser.Scene {
       this.tweens.add({ targets: sipka, y: '-=12', duration: 500, yoyo: true, repeat: -1 });
     }
 
-    // Dog Man
-    this.start = start;
-    this.kontrolniBod = { ...start };
-    this.hrac = new DogMan(this, start.x, start.y);
+    // Dog Man, ovládání, stav hry a horní lišta
+    this.pripravHrace(start, { kosti: this.kosti.getLength() });
+    this.pocetKosti = 0;
+    this.celkemKosti = this.kosti.getLength();
 
     // srážky a sbírání
     this.physics.add.collider(this.hrac.telo, this.dlazdice);
@@ -102,81 +102,17 @@ class PonorScena extends Phaser.Scene {
     this.cameras.main.setDeadzone(80, 60);
     this.cameras.main.fadeIn(400);
 
-    // stav hry
-    this.pocetKosti = 0;
-    this.celkemKosti = this.kosti.getLength();
-    this.kyslik = N.KYSLIK.max;
-    this.varovaniKysliku = false;
-    this.hafPripravenOd = 0;
-    this.zniceno = 0;
-    this.hotovo = false;
-    this.zacatek = this.time.now;
-    this.casHry = 0;
-    this.predchozi = { skok: false, haf: false };
-
-    // ovládání
-    this.klavesy = this.input.keyboard.addKeys('LEFT,RIGHT,UP,A,D,W,SPACE,X,K,ESC');
-    this.input.keyboard.addCapture('SPACE,UP,DOWN,LEFT,RIGHT');
-    this.dotyk = jeDotykoveZarizeni(this) ? new DotykoveOvladani(this) : null;
-    this.ukazatele = new Ukazatele(this, this.celkemKosti);
-
-    // název úrovně
-    const nazev = this.add.text(N.SIRKA / 2, 110, uroven.nazev, {
-      fontFamily: N.PISMO_NADPIS, fontSize: '54px', color: '#ffffff', stroke: '#0b2a55', strokeThickness: 10,
-    }).setOrigin(0.5).setScrollFactor(0).setDepth(200);
-    this.tweens.add({ targets: nazev, alpha: 0, delay: 1800, duration: 700, onComplete: () => nazev.destroy() });
-    if (this.dotyk) {
-      const styl = { fontFamily: N.PISMO, fontSize: '34px', color: '#ffffff', stroke: '#0b2a55', strokeThickness: 7, align: 'center' };
-      const vlevo = this.add.text(N.SIRKA * 0.25, N.VYSKA - 90, '◀ táhni ▶\nchůze', styl).setOrigin(0.5).setScrollFactor(0).setDepth(200);
-      const vpravo = this.add.text(N.SIRKA * 0.75, N.VYSKA - 90, 'ťukni = skok\n2× ťukni = HAF', styl).setOrigin(0.5).setScrollFactor(0).setDepth(200);
-      const cara = this.add.rectangle(N.SIRKA / 2, N.VYSKA / 2 + 40, 3, N.VYSKA - 160, 0xffffff, 0.35).setScrollFactor(0).setDepth(200);
-      this.tweens.add({ targets: [vlevo, vpravo, cara], alpha: 0, delay: 3500, duration: 800, onComplete: () => [vlevo, vpravo, cara].forEach((o) => o.destroy()) });
-    }
+    this.ukazNazev(uroven.nazev);
 
     if (PARAMETRY.get('debug') === '1') this.physics.world.createDebugGraphic();
   }
 
   update(cas, delta) {
-    const ov = this.ctiOvladani();
-    if (Phaser.Input.Keyboard.JustDown(this.klavesy.ESC)) return this.doMenu();
-
-    this.hrac.update(ov, cas);
-    if (ov.hafStisknut) this.haf(cas);
+    if (!this.zakladniUpdate(cas, delta)) return;
     for (const n of this.seznamNepratel) if (n.zivy) n.update(cas, this.hrac);
-
-    // kyslík
-    if (N.KYSLIK.zapnuto && !this.hotovo && !this.hrac.zmrazeny) {
-      this.kyslik -= (N.KYSLIK.ubytekZaSekundu * delta) / 1000;
-      if (this.kyslik < N.KYSLIK.max * 0.25 && !this.varovaniKysliku) {
-        this.varovaniKysliku = true;
-        this.vyskakovaciText(this.hrac.x, this.hrac.y - 60, 'Málo kyslíku!', '#ff6b6b');
-      }
-      if (this.kyslik <= 0) this.zasah('Došel kyslík!');
-    }
-
     // propadl se dírou ve dně
     if (this.hrac.y > this.vyskaSveta + 40 && !this.hrac.zmrazeny) this.zasah('Žbluňk!');
-
-    if (!this.hotovo) this.casHry = this.time.now - this.zacatek;
     this.ukazatele.update(this.pocetKosti, this.kyslik, this.casHry);
-  }
-
-  ctiOvladani() {
-    const k = this.klavesy;
-    const d = this.dotyk ? this.dotyk.stav() : {};
-    const skok = k.UP.isDown || k.W.isDown || k.SPACE.isDown || !!d.skok;
-    const haf = k.X.isDown || k.K.isDown || !!d.haf;
-    const ov = {
-      vlevo: k.LEFT.isDown || k.A.isDown || !!d.vlevo,
-      vpravo: k.RIGHT.isDown || k.D.isDown || !!d.vpravo,
-      osaX: d.osaX || 0,
-      skok,
-      haf,
-      skokStisknut: skok && !this.predchozi.skok,
-      hafStisknut: haf && !this.predchozi.haf,
-    };
-    this.predchozi = { skok, haf };
-    return ov;
   }
 
   // --- události ---
@@ -186,14 +122,6 @@ class PonorScena extends Phaser.Scene {
     this.pocetKosti++;
     Zvuky.kost();
     this.vyskakovaciText(kost.x, kost.y - 20, '+1', '#ffffff', 26);
-  }
-
-  seberKyslik(bublina) {
-    bublina.destroy();
-    this.kyslik = Math.min(N.KYSLIK.max, this.kyslik + N.KYSLIK.bublina);
-    this.varovaniKysliku = false;
-    Zvuky.kyslik();
-    this.vypustBublinky(bublina.x, bublina.y, 6);
   }
 
   kontrola(bojka) {
@@ -207,89 +135,19 @@ class PonorScena extends Phaser.Scene {
     this.vyskakovaciText(bojka.x, bojka.y - 60, 'Kontrolní bod!', '#69db7c');
   }
 
-  zasah(hlaska) {
-    if (!this.hrac.zranitelny || this.hotovo) return;
-    Zvuky.zasah();
-    this.cameras.main.shake(160, 0.006);
-    this.vyskakovaciText(this.hrac.x, this.hrac.y - 50, hlaska, '#ff8787');
-    this.vypustBublinky(this.hrac.x, this.hrac.y, 10);
-    this.hrac.zmraz();
-    this.time.delayedCall(450, () => {
-      this.hrac.presun(this.kontrolniBod.x, this.kontrolniBod.y);
-      this.kyslik = Math.max(this.kyslik, N.KYSLIK.max * 0.6);
-      this.varovaniKysliku = false;
-    });
-  }
-
-  dotekNepritele(nepritel) {
-    if (!nepritel.zivy || this.hrac.zmrazeny || this.hotovo) return;
-    const hrac = this.hrac.telo.body;
-    const shora = hrac.velocity.y > 0 && hrac.bottom <= nepritel.sprite.body.top + 18;
-    if (shora) {
-      const hlaska = nepritel.skokShora();
-      if (!nepritel.zivy) this.zniceno++;
-      this.hrac.odraz(this.predchozi.skok);
-      Zvuky.bum();
-      this.vyskakovaciText(nepritel.sprite.x, nepritel.sprite.y - 40, hlaska, '#ffd43b');
-      return;
-    }
-    if (nepritel.nebezpecny) this.zasah('AU!');
-  }
-
-  haf(cas) {
-    if (cas < this.hafPripravenOd || this.hrac.zmrazeny) return;
-    // štěk stojí kyslík, jiný limit nemá: kdo se uštěká, utone
-    if (N.KYSLIK.zapnuto) {
-      this.kyslik -= N.HAF.kyslik;
-      this.vyskakovaciText(this.hrac.x + 50, this.hrac.y - 20, `-${N.HAF.kyslik} O2`, '#74c0fc', 24);
-    }
-    this.hafPripravenOd = cas + N.HAF.pauza;
-    Zvuky.haf();
-    this.vyskakovaciText(this.hrac.x, this.hrac.y - 50, 'HAF!', '#ffd43b', 44);
-    const kruh = this.add.circle(this.hrac.x, this.hrac.y, N.HAF.dosah).setStrokeStyle(6, 0xffd43b, 0.9).setDepth(4).setScale(0.1);
-    this.tweens.add({ targets: kruh, scale: 1, alpha: 0, duration: 380, onComplete: () => kruh.destroy() });
-    let zasazeno = false;
-    for (const n of this.seznamNepratel) {
-      if (!n.zivy) continue;
-      const d = Phaser.Math.Distance.Between(this.hrac.x, this.hrac.y, n.sprite.x, n.sprite.y);
-      if (d < N.HAF.dosah && n.nebezpecny) {
-        n.omrac(N.HAF.omraceni);
-        zasazeno = true;
-      }
-    }
-    if (zasazeno) Zvuky.omraceni();
-    if (N.KYSLIK.zapnuto && this.kyslik <= 0) this.zasah('Uštěkal se!');
-  }
-
   cil() {
     if (this.hotovo) return;
     this.hotovo = true;
     Zvuky.konec();
     this.hrac.zmraz();
     this.hrac.odpoj(); // obrázek teď řídí animace nástupu
-    const cas = Math.round(this.casHry);
     this.tweens.add({
       targets: this.hrac.obrazek, x: this.ponorka.x, y: this.ponorka.y - 60, scale: 0.3, alpha: 0, duration: 600,
       onComplete: () => this.hrac.obrazek.setVisible(false),
     });
     this.cameras.main.stopFollow();
     this.tweens.add({ targets: this.ponorka, x: '+=700', delay: 700, duration: 2200, ease: 'Sine.in' });
-    this.time.delayedCall(2600, () => {
-      this.cameras.main.fadeOut(400);
-      this.time.delayedCall(450, () => this.scene.start('Konec', {
-        uroven: this.idUrovne, kosti: this.pocetKosti, celkem: this.celkemKosti, cas, zniceno: this.zniceno,
-      }));
-    });
-  }
-
-  // po otočení telefonu: větší záběr kamery a přeskládaná lišta, hra běží dál
-  prizpusobSirce() {
-    this.cameras.main.setSize(N.SIRKA, N.VYSKA);
-    this.ukazatele.rozmisti();
-  }
-
-  doMenu() {
-    this.scene.start('Menu');
+    this.time.delayedCall(2300, () => this.dokonceno({ kosti: this.pocetKosti, celkem: this.celkemKosti }));
   }
 
   // --- efekty ---
@@ -297,33 +155,5 @@ class PonorScena extends Phaser.Scene {
   pridejRasu(x, horniOkraj) {
     const r = this.add.image(x + Phaser.Math.Between(-12, 12), horniOkraj + 4, 'rasa').setOrigin(0.5, 1).setDepth(0);
     this.tweens.add({ targets: r, angle: { from: -7, to: 7 }, duration: 1600 + (x % 5) * 200, yoyo: true, repeat: -1, ease: 'Sine.inOut' });
-  }
-
-  vypustBublinky(x, y, pocet) {
-    for (let i = 0; i < pocet; i++) {
-      const b = this.add.image(x + Phaser.Math.Between(-14, 14), y, 'bublinka').setDepth(6).setScale(Phaser.Math.FloatBetween(0.5, 1.2));
-      this.tweens.add({
-        targets: b, y: y - Phaser.Math.Between(50, 110), x: b.x + Phaser.Math.Between(-15, 15), alpha: 0,
-        duration: Phaser.Math.Between(500, 900), onComplete: () => b.destroy(),
-      });
-    }
-  }
-
-  rozsypSrouby(x, y) {
-    for (let i = 0; i < 8; i++) {
-      const sroub = this.add.rectangle(x, y, 6, 6, i % 2 ? 0x8a9bb0 : 0x495057).setDepth(6);
-      this.tweens.add({
-        targets: sroub,
-        x: x + Phaser.Math.Between(-70, 70), y: y + Phaser.Math.Between(-60, 40), angle: Phaser.Math.Between(-360, 360),
-        alpha: 0, duration: Phaser.Math.Between(500, 900), onComplete: () => sroub.destroy(),
-      });
-    }
-  }
-
-  vyskakovaciText(x, y, text, barva = '#ffffff', velikost = 34) {
-    const t = this.add.text(x, y, text, {
-      fontFamily: N.PISMO_NADPIS, fontSize: `${velikost}px`, color: barva, stroke: '#1b1b1b', strokeThickness: 6,
-    }).setOrigin(0.5).setDepth(50);
-    this.tweens.add({ targets: t, y: y - 50, alpha: 0, delay: 350, duration: 700, onComplete: () => t.destroy() });
   }
 }

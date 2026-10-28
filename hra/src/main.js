@@ -21,7 +21,7 @@ const KONFIGURACE = {
   physics: { default: 'arcade', arcade: { gravity: { y: N.GRAVITACE }, debug: false } },
   input: { activePointers: 4 },
   dom: { createContainer: true }, // pro políčko se jménem v Síni slávy
-  scene: [ZavadeciScena, MenuScena, KomiksScena, PonorScena, KonecScena],
+  scene: [ZavadeciScena, MenuScena, KomiksScena, PonorScena, ChobotniceScena, KonecScena],
 };
 
 // Po otočení telefonu nebo změně okna: nová šířka hry. Scény, které to umí,

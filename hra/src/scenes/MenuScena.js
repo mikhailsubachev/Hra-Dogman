@@ -35,10 +35,20 @@ class MenuScena extends Phaser.Scene {
     }).setOrigin(0.5);
     this.tweens.add({ targets: [tlacitko, napis], scale: 1.06, duration: 700, yoyo: true, repeat: -1, ease: 'Sine.inOut' });
 
+    // úroveň 2: odemkne se po dokončení úrovně 1
+    const odemceno = Postup.jeOdemcena('chobotnice');
+    const u2 = this.add.text(S / 2, 382, odemceno ? '2: Souboj s Robo-chobotnicí ▶' : '🔒 2: Chobotnice (nejdřív dokonči Ponor 1)', {
+      fontFamily: N.PISMO, fontSize: '30px', color: odemceno ? '#ffffff' : '#a5d8ff', stroke: '#0b2a55', strokeThickness: 6,
+      backgroundColor: odemceno ? '#7048e8' : undefined, padding: { x: 14, y: 6 },
+    }).setOrigin(0.5);
+    if (odemceno) {
+      u2.setInteractive({ useHandCursor: true }).on('pointerdown', () => { Zvuky.klik(); Postup.spust(this, 'chobotnice'); });
+    }
+
     const nejlepsi = Ulozeni.rekordy('ponor1')[0];
     if (nejlepsi) {
-      this.add.text(S / 2, 385, `🏆 Nejrychlejší: ${nejlepsi.jmeno}  ${formatCas(nejlepsi.cas)}`, {
-        fontFamily: N.PISMO, fontSize: '30px', color: '#ffd43b', stroke: '#0b2a55', strokeThickness: 5,
+      this.add.text(S / 2, 436, `🏆 Ponor 1: ${nejlepsi.jmeno}  ${formatCas(nejlepsi.cas)}`, {
+        fontFamily: N.PISMO, fontSize: '26px', color: '#ffd43b', stroke: '#0b2a55', strokeThickness: 5,
       }).setOrigin(0.5);
     }
 
@@ -63,7 +73,7 @@ class MenuScena extends Phaser.Scene {
 
     const start = () => {
       Zvuky.klik();
-      this.scene.start('Komiks');
+      Postup.spust(this, 'ponor1');
     };
     tlacitko.on('pointerdown', start);
     this.input.keyboard.once('keydown-ENTER', start);
