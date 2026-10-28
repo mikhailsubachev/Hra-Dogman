@@ -14,7 +14,7 @@ class HerniScena extends Phaser.Scene {
     this.zniceno = 0;
     this.zasahu = 0;
     this.hotovo = false;
-    this.zacatek = this.time.now;
+    this.zacatek = null; // stopky se spustí v prvním update(); hodiny scény jsou v create() ještě na nule
     this.casHry = 0;
     this.predchozi = { skok: false, haf: false };
 
@@ -54,6 +54,7 @@ class HerniScena extends Phaser.Scene {
       }
       if (this.kyslik <= 0) this.zasah('Došel kyslík!');
     }
+    if (this.zacatek === null) this.zacatek = this.time.now;
     if (!this.hotovo) this.casHry = this.time.now - this.zacatek;
     return ov;
   }
