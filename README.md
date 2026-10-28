@@ -2,7 +2,13 @@
 
 Webová hra inspirovaná Dog Manem pro děti 9–10 let. Plán a odpovědi dětí jsou ve složce `dokumentace/`.
 
-## Spuštění
+## Hrát online
+
+https://mikhailsubachev.github.io/Hra-Dogman/
+
+Funguje na mobilu (Android), PC i Macu. Na mobilu otoč telefon na šířku.
+
+## Spuštění na vlastním počítači
 
 Hra potřebuje malý lokální server (prohlížeč jinak nenačte obrázky). V Terminálu:
 
