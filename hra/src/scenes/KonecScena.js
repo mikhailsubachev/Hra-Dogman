@@ -5,7 +5,7 @@ class KonecScena extends Phaser.Scene {
   init(data) { this.vysledek = data; }
 
   create() {
-    const S = N.SIRKA;
+    const S = N.ZAKLADNI_SIRKA; // rozvržení na 960, kamera ho na širší obrazovce vycentruje
     const { uroven, kosti, celkem, cas, zniceno } = this.vysledek;
     this.uroven = uroven;
     this.cas = cas;
@@ -43,8 +43,15 @@ class KonecScena extends Phaser.Scene {
     if (misto) this.zeptejSeNaJmeno(misto);
     else this.ukazTabulku(-1);
 
+    this.prizpusobSirce();
     this.tlacitko(160, 480, 'ZNOVU', () => this.scene.start('Ponor', { uroven }));
     this.tlacitko(400, 480, 'MENU', () => this.scene.start('Menu'));
+  }
+
+  // obsah je rozvržený na šířku 960, na širší obrazovce ho kamera vycentruje
+  prizpusobSirce() {
+    this.cameras.main.setSize(N.SIRKA, N.VYSKA);
+    this.cameras.main.setScroll(-(N.SIRKA - N.ZAKLADNI_SIRKA) / 2, 0);
   }
 
   zeptejSeNaJmeno(misto) {

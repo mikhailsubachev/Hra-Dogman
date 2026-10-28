@@ -282,6 +282,12 @@ class PonorScena extends Phaser.Scene {
     });
   }
 
+  // po otočení telefonu: větší záběr kamery a přeskládaná lišta, hra běží dál
+  prizpusobSirce() {
+    this.cameras.main.setSize(N.SIRKA, N.VYSKA);
+    this.ukazatele.rozmisti();
+  }
+
   doMenu() {
     this.scene.start('Menu');
   }

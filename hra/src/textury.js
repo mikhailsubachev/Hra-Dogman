@@ -130,10 +130,10 @@ const Textury = {
   voda(scene) {
     const g = scene.add.graphics().setScrollFactor(0).setDepth(-20);
     g.fillGradientStyle(0x2b8fd6, 0x2b8fd6, 0x0b2a55, 0x0b2a55, 1);
-    g.fillRect(0, 0, N.SIRKA, N.VYSKA);
+    g.fillRect(0, 0, 1400, N.VYSKA); // širší než nejširší obrazovka
     const paprsky = scene.add.graphics().setScrollFactor(0.15, 0).setDepth(-19);
     paprsky.fillStyle(0xffffff, 0.05);
-    for (let i = 0; i < 9; i++) {
+    for (let i = 0; i < 12; i++) {
       const x = i * 260 - 100;
       paprsky.fillTriangle(x, 0, x + 90, 0, x + 260, N.VYSKA);
     }

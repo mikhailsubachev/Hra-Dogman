@@ -21,6 +21,19 @@ class Ukazatele {
     this.menu = scene.add.text(N.SIRKA - 16, 12, '☰', { ...styl, fontSize: '34px' })
       .setOrigin(1, 0).setScrollFactor(0).setDepth(100).setInteractive({ useHandCursor: true });
     this.menu.on('pointerdown', () => scene.doMenu());
+    this.rozmisti();
+  }
+
+  // pravá část lišty se drží u pravého okraje, stopky uprostřed (po otočení telefonu)
+  rozmisti() {
+    const S = N.SIRKA;
+    this.stopky.setX(S / 2 - 20);
+    if (this.pruh) {
+      this.kyslikPopis.setX(S - 330);
+      this.ramecek.setX(S - 225);
+      this.pruh.setX(S - 222);
+    }
+    this.menu.setX(S - 16);
   }
 
   update(kosti, kyslik, cas) {
