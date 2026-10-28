@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0b2a55">
+  <title>DogMan – Čuňas pod mořem</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Patrick+Hand&display=swap" rel="stylesheet">
+  <style>
+    html, body { margin: 0; height: 100%; background: #06172f; overflow: hidden; }
+    body { touch-action: none; -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent; }
+    #hra { position: fixed; inset: 0; }
+    #otoc { display: none; }
+    @media (orientation: portrait) and (pointer: coarse) {
+      #otoc {
+        display: flex; position: fixed; inset: 0; z-index: 10; align-items: center; justify-content: center;
+        flex-direction: column; gap: 12px; background: #0b2a55; color: #fff; text-align: center;
+        font: 28px "Patrick Hand", "Comic Sans MS", sans-serif;
+      }
+      #otoc b { font: 64px "Bangers", cursive; color: #ffd43b; }
+    }
+  </style>
+</head>
+<body>
+  <div id="hra"></div>
+  <div id="otoc"><b>↻</b>Otoč telefon na šířku</div>
+
+  <script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"></script>
+
+  <!-- nastavení a pomocníci -->
+  <script src="src/nastaveni.js"></script>
+  <script src="src/mapa.js"></script>
+  <script src="src/ulozeni.js"></script>
+  <script src="src/zvuky.js"></script>
+  <script src="src/textury.js"></script>
+
+  <!-- úrovně (děti je mohou upravovat) -->
+  <script src="levels/ponor1.js"></script>
+
+  <!-- postavy a ovládání -->
+  <script src="src/entities/DogMan.js"></script>
+  <script src="src/entities/Nepratele.js"></script>
+  <script src="src/ui/DotykoveOvladani.js"></script>
+  <script src="src/ui/Ukazatele.js"></script>
+
+  <!-- scény -->
+  <script src="src/scenes/ZavadeciScena.js"></script>
+  <script src="src/scenes/MenuScena.js"></script>
+  <script src="src/scenes/KomiksScena.js"></script>
+  <script src="src/scenes/PonorScena.js"></script>
+  <script src="src/scenes/KonecScena.js"></script>
+
+  <script src="src/main.js"></script>
+</body>
+</html>
