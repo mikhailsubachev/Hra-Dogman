@@ -26,9 +26,9 @@ Užitečné přepínače v adrese: `?dotyk=1` ukáže dotyková tlačítka i na 
 
 | Akce | Klávesnice | Mobil |
 |---|---|---|
-| Chůze | šipky nebo A / D | kolečko levým palcem (čím dál táhneš, tím rychleji) |
-| Skok | mezerník, šipka nahoru nebo W | SKOK |
-| Štěkot (omráčí roboty, stojí kyslík) | X nebo K | HAF |
+| Chůze | šipky nebo A / D | táhni palcem v levé půlce (čím dál, tím rychleji) |
+| Skok | mezerník, šipka nahoru nebo W | ťukni kamkoli v pravé půlce, držením vyskočíš výš |
+| Štěkot (omráčí roboty, stojí kyslík) | X nebo K | dvakrát rychle ťukni v pravé půlce |
 | Zpět do menu | Esc | ☰ |
 
 ## Co hra už umí
@@ -40,7 +40,7 @@ Užitečné přepínače v adrese: `?dotyk=1` ukáže dotyková tlačítka i na 
 - Nepřátelé: 9 robotických rybek, 6 mechanických medúz a 2 Bobánci, kteří Dog Mana honí a naráží do vraků.
 - 32 kostí, jen 2 bubliny kyslíku a 2 kontrolní bójky. Žádná smrt: po zásahu se Dog Man vrátí na poslední bójku.
 - Stopky během hry a Síň slávy: po dokončení se hráč zapíše jménem a tabulka ukáže 10 nejrychlejších průchodů na tomto zařízení.
-- Základní zvuky, dotykové ovládání (kolečko pro levý palec, SKOK a HAF pro pravý), výzva k otočení mobilu na šířku.
+- Základní zvuky, dotykové ovládání bez tlačítek (levý palec chůze, pravý palec skok a HAF), výzva k otočení mobilu na šířku.
 
 Síň slávy je uložená v prohlížeči. Soupeřit se dá na jednom zařízení. Společná tabulka pro víc zařízení by potřebovala server.
 

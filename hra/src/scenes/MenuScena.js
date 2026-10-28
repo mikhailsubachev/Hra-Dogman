@@ -43,7 +43,7 @@ class MenuScena extends Phaser.Scene {
     }
 
     const napoveda = jeDotykoveZarizeni(this)
-      ? 'Ovládání: tlačítka dole na obrazovce'
+      ? 'Vlevo táhni palcem = chůze   ·   Vpravo ťukni = skok, 2× ťukni = HAF'
       : 'Šipky = chůze   ·   Mezerník = skok   ·   X = HAF!   ·   Esc = menu';
     this.add.text(S / 2, V - 34, napoveda, {
       fontFamily: N.PISMO, fontSize: '26px', color: '#d0ebff',

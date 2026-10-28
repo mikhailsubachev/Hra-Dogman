@@ -1,74 +1,40 @@
-// Dotykové ovládání pro mobil a tablet.
-// Levý palec: kolečko (joystick). Objeví se tam, kde se palec dotkne levé půlky
-// obrazovky; tahem doleva a doprava Dog Man chodí, čím dál tím rychleji.
-// Pravý palec: tlačítka SKOK a HAF.
+// Dotykové ovládání pro mobil a tablet. Na obrazovce nic není, ovládá se celou plochou.
+// Levá půlka: neviditelné kolečko. Kam se palec dotkne, tam je střed; tahem doleva
+//   a doprava Dog Man chodí, čím dál tím rychleji.
+// Pravá půlka: ťuknutí kamkoli = skok, držení palce skok prodlouží (vyskočí výš).
+//   Dvojí rychlé ťuknutí = HAF.
 // Čte všechny prsty najednou, takže jde běžet a skákat zároveň.
 const KOLECKO = {
   polomer: 70,         // jak daleko jde táhnout (v herních pixelech)
   mrtvaZona: 0.18,     // malý pohyb kolem středu nic nedělá
-  klidX: 130,          // kde je kolečko vidět, když se ho nikdo nedotýká
-  klidY: N.VYSKA - 120,
 };
+const DVOJI_TUKNUTI = 300; // do kolika milisekund musí přijít druhé ťuknutí, aby to byl HAF
 
 class DotykoveOvladani {
   constructor(scene) {
     this.scene = scene;
-    const V = N.VYSKA;
-    const S = N.SIRKA;
-
-    // kolečko vlevo
-    this.koleckoPrst = null;     // id prstu, který kolečko drží
-    this.stred = { x: KOLECKO.klidX, y: KOLECKO.klidY };
-    this.zaklad = scene.add.circle(this.stred.x, this.stred.y, KOLECKO.polomer, 0xffffff, 0.12)
-      .setStrokeStyle(4, 0xffffff, 0.45).setScrollFactor(0).setDepth(1000);
-    this.hlavicka = scene.add.circle(this.stred.x, this.stred.y, 34, 0xffffff, 0.35)
-      .setStrokeStyle(3, 0xffffff, 0.8).setScrollFactor(0).setDepth(1001);
-    this.sipky = scene.add.text(this.stred.x, this.stred.y, '◀   ▶', {
-      fontFamily: N.PISMO_NADPIS, fontSize: '26px', color: '#ffffff',
-    }).setOrigin(0.5).setScrollFactor(0).setDepth(1001).setAlpha(0.6);
-
-    // tlačítka vpravo
-    this.tlacitka = [
-      { id: 'haf',  x: S - 225, y: V - 72, r: 52, popis: 'HAF' },
-      { id: 'skok', x: S - 92,  y: V - 100, r: 68, popis: 'SKOK' },
-    ];
-    for (const t of this.tlacitka) {
-      t.kruh = scene.add.circle(t.x, t.y, t.r, 0xffffff, 0.16)
-        .setStrokeStyle(3, 0xffffff, 0.55).setScrollFactor(0).setDepth(1000);
-      t.text = scene.add.text(t.x, t.y, t.popis, {
-        fontFamily: N.PISMO_NADPIS, fontSize: '28px', color: '#ffffff',
-      }).setOrigin(0.5).setScrollFactor(0).setDepth(1001).setAlpha(0.85);
-    }
+    this.koleckoPrst = null;     // id prstu, který drží kolečko
+    this.stred = null;
+    this.znamePrsty = new Map(); // dotyky vpravo: "id:čas dotyku" -> 'skok' nebo 'haf'
+    this.posledniSkokVpravo = -Infinity;
   }
 
   stav() {
     const s = { vlevo: false, vpravo: false, skok: false, haf: false, osaX: 0 };
     const prsty = this.scene.input.manager.pointers.filter((p) => p && p.isDown);
 
-    // kolečko: drží ho první prst, který se dotkl levé půlky obrazovky
+    // --- levá půlka: kolečko ---
     let drzi = prsty.find((p) => p.id === this.koleckoPrst);
     if (!drzi) {
       this.koleckoPrst = null;
-      drzi = prsty.find((p) => p.downX < N.SIRKA / 2 && !this.naTlacitku(p.downX, p.downY));
+      drzi = prsty.find((p) => p.downX < N.SIRKA / 2);
       if (drzi) {
         this.koleckoPrst = drzi.id;
-        // kolečko se posune pod palec, ale ne úplně k okraji obrazovky
-        this.stred = {
-          x: Phaser.Math.Clamp(drzi.downX, KOLECKO.polomer, N.SIRKA / 2 - KOLECKO.polomer),
-          y: Phaser.Math.Clamp(drzi.downY, KOLECKO.polomer + 60, N.VYSKA - KOLECKO.polomer),
-        };
+        this.stred = { x: drzi.downX, y: drzi.downY };
       }
     }
-
     if (drzi) {
-      let dx = drzi.x - this.stred.x;
-      let dy = drzi.y - this.stred.y;
-      const delka = Math.hypot(dx, dy);
-      if (delka > KOLECKO.polomer) {
-        dx *= KOLECKO.polomer / delka;
-        dy *= KOLECKO.polomer / delka;
-      }
-      const osa = dx / KOLECKO.polomer;
+      const osa = Phaser.Math.Clamp((drzi.x - this.stred.x) / KOLECKO.polomer, -1, 1);
       if (Math.abs(osa) > KOLECKO.mrtvaZona) {
         // po mrtvé zóně plynule od pomalé chůze po plnou rychlost
         const sila = (Math.abs(osa) - KOLECKO.mrtvaZona) / (1 - KOLECKO.mrtvaZona);
@@ -76,37 +42,38 @@ class DotykoveOvladani {
         s.vlevo = osa < 0;
         s.vpravo = osa > 0;
       }
-      this.vykresliKolecko(this.stred.x + dx, this.stred.y + dy, true);
-    } else {
-      this.stred = { x: KOLECKO.klidX, y: KOLECKO.klidY };
-      this.vykresliKolecko(this.stred.x, this.stred.y, false);
     }
 
-    // tlačítka: kterýkoli prst kromě toho na kolečku
+    // --- pravá půlka: ťuknutí = skok, dvojí ťuknutí = HAF ---
+    const aktivni = new Set();
     for (const p of prsty) {
-      if (p.id === this.koleckoPrst) continue;
-      for (const t of this.tlacitka) {
-        if (Phaser.Math.Distance.Between(p.x, p.y, t.x, t.y) < t.r * 1.3) s[t.id] = true;
+      if (p.id === this.koleckoPrst || p.downX < N.SIRKA / 2) continue;
+      if (this.naMenu(p.downX, p.downY)) continue;
+      const klic = `${p.id}:${p.downTime}`;
+      aktivni.add(klic);
+      if (!this.znamePrsty.has(klic)) {
+        // nový dotyk: krátce po předchozím ťuknutí je to HAF, jinak skok
+        const druhe = p.downTime - this.posledniSkokVpravo < DVOJI_TUKNUTI;
+        this.znamePrsty.set(klic, druhe ? 'haf' : 'skok');
+        if (druhe) {
+          s.haf = true;
+          this.posledniSkokVpravo = -Infinity; // třetí ťuknutí je zase skok
+        } else {
+          this.posledniSkokVpravo = p.downTime;
+        }
       }
+      if (this.znamePrsty.get(klic) === 'skok') s.skok = true;
     }
-    for (const t of this.tlacitka) t.kruh.setFillStyle(0xffffff, s[t.id] ? 0.42 : 0.16);
+    for (const klic of this.znamePrsty.keys()) if (!aktivni.has(klic)) this.znamePrsty.delete(klic);
     return s;
   }
 
-  naTlacitku(x, y) {
-    return this.tlacitka.some((t) => Phaser.Math.Distance.Between(x, y, t.x, t.y) < t.r * 1.3);
+  // tlačítko ☰ vpravo nahoře nemá spouštět skok
+  naMenu(x, y) {
+    return x > N.SIRKA - 70 && y < 70;
   }
 
-  vykresliKolecko(hx, hy, aktivni) {
-    this.zaklad.setPosition(this.stred.x, this.stred.y).setFillStyle(0xffffff, aktivni ? 0.2 : 0.1);
-    this.hlavicka.setPosition(hx, hy).setFillStyle(0xffffff, aktivni ? 0.55 : 0.3);
-    this.sipky.setPosition(this.stred.x, this.stred.y).setAlpha(aktivni ? 0.25 : 0.6);
-  }
-
-  ztlum(id, ztlumeno) {
-    const t = this.tlacitka.find((x) => x.id === id);
-    if (t) t.text.setAlpha(ztlumeno ? 0.3 : 0.85);
-  }
+  ztlum() {}
 }
 
 function jeDotykoveZarizeni(scene) {

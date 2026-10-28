@@ -125,6 +125,13 @@ class PonorScena extends Phaser.Scene {
       fontFamily: N.PISMO_NADPIS, fontSize: '54px', color: '#ffffff', stroke: '#0b2a55', strokeThickness: 10,
     }).setOrigin(0.5).setScrollFactor(0).setDepth(200);
     this.tweens.add({ targets: nazev, alpha: 0, delay: 1800, duration: 700, onComplete: () => nazev.destroy() });
+    if (this.dotyk) {
+      const styl = { fontFamily: N.PISMO, fontSize: '34px', color: '#ffffff', stroke: '#0b2a55', strokeThickness: 7, align: 'center' };
+      const vlevo = this.add.text(N.SIRKA * 0.25, N.VYSKA - 90, '◀ táhni ▶\nchůze', styl).setOrigin(0.5).setScrollFactor(0).setDepth(200);
+      const vpravo = this.add.text(N.SIRKA * 0.75, N.VYSKA - 90, 'ťukni = skok\n2× ťukni = HAF', styl).setOrigin(0.5).setScrollFactor(0).setDepth(200);
+      const cara = this.add.rectangle(N.SIRKA / 2, N.VYSKA / 2 + 40, 3, N.VYSKA - 160, 0xffffff, 0.35).setScrollFactor(0).setDepth(200);
+      this.tweens.add({ targets: [vlevo, vpravo, cara], alpha: 0, delay: 3500, duration: 800, onComplete: () => [vlevo, vpravo, cara].forEach((o) => o.destroy()) });
+    }
 
     if (PARAMETRY.get('debug') === '1') this.physics.world.createDebugGraphic();
   }
@@ -135,7 +142,6 @@ class PonorScena extends Phaser.Scene {
 
     this.hrac.update(ov, cas);
     if (ov.hafStisknut) this.haf(cas);
-    if (this.dotyk) this.dotyk.ztlum('haf', cas < this.hafPripravenOd);
     for (const n of this.seznamNepratel) if (n.zivy) n.update(cas, this.hrac);
 
     // kyslík
