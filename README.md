@@ -42,10 +42,11 @@ Užitečné přepínače v adrese: `?dotyk=1` zapne dotykové ovládání i na P
 - Skok shora na nepřítele: rybku zničí, medúzu a Bobánka na chvíli omráčí. Se zmáčknutým skokem se Dog Man odrazí výš.
 - Nepřátelé: 9 robotických rybek, 6 mechanických medúz a 2 Bobánci, kteří Dog Mana honí a naráží do vraků.
 - 32 kostí, jen 2 bubliny kyslíku a 2 kontrolní bójky. Žádná smrt: po zásahu se Dog Man vrátí na poslední bójku.
-- Stopky během hry a Síň slávy: po dokončení se hráč zapíše jménem a tabulka ukáže 10 nejrychlejších průchodů na tomto zařízení.
+- Stopky během hry a Síň slávy: společná tabulka nejrychlejších hráčů na serveru (zapisují se jen přihlášení), bez serveru tabulka z tohoto zařízení.
+- Hráči: v menu „👤 Přihlásit se“, nový hráč si vymyslí přezdívku a 4místný PIN. Postup se ukládá na server, takže jde pokračovat i na jiném zařízení. Bez přihlášení se hraje jako host.
 - Základní zvuky, dotykové ovládání bez tlačítek (levý palec chůze, pravý palec skok a HAF), výzva k otočení mobilu na šířku.
 
-Síň slávy je uložená v prohlížeči. Soupeřit se dá na jednom zařízení. Společná tabulka pro víc zařízení by potřebovala server.
+Hráči a Síň slávy jsou na serveru (viz `server/README.md`). Bez serveru se postup i tabulka ukládají jen v prohlížeči.
 
 ## Struktura projektu
 
@@ -55,7 +56,7 @@ Hra/
 ├── predlohy/postavy/         fotky kreseb dětí (originály)
 ├── nastroje/
 │   └── kresba_na_sprite.py   převod fotky kresby na obrázek bez pozadí
-├── server/                   sdílená Síň slávy: vysledky.php pro webhosting (návod v server/README.md)
+├── server/                   hráči, postup a Síň slávy: vysledky.php pro webhosting (návod v server/README.md)
 └── hra/                      samotná hra, tahle složka se nahrává na web
     ├── index.html
     ├── levels/               úrovně jako textová mřížka (děti mohou upravovat): ponor1.js, chobotnice.js, zakladna.js

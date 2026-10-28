@@ -1,21 +1,29 @@
-# Sdílená Síň slávy (Endora)
+# Server hry: hráči a sdílená Síň slávy (Endora)
 
-Skript `vysledky.php` ukládá nejlepší časy všech hráčů do souboru `data/vysledky.json`.
-Hra (na GitHub Pages) mu po zadání jména pošle čas a zobrazí společnou tabulku.
-Když server nejde, hra ukáže tabulku jen z daného zařízení.
+Skript `vysledky.php` běží na https://subachev.com/dogman/vysledky.php a ukládá vše
+do souboru `data/vysledky.json` (databáze není potřeba):
 
-## Nahrání na Endoru
+- **hráče:** přezdívka + 4místný PIN (PIN je uložený jen jako otisk, ne čitelně),
+- **postup každého hráče:** dokončené úrovně, kosti, nejrychlejší časy,
+- **Síň slávy:** každý hráč má v tabulce úrovně svůj nejlepší čas. Zapisovat můžou jen přihlášení.
 
-1. V administraci Endory si u domény zapněte **SSL certifikát (Let's Encrypt)**. Bez HTTPS prohlížeč zápis ze hry zablokuje.
-2. Přes **Souborový manažer** nebo FTP vytvořte na webu složku `dogman` a nahrajte do ní `vysledky.php`.
-3. V prohlížeči otevřete `https://VASE-DOMENA/dogman/vysledky.php?uroven=ponor1`.
-   Má se ukázat `{"rekordy":[]}`. Složka `data` se vytvoří sama.
-4. Pošlete adresu Claudovi, nebo ji sami zapište do `hra/src/nastaveni.js`:
-   `SIN_SLAVY_ADRESA: 'https://VASE-DOMENA/dogman/vysledky.php',`
+Když server nejde, hra jede dál s postupem a tabulkou z daného zařízení.
 
-## Úpravy
+## Nahrání nové verze na Endoru
 
-- Nahoře ve skriptu je seznam úrovní s nejkratším uvěřitelným časem (kratší se odmítne)
-  a seznam adres, odkud smí hra zapisovat.
-- Smazat výsledky: smažte soubor `data/vysledky.json`, nebo v něm ručně upravte řádky.
+1. Přes **Souborový manažer** nebo FTP otevřete složku `dogman` na webu.
+2. Nahrajte nový `vysledky.php` (přepište starý). Složku `data` nechte, jsou v ní výsledky a hráči.
+3. Kontrola: `https://subachev.com/dogman/vysledky.php?uroven=ponor1` ukáže `{"rekordy":[...]}`.
+
+První nahrání: u domény zapnout **SSL certifikát (Let's Encrypt)**, vytvořit složku `dogman`,
+nahrát skript a adresu zapsat do `hra/src/nastaveni.js` (`SIN_SLAVY_ADRESA`).
+
+## Správa
+
+- **Zapomenutý PIN:** v `data/vysledky.json` najděte hráče (`"hraci"` → přezdívka malými písmeny)
+  a smažte jeho hodnotu `"pin"` (nechte `"pin": ""`). Při dalším přihlášení se uloží PIN, který hráč zadá.
+- **Zamčená přezdívka** po 5 špatných PINech se sama odemkne za 10 minut.
+- **Smazat hráče:** odstraňte ho z `"hraci"` (jeho časy v `"rekordy"` smažte zvlášť).
+- **Smazat výsledky:** v `"rekordy"` vymažte řádky, nebo smažte celý soubor (zmizí i hráči).
+- Nahoře ve skriptu je seznam úrovní s nejkratším uvěřitelným časem a seznam adres, odkud smí hra se serverem mluvit.
 - Nová úroveň ve hře = přidat její `id` do `UROVNE` ve skriptu.

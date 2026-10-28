@@ -81,6 +81,21 @@ class MenuScena extends Phaser.Scene {
       });
     }
 
+    // hráč vpravo nahoře: kdo hraje, nebo pozvánka k přihlášení
+    if (SdileneVysledky.zapnuto) {
+      const hrac = this.add.text(S - 16, 12, Ucet.prihlaseny ? `👤 ${Ucet.prezdivka}` : '👤 Přihlásit se', {
+        fontFamily: N.PISMO, fontSize: '30px', color: '#ffffff', stroke: '#0b2a55', strokeThickness: 6,
+        backgroundColor: Ucet.prihlaseny ? undefined : '#7048e8', padding: { x: 12, y: 4 },
+      }).setOrigin(1, 0).setInteractive({ useHandCursor: true });
+      hrac.on('pointerup', () => { Zvuky.klik(); this.scene.start('Ucet'); });
+      // postup z jiného zařízení: když se něco změní, menu se překreslí (odemknou se úrovně)
+      if (Ucet.prihlaseny) {
+        Ucet.obnovPostup().then((zmena) => {
+          if (this.sys.isActive() && (zmena || !Ucet.prihlaseny)) this.scene.restart();
+        });
+      }
+    }
+
     // číslo verze, ať je poznat, jestli prohlížeč načetl tu nejnovější
     this.add.text(S - 12, V - 10, `verze ${VERZE}`, {
       fontFamily: N.PISMO, fontSize: '20px', color: '#a5d8ff',

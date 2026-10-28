@@ -1,10 +1,11 @@
-// Ukládání postupu do prohlížeče (na každém zařízení zvlášť).
+// Ukládání postupu do prohlížeče. Každý přihlášený hráč má svůj, host má společný.
 const Ulozeni = {
-  KLIC: 'dogman-postup',
+  KLIC_HOSTA: 'dogman-postup',
+  get KLIC() { return Ucet.prihlaseny ? `dogman-postup:${Ucet.prezdivka.toLowerCase()}` : this.KLIC_HOSTA; },
 
-  nacti() {
+  nacti(klic = this.KLIC) {
     try {
-      return JSON.parse(localStorage.getItem(this.KLIC)) || {};
+      return JSON.parse(localStorage.getItem(klic)) || {};
     } catch (e) {
       return {};
     }
@@ -16,6 +17,31 @@ const Ulozeni = {
     } catch (e) {
       // soukromé okno nebo zakázané úložiště: hra jede dál bez ukládání
     }
+  },
+
+  // jen úrovně (bez Síně slávy), tak jak je posílá server
+  urovne(klic) {
+    const data = this.nacti(klic);
+    const vysledek = {};
+    for (const u of UROVNE_HRY) if (data[u.id]) vysledek[u.id] = data[u.id];
+    return vysledek;
+  },
+
+  // postup ze serveru: u každé úrovně se nechá to lepší
+  spojUrovne(postup) {
+    if (!postup) return;
+    const data = this.nacti();
+    for (const [id, u] of Object.entries(postup)) {
+      const p = data[id] || {};
+      data[id] = {
+        hotovo: !!(p.hotovo || u.hotovo),
+        kosti: Math.max(p.kosti || 0, u.kosti || 0),
+        celkem: u.celkem !== undefined && u.celkem !== null ? u.celkem : p.celkem,
+        nejrychleji: Math.min(p.nejrychleji || Infinity, u.nejrychleji || Infinity),
+      };
+      if (data[id].nejrychleji === Infinity) delete data[id].nejrychleji;
+    }
+    this.uloz(data);
   },
 
   zapisUroven(id, kosti, celkem, cas) {

@@ -1,5 +1,6 @@
-// Mise splněna: hvězdy za kosti, čas a Síň slávy nejrychlejších
-// (sdílená na serveru, a když není dostupná, tak z tohoto zařízení).
+// Mise splněna: hvězdy za kosti, čas a Síň slávy nejrychlejších.
+// Se serverem: přihlášený hráč se zapíše sám, host tabulku jen vidí.
+// Bez serveru: tabulka z tohoto zařízení a jméno se píše ručně.
 class KonecScena extends Phaser.Scene {
   constructor() { super('Konec'); }
 
@@ -8,6 +9,7 @@ class KonecScena extends Phaser.Scene {
   create() {
     const S = N.ZAKLADNI_SIRKA; // rozvržení na 960, kamera ho na širší obrazovce vycentruje
     const { uroven, kosti, celkem, cas, zniceno, zasahu } = this.vysledek;
+    this.celkem = celkem;
     const souboj = celkem === undefined; // souboj s bossem nemá kosti
     this.uroven = uroven;
     this.cas = cas;
@@ -48,17 +50,9 @@ class KonecScena extends Phaser.Scene {
     }).setOrigin(0.5);
     this.tabulka = this.add.container(0, 0);
 
-    if (SdileneVysledky.zapnuto) {
-      const cekam = this.add.text(690, 220, 'Načítám…', { fontFamily: N.PISMO, fontSize: '30px', color: '#d0ebff' }).setOrigin(0.5);
-      SdileneVysledky.nacti(uroven).then((rekordy) => {
-        if (!this.sys.isActive()) return;
-        cekam.destroy();
-        this.sdilene = rekordy;
-        this.zacniSinSlavy();
-      });
-    } else {
-      this.zacniSinSlavy();
-    }
+    if (Ucet.prihlaseny) this.zapisHrace();
+    else if (SdileneVysledky.zapnuto) this.ukazProHosta();
+    else this.zacniSinSlavy();
 
     this.prizpusobSirce();
     const dalsi = Postup.dalsi(uroven);
@@ -73,15 +67,45 @@ class KonecScena extends Phaser.Scene {
     this.cameras.main.setScroll(-(N.SIRKA - N.ZAKLADNI_SIRKA) / 2, 0);
   }
 
-  // o jméno se hra zeptá, když se čas vejde do sdílené tabulky nebo do tabulky zařízení
+  // přihlášený hráč: čas se zapíše pod jeho přezdívkou
+  zapisHrace() {
+    const ukladam = this.add.text(690, 220, 'Ukládám…', { fontFamily: N.PISMO, fontSize: '30px', color: '#d0ebff' }).setOrigin(0.5);
+    Ucet.zapis(this.uroven, this.cas, this.kostiVysledek, this.celkem).then((vysledek) => {
+      if (!this.sys.isActive()) return;
+      ukladam.destroy();
+      if (vysledek) {
+        this.ukazTabulku(vysledek.poradi, vysledek.rekordy, true);
+        if (vysledek.poradi >= 0) Zvuky.checkpoint();
+        if (!vysledek.zlepseni) this.poznamka('Tvůj rekord zůstává rychlejší');
+        else if (vysledek.poradi >= 6) this.poznamka(`${Ucet.prezdivka}: ${vysledek.poradi + 1}. místo`);
+      } else {
+        // server nejde: aspoň do tabulky tohoto zařízení
+        const rekordy = Ulozeni.pridejRekord(this.uroven, Ucet.prezdivka, this.cas, this.kostiVysledek);
+        this.ukazTabulku(rekordy.findIndex((r) => r.jmeno === Ucet.prezdivka && r.cas === this.cas));
+      }
+    });
+  }
+
+  // host: tabulku vidí, ale zapisují se jen přihlášení
+  ukazProHosta() {
+    const cekam = this.add.text(690, 220, 'Načítám…', { fontFamily: N.PISMO, fontSize: '30px', color: '#d0ebff' }).setOrigin(0.5);
+    SdileneVysledky.nacti(this.uroven).then((rekordy) => {
+      if (!this.sys.isActive()) return;
+      cekam.destroy();
+      if (rekordy) this.ukazTabulku(-1, rekordy, true);
+      else this.ukazTabulku(-1);
+      this.poznamka('Přihlas se v menu a tvůj čas se zapíše!');
+    });
+  }
+
+  poznamka(text) {
+    this.add.text(690, 430, text, { fontFamily: N.PISMO, fontSize: '24px', color: '#ffd43b', stroke: '#0b2a55', strokeThickness: 5 }).setOrigin(0.5);
+  }
+
+  // bez serveru: o jméno se hra zeptá, když se čas vejde do tabulky zařízení
   zacniSinSlavy() {
-    let misto = Ulozeni.poradi(this.uroven, this.cas);
-    if (this.sdilene) {
-      const sdileneMisto = this.sdilene.filter((r) => r.cas <= this.cas).length + 1;
-      if (sdileneMisto <= Ulozeni.MAX_REKORDU) misto = sdileneMisto;
-    }
+    const misto = Ulozeni.poradi(this.uroven, this.cas);
     if (misto) this.zeptejSeNaJmeno(misto);
-    else if (this.sdilene) this.ukazTabulku(-1, this.sdilene, true);
     else this.ukazTabulku(-1);
   }
 
@@ -107,14 +131,7 @@ class KonecScena extends Phaser.Scene {
       policko.destroy();
       vyzva.destroy();
       tl.forEach((o) => o.destroy());
-      if (!SdileneVysledky.zapnuto) return this.ukazTabulku(index);
-      const ukladam = this.add.text(690, 220, 'Ukládám…', { fontFamily: N.PISMO, fontSize: '30px', color: '#d0ebff' }).setOrigin(0.5);
-      SdileneVysledky.zapis(this.uroven, jmeno, this.cas, this.kostiVysledek).then((vysledek) => {
-        if (!this.sys.isActive()) return;
-        ukladam.destroy();
-        if (vysledek) this.ukazTabulku(vysledek.poradi, vysledek.rekordy, true);
-        else this.ukazTabulku(index);
-      });
+      this.ukazTabulku(index);
     };
     input.addEventListener('keydown', (e) => {
       e.stopPropagation(); // písmena a Enter nepatří hře, jen políčku
@@ -124,7 +141,7 @@ class KonecScena extends Phaser.Scene {
   }
 
   ukazTabulku(zvyraznit, vsechny = Ulozeni.rekordy(this.uroven), sdilena = false) {
-    const rekordy = vsechny.slice(0, 7);
+    const rekordy = vsechny.slice(0, SdileneVysledky.zapnuto ? 6 : 7); // pod tabulkou se serverem je místo na poznámku
     if (SdileneVysledky.zapnuto) {
       this.tabulka.add(this.add.text(690, 146, sdilena ? '🌍 všichni hráči' : '📱 jen toto zařízení (server nedostupný)', {
         fontFamily: N.PISMO, fontSize: '22px', color: '#a5d8ff',
