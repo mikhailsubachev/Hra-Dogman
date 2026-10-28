@@ -90,6 +90,8 @@ class ChobotniceScena extends HerniScena {
         const v = this.boss.vypinacSvet();
         if (Math.abs(telo.center.x - v.x) < 42 + telo.halfWidth && telo.bottom > v.y - 22 && telo.bottom < v.y + 26) this.zasahVypinace();
       }
+      // na hlavě se během útoku stát nedá, chobotnice Dog Mana setřese
+      if (this.boss.stav !== 'unava' && this.boss.stav !== 'konec' && this.naHlaveChobotnice()) this.odhodHraceZHlavy();
       if (this.boss.zasahujeChapadlo(telo)) this.zasah('AU! Chapadlo!');
       if (this.boss.zasahujeInkoust(telo)) this.zasah('Fuj, inkoust!');
       this.aktualizujKlice(cas, telo);
@@ -105,20 +107,24 @@ class ChobotniceScena extends HerniScena {
     Zvuky.bum();
     this.vyskakovaciText(this.hrac.x, this.hrac.y - 60, 'KLIK! ZÁSAH!', '#ffd43b', 40);
     this.ukazatele.zivotyBosse(this.boss.zivoty);
-    // chobotnice Dog Mana odhodí zpátky doleva
+    // Dog Man se odrazí rovně nahoru a může na vypínač dopadnout znovu
     this.hrac.odraz(true);
-    this.hrac.telo.body.velocity.x = -320;
     this.hrac.nezranitelnyDo = this.time.now + 1200;
     if (this.boss.zivoty <= 0) this.vyhra();
     else if (this.bobanek) this.time.delayedCall(700, () => this.bobanekRekne('Šéfe, já to spravím!'));
   }
 
-  // když se chobotnice probudí a Dog Man stojí na její hlavě, shodí ho
+  // stojí Dog Man na hlavě chobotnice?
+  naHlaveChobotnice() {
+    const telo = this.hrac.telo.body;
+    return telo.center.x > this.boss.x0 - 170 && telo.bottom < this.vyskaPodlahy - 60 && (telo.blocked.down || telo.touching.down);
+  }
+
+  // když se chobotnice probudí (nebo útočí) a Dog Man stojí na její hlavě, shodí ho daleko doleva
   odhodHraceZHlavy() {
     const telo = this.hrac.telo.body;
-    if (telo.center.x > this.boss.x0 - 160 && telo.bottom < this.vyskaPodlahy - 60) {
-      this.hrac.odraz(false);
-      telo.velocity.x = -300;
+    if (telo.center.x > this.boss.x0 - 170 && telo.bottom < this.vyskaPodlahy - 60) {
+      this.hrac.odhod(-430, -380);
       this.vyskakovaciText(this.hrac.x, this.hrac.y - 50, 'BOING!', '#ffd43b');
     }
   }

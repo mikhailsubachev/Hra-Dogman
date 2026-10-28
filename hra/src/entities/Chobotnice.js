@@ -1,7 +1,8 @@
 // Robo-chobotnice: boss úrovně 2. Řídí ji Čuňas z prosklené kabiny.
 // Kolo souboje: 3 údery chapadlem na místo, kde stojí Dog Man (předem varování „!“),
 // od 2. kola i inkoustové koule. Pak se unaví: sklopí se a otevře kryt s vypínačem.
-// Skok na vypínač = zásah. Po 3 zásazích se rozpadne.
+// Dokud je kryt otevřený, počítá se každý skok na vypínač, klidně několik po sobě.
+// Po 3 zásazích se rozpadne. Další kolo je tím těžší, čím víc zásahů už dostala.
 const CHOBOTNICE = {
   odPravehoOkraje: 150, // střed těla je tolik pixelů od pravého okraje arény
   yNahore: 236,        // střed těla, když útočí
@@ -10,9 +11,9 @@ const CHOBOTNICE = {
   zivoty: 3,
   // pro každé kolo: varování před úderem, pauza mezi údery, jak dlouho je unavená, inkoust (0 = žádný)
   kola: [
-    { varovani: 950, pauza: 1300, unava: 4800, inkoust: 0 },
-    { varovani: 800, pauza: 1100, unava: 4000, inkoust: 1700 },
-    { varovani: 650, pauza: 950,  unava: 3400, inkoust: 1250 },
+    { varovani: 950, pauza: 1300, unava: 4000, inkoust: 0 },
+    { varovani: 800, pauza: 1100, unava: 3300, inkoust: 1700 },
+    { varovani: 650, pauza: 950,  unava: 2800, inkoust: 1250 },
   ],
   uderuVKole: 3,
 };
@@ -214,6 +215,8 @@ class Chobotnice {
   // --- únava: sklopí se a otevře kryt s vypínačem ---
   unav() {
     this.stav = 'unava';
+    this.zasahuVOkne = 0;
+    this.posledniZasah = -Infinity;
     const s = this.scene;
     this.konecUnavy = s.time.now + 700 + this.nastaveni.unava;
     s.tweens.add({ targets: this.kontejner, y: CHOBOTNICE.yDole, duration: 600, ease: 'Sine.inOut' });
@@ -235,29 +238,34 @@ class Chobotnice {
     const s = this.scene;
     this.zavriKryt();
     s.odhodHraceZHlavy();
-    s.tweens.add({ targets: this.kontejner, y: CHOBOTNICE.yNahore, duration: 600, ease: 'Sine.inOut', onComplete: () => this.utoc() });
-    s.cunasRekne(Phaser.Utils.Array.GetRandom(['Chi chi! Zkus to znovu!', 'Moc pomalý, pejsku!']));
+    // obtížnost dalšího kola podle toho, kolik zásahů už chobotnice dostala
+    const kolo = Math.min(CHOBOTNICE.kola.length - 1, CHOBOTNICE.zivoty - this.zivoty);
+    s.tweens.add({ targets: this.kontejner, y: CHOBOTNICE.yNahore, duration: 600, ease: 'Sine.inOut', onComplete: () => this.dalsiKolo(kolo) });
+    s.cunasRekne(this.zasahuVOkne
+      ? Phaser.Utils.Array.GetRandom(['Au! Teď se zlobím!', 'Bobánku, oprav ji!'])
+      : Phaser.Utils.Array.GetRandom(['Chi chi! Zkus to znovu!', 'Moc pomalý, pejsku!']));
   }
 
-  // Dog Man skočil na vypínač
+  // Dog Man skočil na vypínač: dokud je kryt otevřený, počítá se každý zásah
   zasah() {
     if (this.stav !== 'unava') return false;
-    this.stav = 'zasah';
     const s = this.scene;
+    if (s.time.now - this.posledniZasah < 350) return false; // jeden dopad = jeden zásah
+    this.posledniZasah = s.time.now;
+    this.zasahuVOkne++;
     this.zivoty--;
     const v = this.vypinacSvet();
-    this.zavriKryt();
     s.rozsypSrouby(v.x, v.y, 14, 110);
     this.telo.setTint(0xff6b6b);
-    s.tweens.add({ targets: this.kontejner, x: this.x0 + 14, duration: 60, yoyo: true, repeat: 5, onComplete: () => this.telo.clearTint() });
+    s.tweens.add({ targets: this.telo, x: 8, duration: 50, yoyo: true, repeat: 3,
+      onComplete: () => { this.telo.x = 0; if (this.stav === 'unava') this.telo.setTint(0xd0bfff); } });
     if (this.zivoty <= 0) {
+      this.stav = 'zasah';
+      this.zavriKryt();
       s.time.delayedCall(500, () => this.rozpadniSe());
       return true;
     }
-    s.cunasRekne(Phaser.Utils.Array.GetRandom(['Au! Moje chobotnice!', 'To bolelo! Teď se zlobím!']));
-    s.time.delayedCall(900, () => {
-      s.tweens.add({ targets: this.kontejner, y: CHOBOTNICE.yNahore, duration: 600, ease: 'Sine.inOut', onComplete: () => this.dalsiKolo(this.kolo + 1) });
-    });
+    s.cunasRekne(Phaser.Utils.Array.GetRandom(['Au! Moje chobotnice!', 'Ne! Nech ten vypínač!', 'Au au au!']));
     return true;
   }
 

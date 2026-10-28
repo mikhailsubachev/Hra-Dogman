@@ -49,7 +49,8 @@ class DogMan {
     this.pohyb = ovladani.osaX ? ovladani.osaX : klavesy;
     if (this.pohyb !== 0) this.smer = Math.sign(this.pohyb);
     const cil = this.pohyb * N.DOGMAN.rychlost;
-    b.velocity.x = Phaser.Math.Linear(b.velocity.x, cil, this.naZemi ? 0.35 : 0.12);
+    // chvíli po odhození (chobotnicí) ovládání nebrzdí let do strany
+    if (cas > (this.odhozenDo || 0)) b.velocity.x = Phaser.Math.Linear(b.velocity.x, cil, this.naZemi ? 0.35 : 0.12);
 
     // skok s malou tolerancí, aby to dětem "nepropadlo"
     if (ovladani.skokStisknut) this.skokPozadan = cas;
@@ -96,6 +97,14 @@ class DogMan {
     this.telo.body.velocity.y = -(drziSkok ? N.DOGMAN.skok : N.SKOK_NA_NEPRITELE.odraz);
     this.odrazDo = this.scene.time.now + 250;
     this.posledniNaZemi = -1000;
+  }
+
+  // odhození do strany (třeba z hlavy chobotnice)
+  odhod(vx, vy) {
+    this.telo.body.velocity.x = vx;
+    this.telo.body.velocity.y = vy;
+    this.odhozenDo = this.scene.time.now + 600;
+    this.odrazDo = this.scene.time.now + 250;
   }
 
   odpoj() { this.scene.events.off('postupdate', this.vykresli, this); }
