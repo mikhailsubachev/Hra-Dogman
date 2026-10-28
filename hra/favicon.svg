@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <!-- kost jako ikonka hry -->
+  <g transform="rotate(-35 32 32)">
+    <g fill="#1b1622">
+      <rect x="14" y="25" width="36" height="14" rx="3"/>
+      <circle cx="14" cy="24" r="10"/><circle cx="14" cy="40" r="10"/>
+      <circle cx="50" cy="24" r="10"/><circle cx="50" cy="40" r="10"/>
+    </g>
+    <g fill="#fff8ea">
+      <rect x="14" y="28" width="36" height="8" rx="2"/>
+      <circle cx="14" cy="24" r="6.5"/><circle cx="14" cy="40" r="6.5"/>
+      <circle cx="50" cy="24" r="6.5"/><circle cx="50" cy="40" r="6.5"/>
+    </g>
+    <path d="M20 34 H44" stroke="#e3cfa8" stroke-width="3" stroke-linecap="round"/>
+  </g>
+</svg>
