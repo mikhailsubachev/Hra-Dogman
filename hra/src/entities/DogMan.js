@@ -44,8 +44,10 @@ class DogMan {
     if (this.naZemi) this.posledniNaZemi = cas;
 
     // chůze: pod vodou se rozjíždí a brzdí trochu líně
-    this.pohyb = (ovladani.vpravo ? 1 : 0) - (ovladani.vlevo ? 1 : 0);
-    if (this.pohyb !== 0) this.smer = this.pohyb;
+    // klávesy dávají -1 / 0 / 1, kolečko na mobilu i něco mezi (pomalejší chůze)
+    const klavesy = (ovladani.vpravo ? 1 : 0) - (ovladani.vlevo ? 1 : 0);
+    this.pohyb = ovladani.osaX ? ovladani.osaX : klavesy;
+    if (this.pohyb !== 0) this.smer = Math.sign(this.pohyb);
     const cil = this.pohyb * N.DOGMAN.rychlost;
     b.velocity.x = Phaser.Math.Linear(b.velocity.x, cil, this.naZemi ? 0.35 : 0.12);
 

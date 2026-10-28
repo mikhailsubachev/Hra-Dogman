@@ -163,6 +163,7 @@ class PonorScena extends Phaser.Scene {
     const ov = {
       vlevo: k.LEFT.isDown || k.A.isDown || !!d.vlevo,
       vpravo: k.RIGHT.isDown || k.D.isDown || !!d.vpravo,
+      osaX: d.osaX || 0,
       skok,
       haf,
       skokStisknut: skok && !this.predchozi.skok,
