@@ -54,6 +54,7 @@ Hra/
 ├── predlohy/postavy/         fotky kreseb dětí (originály)
 ├── nastroje/
 │   └── kresba_na_sprite.py   převod fotky kresby na obrázek bez pozadí
+├── server/                   sdílená Síň slávy: vysledky.php pro webhosting (návod v server/README.md)
 └── hra/                      samotná hra, tahle složka se nahrává na web
     ├── index.html
     ├── levels/               úrovně jako textová mřížka (děti mohou upravovat): ponor1.js, chobotnice.js, zakladna.js

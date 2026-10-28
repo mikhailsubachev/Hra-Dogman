@@ -36,6 +36,9 @@ const N = {
   PLOSINA: { rychlost: 80 },          // pohyblivá plošina (=)
   MINA: { obnova: 2500 },             // za jak dlouho se vybuchlá mina (X) vrátí
 
+  // adresa sdílené Síně slávy (server/vysledky.php na hostingu); prázdná = jen výsledky z tohoto zařízení
+  SIN_SLAVY_ADRESA: '',
+
   PISMO_NADPIS: '"Bangers", "Comic Sans MS", "Chalkboard SE", cursive',
   PISMO: '"Patrick Hand", "Comic Sans MS", "Chalkboard SE", sans-serif',
 };
