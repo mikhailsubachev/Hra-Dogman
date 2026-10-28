@@ -47,11 +47,20 @@ class MenuScena extends Phaser.Scene {
       if (odemceno) t.setInteractive({ useHandCursor: true }).on('pointerdown', () => { Zvuky.klik(); Postup.spust(this, u.id); });
     });
 
-    const nejlepsi = Ulozeni.rekordy('ponor1')[0];
-    if (nejlepsi) {
-      this.add.text(S / 2, 366 + (UROVNE_HRY.length - 1) * 50, `🏆 Ponor 1: ${nejlepsi.jmeno}  ${formatCas(nejlepsi.cas)}`, {
-        fontFamily: N.PISMO, fontSize: '24px', color: '#ffd43b', stroke: '#0b2a55', strokeThickness: 5,
-      }).setOrigin(0.5);
+    // nejlepší čas Ponoru 1: ze sdílené Síně slávy, bez serveru z tohoto zařízení
+    const rekord = this.add.text(S / 2, 366 + (UROVNE_HRY.length - 1) * 50, '', {
+      fontFamily: N.PISMO, fontSize: '24px', color: '#ffd43b', stroke: '#0b2a55', strokeThickness: 5,
+    }).setOrigin(0.5);
+    const ukazRekord = (nejlepsi) => {
+      if (nejlepsi) rekord.setText(`🏆 Ponor 1: ${nejlepsi.jmeno}  ${formatCas(nejlepsi.cas)}`);
+    };
+    if (SdileneVysledky.zapnuto) {
+      SdileneVysledky.nacti('ponor1').then((rekordy) => {
+        if (!this.sys.isActive()) return;
+        ukazRekord(rekordy ? rekordy[0] : Ulozeni.rekordy('ponor1')[0]);
+      });
+    } else {
+      ukazRekord(Ulozeni.rekordy('ponor1')[0]);
     }
 
     const napoveda = jeDotykoveZarizeni(this)
