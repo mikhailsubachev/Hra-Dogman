@@ -49,6 +49,11 @@ class MenuScena extends Phaser.Scene {
       fontFamily: N.PISMO, fontSize: '26px', color: '#d0ebff',
     }).setOrigin(0.5);
 
+    // číslo verze, ať je poznat, jestli prohlížeč načetl tu nejnovější
+    this.add.text(S - 12, V - 10, `verze ${VERZE}`, {
+      fontFamily: N.PISMO, fontSize: '20px', color: '#a5d8ff',
+    }).setOrigin(1, 1).setAlpha(0.8);
+
     const start = () => {
       Zvuky.klik();
       this.scene.start('Komiks');

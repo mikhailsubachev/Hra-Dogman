@@ -22,7 +22,7 @@ class ZavadeciScena extends Phaser.Scene {
     this.load.on('progress', (p) => text.setText(`Načítám… ${Math.round(p * 100)} %`));
     this.load.on('loaderror', (soubor) => console.warn('Nepodařilo se načíst', soubor.src));
     for (const [jmeno, p] of Object.entries(POSTAVY)) {
-      this.load.svg(jmeno, `assets/sprites/${jmeno}.svg`, { width: Math.round(p.vyska * p.pomer), height: p.vyska });
+      this.load.svg(jmeno, `assets/sprites/${jmeno}.svg?v=${VERZE}`, { width: Math.round(p.vyska * p.pomer), height: p.vyska });
     }
   }
 

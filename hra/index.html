@@ -29,29 +29,26 @@
 
   <script src="https://cdn.jsdelivr.net/npm/phaser@3.80.1/dist/phaser.min.js"></script>
 
-  <!-- nastavení a pomocníci -->
-  <script src="src/nastaveni.js"></script>
-  <script src="src/mapa.js"></script>
-  <script src="src/ulozeni.js"></script>
-  <script src="src/zvuky.js"></script>
-  <script src="src/textury.js"></script>
-
-  <!-- úrovně (děti je mohou upravovat) -->
-  <script src="levels/ponor1.js"></script>
-
-  <!-- postavy a ovládání -->
-  <script src="src/entities/DogMan.js"></script>
-  <script src="src/entities/Nepratele.js"></script>
-  <script src="src/ui/DotykoveOvladani.js"></script>
-  <script src="src/ui/Ukazatele.js"></script>
-
-  <!-- scény -->
-  <script src="src/scenes/ZavadeciScena.js"></script>
-  <script src="src/scenes/MenuScena.js"></script>
-  <script src="src/scenes/KomiksScena.js"></script>
-  <script src="src/scenes/PonorScena.js"></script>
-  <script src="src/scenes/KonecScena.js"></script>
-
-  <script src="src/main.js"></script>
+  <!--
+    Číslo verze. Při každé nové verzi se zvýší, takže si prohlížeč (hlavně na mobilu)
+    načte nové soubory a nepoužije staré uložené. Je vidět i v menu vpravo dole.
+  -->
+  <script>
+    const VERZE = '0.4';
+    const SOUBORY_HRY = [
+      // nastavení a pomocníci
+      'src/nastaveni.js', 'src/mapa.js', 'src/ulozeni.js', 'src/zvuky.js', 'src/textury.js',
+      // úrovně (děti je mohou upravovat)
+      'levels/ponor1.js',
+      // postavy a ovládání
+      'src/entities/DogMan.js', 'src/entities/Nepratele.js', 'src/ui/DotykoveOvladani.js', 'src/ui/Ukazatele.js',
+      // scény
+      'src/scenes/ZavadeciScena.js', 'src/scenes/MenuScena.js', 'src/scenes/KomiksScena.js',
+      'src/scenes/PonorScena.js', 'src/scenes/KonecScena.js',
+      'src/main.js',
+    ];
+    // document.write načte skripty po řadě, stejně jako obyčejné <script> značky
+    for (const soubor of SOUBORY_HRY) document.write(`<script src="${soubor}?v=${VERZE}"><\/script>`);
+  </script>
 </body>
 </html>
