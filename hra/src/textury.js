@@ -148,13 +148,74 @@ const Textury = {
       g.fillStyle(0x343a40); [12, 24, 36, 48].forEach((x) => g.fillRect(x, 4, 5, 8));
     });
 
-    // sada dlaždic pro mapu: 0 = písek nahoře, 1 = kámen uvnitř
-    if (!scene.textures.exists('sada_dna')) {
-      const sada = scene.textures.createCanvas('sada_dna', 96, 48);
-      sada.draw(0, 0, scene.textures.get('dno').getSourceImage());
-      sada.draw(48, 0, scene.textures.get('skala').getSourceImage());
+    // --- Čuňasova základna ---
+    kresli('kov_hore', 48, 48, (g) => {
+      g.fillStyle(0x4f6472); g.fillRect(0, 0, 48, 48);
+      g.fillStyle(0x7d93a1); g.fillRect(0, 0, 48, 10);
+      g.fillStyle(0xffd43b); for (let x = 0; x < 48; x += 16) g.fillTriangle(x, 10, x + 8, 10, x + 4, 4);
+      g.fillStyle(0x2f3d47); g.fillRect(0, 10, 48, 3); g.fillRect(23, 13, 2, 35);
+      g.fillStyle(0xa9bcc8); [[6, 20], [42, 20], [6, 40], [42, 40]].forEach(([x, y]) => g.fillCircle(x, y, 2));
+    });
+    kresli('kov', 48, 48, (g) => {
+      g.fillStyle(0x3b4c57); g.fillRect(0, 0, 48, 48);
+      g.lineStyle(2, 0x2a3740); g.strokeRect(1, 1, 46, 46);
+      g.fillStyle(0x6c8190); [[6, 6], [42, 6], [6, 42], [42, 42]].forEach(([x, y]) => g.fillCircle(x, y, 2));
+      g.fillStyle(0x334350); g.fillRect(10, 20, 28, 8);
+    });
+    // námořní mina s bodlinami
+    kresli('mina', 44, 44, (g) => {
+      g.fillStyle(0x1b1622);
+      for (let i = 0; i < 8; i++) {
+        const u = (i / 8) * Math.PI * 2;
+        g.fillCircle(22 + Math.cos(u) * 17, 22 + Math.sin(u) * 17, 3.5);
+        g.lineStyle(4, 0x1b1622); g.lineBetween(22, 22, 22 + Math.cos(u) * 17, 22 + Math.sin(u) * 17);
+      }
+      g.fillCircle(22, 22, 14);
+      g.fillStyle(0x495057); g.fillCircle(22, 22, 11);
+      g.fillStyle(0xe03131); g.fillCircle(22, 22, 4);
+      g.fillStyle(0xffffff, 0.5); g.fillEllipse(17, 16, 7, 4);
+    });
+    // pohyblivá plošina (jeden díl, skládá se do délky)
+    kresli('plosina', 48, 24, (g) => {
+      g.fillStyle(0x1b1622); g.fillRect(0, 0, 48, 24);
+      g.fillStyle(0xf08c00); g.fillRect(0, 2, 48, 9);
+      g.fillStyle(0x1b1622); for (let x = -8; x < 48; x += 16) g.fillTriangle(x, 11, x + 8, 2, x + 14, 2);
+      g.fillStyle(0x868e96); g.fillRect(0, 13, 48, 9);
+      g.fillStyle(0x495057); g.fillCircle(12, 17, 2.5); g.fillCircle(36, 17, 2.5);
+    });
+    // tryska na dně, ze které stoupá proud bublin
+    kresli('tryska', 96, 20, (g) => {
+      g.fillStyle(0x1b1622); g.fillRoundedRect(0, 4, 96, 16, 5);
+      g.fillStyle(0x868e96); g.fillRoundedRect(3, 7, 90, 10, 3);
+      g.fillStyle(0x1b1622); for (let x = 12; x < 90; x += 14) g.fillRect(x, 8, 6, 8);
+      g.fillStyle(0x74c0fc); g.fillRect(6, 0, 84, 4);
+    });
+    // velký vypínač základny: páka nahoře (zapnuto) a dole (vypnuto)
+    const paka = (dole) => (g) => {
+      g.fillStyle(0x1b1622); g.fillRoundedRect(4, 30, 64, 70, 8);
+      g.fillStyle(0xadb5bd); g.fillRoundedRect(8, 34, 56, 62, 6);
+      g.fillStyle(dole ? 0x37b24d : 0xe03131); g.fillCircle(36, 82, 8);
+      g.fillStyle(0x1b1622); g.fillRect(30, 50, 12, 12);
+      g.lineStyle(9, 0x1b1622);
+      if (dole) g.lineBetween(36, 56, 62, 82); else g.lineBetween(36, 56, 58, 14);
+      g.lineStyle(5, 0xffd43b);
+      if (dole) g.lineBetween(36, 56, 62, 82); else g.lineBetween(36, 56, 58, 14);
+      g.fillStyle(0xe03131); g.fillCircle(dole ? 64 : 59, dole ? 85 : 11, 9);
+      g.fillStyle(0xffffff, 0.6); g.fillCircle(dole ? 61 : 56, dole ? 82 : 8, 3);
+    };
+    kresli('paka', 72, 100, paka(false));
+    kresli('paka_dole', 72, 100, paka(true));
+
+    // sady dlaždic pro mapu: 0 = povrch nahoře, 1 = vnitřek
+    const sadaDlazdic = (klic, hore, vnitrek) => {
+      if (scene.textures.exists(klic)) return;
+      const sada = scene.textures.createCanvas(klic, 96, 48);
+      sada.draw(0, 0, scene.textures.get(hore).getSourceImage());
+      sada.draw(48, 0, scene.textures.get(vnitrek).getSourceImage());
       sada.refresh();
-    }
+    };
+    sadaDlazdic('sada_dna', 'dno', 'skala');
+    sadaDlazdic('sada_kov', 'kov_hore', 'kov');
   },
 
   // modrá voda s paprsky světla, přes celou obrazovku
@@ -168,6 +229,32 @@ const Textury = {
       const x = i * 260 - 100;
       paprsky.fillTriangle(x, 0, x + 90, 0, x + 260, N.VYSKA);
     }
+    return g;
+  },
+
+  // zatopená Čuňasova základna: tmavá voda, kulatá okna a trubky v pozadí
+  zakladna(scene) {
+    const g = scene.add.graphics().setScrollFactor(0).setDepth(-20);
+    g.fillGradientStyle(0x1f5f6e, 0x1f5f6e, 0x061820, 0x061820, 1);
+    g.fillRect(0, 0, 1400, N.VYSKA);
+    const pozadi = scene.add.graphics().setScrollFactor(0.25, 0).setDepth(-19);
+    for (let x = 0; x < 3600; x += 320) {
+      pozadi.fillStyle(0x0b2530, 0.9); pozadi.fillRect(x + 250, 0, 26, N.VYSKA); // trubka
+      pozadi.fillStyle(0x163a47, 0.9); pozadi.fillRect(x + 254, 0, 6, N.VYSKA);
+      pozadi.fillStyle(0x0b2530); pozadi.fillCircle(x + 120, 190, 58); // okno ven do moře
+      pozadi.fillStyle(0x2b8fd6, 0.55); pozadi.fillCircle(x + 120, 190, 46);
+      pozadi.fillStyle(0xffffff, 0.25); pozadi.fillEllipse(x + 104, 172, 22, 10);
+      pozadi.fillStyle(0x495057); [0, 1, 2, 3, 4, 5, 6, 7].forEach((i) => {
+        const u = (i / 8) * Math.PI * 2;
+        pozadi.fillCircle(x + 120 + Math.cos(u) * 52, 190 + Math.sin(u) * 52, 3);
+      });
+    }
+    // blikající výstražná světla
+    const svetla = [];
+    for (let x = 60; x < 3600; x += 640) {
+      svetla.push(scene.add.circle(x, 40, 9, 0xff6b6b).setScrollFactor(0.25, 0).setDepth(-18));
+    }
+    scene.tweens.add({ targets: svetla, alpha: 0.2, duration: 600, yoyo: true, repeat: -1 });
     return g;
   },
 

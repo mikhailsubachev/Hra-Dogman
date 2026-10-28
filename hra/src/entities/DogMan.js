@@ -107,6 +107,14 @@ class DogMan {
     this.odrazDo = this.scene.time.now + 250;
   }
 
+  // proud bublin zespodu: tlačí nahoru a krátký skok ho nepřibrzdí
+  vynes(sila, max) {
+    const b = this.telo.body;
+    b.velocity.y = Math.max(b.velocity.y - sila, -max);
+    this.odrazDo = this.scene.time.now + 120;
+    this.posledniNaZemi = -1000;
+  }
+
   odpoj() { this.scene.events.off('postupdate', this.vykresli, this); }
 
   zmraz() { this.zmrazeny = true; this.telo.body.setAllowGravity(false); }

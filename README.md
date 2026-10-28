@@ -35,6 +35,7 @@ Užitečné přepínače v adrese: `?dotyk=1` zapne dotykové ovládání i na P
 
 - Menu, úvodní komiks (5 panelů), úroveň „Ponor 1: Dno přístavu“ a obrazovka „Mise splněna“.
 - Úroveň 2 „Souboj s Robo-chobotnicí“: odemkne se po dokončení Ponoru 1 (tlačítko DALŠÍ nebo v menu). Chobotnice třikrát udeří chapadlem (předem varuje „!“), od 2. kola střílí inkoust (nízký přeskoč, pod vysokým stůj). Pak se unaví a otevře kryt: skoč z prostřední plošiny na červený vypínač. Dokud je kryt otevřený, počítá se každý dopad na vypínač, klidně několik po sobě. Po 3 zásazích je poražena. Na hlavě chobotnice se mimo otevřený kryt stát nedá, setřese tě. Čuňas sedí v kabině, Bobánek fandí a ve 3. kole hází klíče. Štěk zruší chapadlo a rozprskne inkoust.
+- Úroveň 3 „Čuňasova základna“: zatopená kovová základna, odemkne se po souboji s chobotnicí. Proudy bublin vynesou Dog Mana nahoru na vysoké zdi, pohyblivé plošiny ho převezou přes šachty a miny po dotyku vybuchnou (Dog Man se vrátí na kontrolní bod, mina se za chvíli objeví znovu). Na konci stáhni velký vypínač, základna zhasne. Před i po úrovni je krátký komiks s Peťulkou.
 - Komiksové postavy podle kreseb dětí. Dog Man chodí, skáče (krátké zmáčknutí = nízký skok) a štěká.
 - Štěk stojí 5 kyslíku a jiný limit nemá. Kdo vyštěká všechen kyslík, utone a vrátí se na poslední bójku.
 - Skok shora na nepřítele: rybku zničí, medúzu a Bobánka na chvíli omráčí. Se zmáčknutým skokem se Dog Man odrazí výš.
@@ -55,7 +56,7 @@ Hra/
 │   └── kresba_na_sprite.py   převod fotky kresby na obrázek bez pozadí
 └── hra/                      samotná hra, tahle složka se nahrává na web
     ├── index.html
-    ├── levels/               úrovně jako textová mřížka (děti mohou upravovat): ponor1.js, chobotnice.js
+    ├── levels/               úrovně jako textová mřížka (děti mohou upravovat): ponor1.js, chobotnice.js, zakladna.js
     ├── assets/sprites/       kresby dětí převedené pro hru
     └── src/
         ├── nastaveni.js      rychlost, výška skoku, kyslík… (dá se ladit)
@@ -83,6 +84,10 @@ Otevřete `hra/levels/ponor1.js`. Každý znak je jedno políčko:
 | `C` | kontrolní bod (bójka) |
 | `S` | start Dog Mana |
 | `E` | konec úrovně (ponorka) |
+| `^` | proud bublin, vynese nahoru (hlavně v základně) |
+| `X` | mina |
+| `=` | pohyblivá plošina, jezdí po dráze z pomlček `-` ve stejném řádku |
+| `Z` | velký vypínač základny (konec úrovně) |
 
 Dog Man vyskočí nejvýš o 2 políčka a přeskočí díru širokou až 4 políčka. Po uložení stačí obnovit stránku. Obtížnost se dá doladit i v `hra/src/nastaveni.js` (cena štěku v kyslíku, ubývání kyslíku, výška odrazu).
 

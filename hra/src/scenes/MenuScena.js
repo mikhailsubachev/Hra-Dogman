@@ -35,20 +35,22 @@ class MenuScena extends Phaser.Scene {
     }).setOrigin(0.5);
     this.tweens.add({ targets: [tlacitko, napis], scale: 1.06, duration: 700, yoyo: true, repeat: -1, ease: 'Sine.inOut' });
 
-    // úroveň 2: odemkne se po dokončení úrovně 1
-    const odemceno = Postup.jeOdemcena('chobotnice');
-    const u2 = this.add.text(S / 2, 382, odemceno ? '2: Souboj s Robo-chobotnicí ▶' : '🔒 2: Chobotnice (nejdřív dokonči Ponor 1)', {
-      fontFamily: N.PISMO, fontSize: '30px', color: odemceno ? '#ffffff' : '#a5d8ff', stroke: '#0b2a55', strokeThickness: 6,
-      backgroundColor: odemceno ? '#7048e8' : undefined, padding: { x: 14, y: 6 },
-    }).setOrigin(0.5);
-    if (odemceno) {
-      u2.setInteractive({ useHandCursor: true }).on('pointerdown', () => { Zvuky.klik(); Postup.spust(this, 'chobotnice'); });
-    }
+    // další úrovně: každá se odemkne po dokončení předchozí
+    UROVNE_HRY.slice(1).forEach((u, i) => {
+      const odemceno = Postup.jeOdemcena(u.id);
+      const predchozi = UROVNE_HRY[i];
+      const popis = odemceno ? `${i + 2}: ${u.menu} ▶` : `🔒 ${i + 2}: ${u.nazev} (nejdřív dokonči ${predchozi.nazev})`;
+      const t = this.add.text(S / 2, 372 + i * 50, popis, {
+        fontFamily: N.PISMO, fontSize: '27px', color: odemceno ? '#ffffff' : '#a5d8ff', stroke: '#0b2a55', strokeThickness: 6,
+        backgroundColor: odemceno ? '#7048e8' : undefined, padding: { x: 14, y: 3 },
+      }).setOrigin(0.5);
+      if (odemceno) t.setInteractive({ useHandCursor: true }).on('pointerdown', () => { Zvuky.klik(); Postup.spust(this, u.id); });
+    });
 
     const nejlepsi = Ulozeni.rekordy('ponor1')[0];
     if (nejlepsi) {
-      this.add.text(S / 2, 436, `🏆 Ponor 1: ${nejlepsi.jmeno}  ${formatCas(nejlepsi.cas)}`, {
-        fontFamily: N.PISMO, fontSize: '26px', color: '#ffd43b', stroke: '#0b2a55', strokeThickness: 5,
+      this.add.text(S / 2, 366 + (UROVNE_HRY.length - 1) * 50, `🏆 Ponor 1: ${nejlepsi.jmeno}  ${formatCas(nejlepsi.cas)}`, {
+        fontFamily: N.PISMO, fontSize: '24px', color: '#ffd43b', stroke: '#0b2a55', strokeThickness: 5,
       }).setOrigin(0.5);
     }
 

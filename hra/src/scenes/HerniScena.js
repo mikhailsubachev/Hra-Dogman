@@ -146,13 +146,19 @@ class HerniScena extends Phaser.Scene {
     return zasazeno;
   }
 
-  // konec úrovně: výsledky na obrazovku Mise splněna
+  // konec úrovně: případně komiks a pak výsledky na obrazovku Mise splněna
   dokonceno(data) {
+    const vysledky = { uroven: this.idUrovne, cas: Math.round(this.casHry), zniceno: this.zniceno, zasahu: this.zasahu, ...data };
+    const uroven = Postup.najdi(this.idUrovne);
     this.time.delayedCall(300, () => {
       this.cameras.main.fadeOut(400);
-      this.time.delayedCall(450, () => this.scene.start('Konec', {
-        uroven: this.idUrovne, cas: Math.round(this.casHry), zniceno: this.zniceno, zasahu: this.zasahu, ...data,
-      }));
+      this.time.delayedCall(450, () => {
+        if (uroven && uroven.komiksPo) {
+          this.scene.start('Komiks', { panely: uroven.komiksPo(), dalsi: { scena: 'Konec', data: vysledky } });
+        } else {
+          this.scene.start('Konec', vysledky);
+        }
+      });
     });
   }
 

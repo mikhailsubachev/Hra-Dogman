@@ -14,9 +14,30 @@ const KOMIKS_PO_CHOBOTNICI = [
   { postava: 'dogman', mluvi: 'Dog Man', text: 'HAF HAF!', vypravec: 'Přístav je zase v bezpečí. Ale na jak dlouho?' },
 ];
 
+const KOMIKS_PRED_ZAKLADNOU = [
+  { postava: 'ponorka', vypravec: 'Stopa šroubků vede k Čuňasově tajné základně na dně moře…' },
+  { postava: 'petulka', mluvi: 'Peťulka', text: 'Dog Mane! Uvnitř je velký vypínač. Když ho stáhneš, základna zhasne!' },
+  { postava: 'cunas', mluvi: 'Čuňas', text: 'Bobánku! Zapni miny a pusť bublinové proudy!' },
+  { postava: 'bobanek', mluvi: 'Bobánek', text: 'Kterým čudlíkem, šéfe? Tím červeným, nebo tím červeným?' },
+  { postava: 'dogman', mluvi: 'Dog Man', text: 'HAF!', vypravec: 'Proud bublin tě vynese nahoru. Na miny nesahej!' },
+];
+
+const KOMIKS_PO_ZAKLADNE = [
+  { postava: 'cunas', mluvi: 'Čuňas', text: 'Tma! Kdo mi zhasnul?! To zase ten pes!' },
+  { postava: 'bobanek', mluvi: 'Bobánek', text: 'Šéfe, já se ve tmě bojím…' },
+  { postava: 'petulka', mluvi: 'Peťulka', text: 'Hurá, Dog Mane! Teď už Čuňas žádné příšery nevyrobí.', vypravec: 'Aspoň na chvíli…' },
+];
+
 const UROVNE_HRY = [
   { id: 'ponor1', scena: 'Ponor', data: { uroven: 'ponor1' }, nazev: 'Ponor 1', komiksPred: () => UVODNI_KOMIKS },
-  { id: 'chobotnice', scena: 'Chobotnice', data: {}, nazev: 'Chobotnice', komiksPred: () => KOMIKS_PRED_CHOBOTNICI },
+  {
+    id: 'chobotnice', scena: 'Chobotnice', data: {}, nazev: 'Chobotnice', menu: 'Souboj s Robo-chobotnicí',
+    komiksPred: () => KOMIKS_PRED_CHOBOTNICI, komiksPo: () => KOMIKS_PO_CHOBOTNICI,
+  },
+  {
+    id: 'zakladna', scena: 'Ponor', data: { uroven: 'zakladna' }, nazev: 'Základna', menu: 'Čuňasova základna',
+    komiksPred: () => KOMIKS_PRED_ZAKLADNOU, komiksPo: () => KOMIKS_PO_ZAKLADNE,
+  },
 ];
 
 const Postup = {

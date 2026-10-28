@@ -200,13 +200,4 @@ class ChobotniceScena extends HerniScena {
     }
     this.time.delayedCall(3600, () => this.dokonceno({ celkem: undefined, kosti: 0 }));
   }
-
-  // po souboji krátký komiks a pak výsledky
-  dokonceno(data) {
-    const vysledky = { uroven: this.idUrovne, cas: Math.round(this.casHry), zniceno: this.zniceno, zasahu: this.zasahu, ...data };
-    this.cameras.main.fadeOut(400);
-    this.time.delayedCall(450, () => this.scene.start('Komiks', {
-      panely: KOMIKS_PO_CHOBOTNICI, dalsi: { scena: 'Konec', data: vysledky },
-    }));
-  }
 }

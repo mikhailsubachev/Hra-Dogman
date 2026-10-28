@@ -31,6 +31,11 @@ const N = {
     bublina: 40,         // kolik přidá jedna bublina
   },
 
+  // Čuňasova základna (úroveň 3)
+  PROUD: { sila: 45, max: 300 },      // proud bublin (^): jak silně a jak rychle vynáší nahoru
+  PLOSINA: { rychlost: 80 },          // pohyblivá plošina (=)
+  MINA: { obnova: 2500 },             // za jak dlouho se vybuchlá mina (X) vrátí
+
   PISMO_NADPIS: '"Bangers", "Comic Sans MS", "Chalkboard SE", cursive',
   PISMO: '"Patrick Hand", "Comic Sans MS", "Chalkboard SE", sans-serif',
 };

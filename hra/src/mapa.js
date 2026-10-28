@@ -4,6 +4,10 @@
 //   R  robotická rybka      M  mechanická medúza
 //   B  Bobánek              C  kontrolní bod (bójka)
 //   S  start Dog Mana       E  konec úrovně (ponorka)
+// V Čuňasově základně navíc:
+//   ^  proud bublin (vynese nahoru)  X  mina
+//   =  pohyblivá plošina, jezdí po dráze z pomlček -
+//   Z  velký vypínač základny (konec úrovně)
 const UROVNE = {};
 
 function nactiMapu(text) {
