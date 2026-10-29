@@ -144,24 +144,26 @@ class MenuScena extends Phaser.Scene {
     if (this.vyber) return;
     const S = N.SIRKA;
     const postup = Ulozeni.nacti();
-    this.otevriOkno('VYBER ÚROVEŇ', 150 + UROVNE_HRY.length * 76 + 10);
+    // řádky se zmenší, aby se vešly všechny úrovně
+    const krok = Math.min(76, Math.floor(340 / UROVNE_HRY.length));
+    this.otevriOkno('VYBER ÚROVEŇ', 140 + UROVNE_HRY.length * krok + 10);
     const okno = this.vyber;
 
     UROVNE_HRY.forEach((u, i) => {
-      const y = 150 + i * 76;
+      const y = 140 + i * krok;
       const odemceno = Postup.jeOdemcena(u.id);
       // ✓ a vlastní čas jen přihlášenému hráči u úrovně, kterou opravdu dohrál
       const muj = Ucet.prihlaseny && postup[u.id] && postup[u.id].hotovo ? postup[u.id].nejrychleji : undefined;
-      const radek = this.add.rectangle(S / 2, y, 680, 68, odemceno ? 0x7048e8 : 0x343a40)
+      const radek = this.add.rectangle(S / 2, y, 680, krok - 8, odemceno ? 0x7048e8 : 0x343a40)
         .setStrokeStyle(5, 0x1b1b1b);
       const popis = `${odemceno ? '' : '🔒 '}${i + 1}: ${u.menu || u.nazev}${muj ? ' ✓' : ''}`;
-      const text = this.add.text(S / 2 - 320, muj ? y - 12 : y, popis, {
+      const text = this.add.text(S / 2 - 320, muj ? y - 11 : y, popis, {
         fontFamily: N.PISMO, fontSize: '30px', color: odemceno ? '#ffffff' : '#adb5bd', stroke: '#1b1b1b', strokeThickness: 5,
       }).setOrigin(0, 0.5);
       okno.add(radek);
       if (muj) {
-        okno.add(this.add.text(S / 2 - 320, y + 18, `tvůj nejlepší čas: ${formatCas(muj)}`, {
-          fontFamily: N.PISMO, fontSize: '21px', color: '#8ce99a', stroke: '#1b1b1b', strokeThickness: 4,
+        okno.add(this.add.text(S / 2 - 320, y + 16, `tvůj nejlepší čas: ${formatCas(muj)}`, {
+          fontFamily: N.PISMO, fontSize: '20px', color: '#8ce99a', stroke: '#1b1b1b', strokeThickness: 4,
         }).setOrigin(0, 0.5));
       }
       const info = this.add.text(S / 2 + 320, y, odemceno ? '' : `dokonči ${UROVNE_HRY[i - 1].nazev}`, {

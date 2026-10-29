@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="100 44 1040 436" width="1040" height="436">
+<!-- Malý robo-žralok: stejný jako velký, jen bez kabiny -->
+<defs>
+<pattern id="sala" width="12" height="12" patternUnits="userSpaceOnUse"><rect x="0" y="0" width="6" height="12" fill="#f6cf2e"/><rect x="6" y="0" width="6" height="12" fill="#e3463c"/></pattern>
+<clipPath id="mrizka"><circle cx="120" cy="290" r="34"/></clipPath>
+<clipPath id="kopule"><path d="M782 204 L782 86 C782 34 878 34 878 86 L878 204 Z"/></clipPath>
+</defs>
+<g stroke-linejoin="round" stroke-linecap="round" transform="translate(20 10)">
+<!-- VRTULE v mřížce na tyči -->
+<path d="M300 290 L150 290" fill="none" stroke="#1b1622" stroke-width="14"></path>
+<path d="M300 290 L150 290" fill="none" stroke="#9aa3ad" stroke-width="6"></path>
+<circle cx="120" cy="290" r="34" fill="#d9dde3"></circle>
+<g clip-path="url(#mrizka)" stroke="#1b1622" stroke-width="4">
+<path d="M80 270 H160 M80 284 H160 M80 298 H160 M80 312 H160 M100 250 V330 M114 250 V330 M128 250 V330 M142 250 V330"></path>
+</g>
+<circle cx="120" cy="290" r="34" fill="none" stroke="#1b1622" stroke-width="8"></circle>
+<path d="M98 268 q8 -8 20 -10" fill="none" stroke="#ffffff" stroke-width="5"></path>
+
+<!-- OCAS do X -->
+<path d="M352 250 L262 152 L212 182 L304 282 L204 382 L252 418 L360 306 Z" fill="#2f4fb5" stroke="#1b1622" stroke-width="9"></path>
+<path d="M230 168 L262 152 L300 194" fill="none" stroke="#ffffff" stroke-width="5" opacity="0.5"></path>
+<path d="M226 396 L252 418 L360 306 L344 292 Z" fill="#1b1622" fill-opacity="0.28"></path>
+
+<!-- PLOUTEV nahoře, trojúhelník -->
+<path d="M560 196 L622 62 L690 182 Z" fill="#3b5fd0" stroke="#1b1622" stroke-width="8"></path>
+<path d="M600 180 L622 62 L690 182 Z" fill="#1b1622" fill-opacity="0.18"></path>
+<!-- PLOUTEV nahoře, obrácený trojúhelník s nýty -->
+<path d="M650 62 L766 54 L718 172 Z" fill="#2f4fb5" stroke="#1b1622" stroke-width="8"></path>
+<g fill="#d9dde3" stroke="#1b1622" stroke-width="3">
+<circle cx="672" cy="76" r="7"></circle><circle cx="744" cy="70" r="7"></circle><circle cx="716" cy="136" r="7"></circle>
+</g>
+<path d="M666 76 h12 M672 70 v12 M738 70 h12 M744 64 v12 M710 136 h12 M716 130 v12" fill="none" stroke="#1b1622" stroke-width="2.5"></path>
+
+<!-- PLOUTEV dole s nýty -->
+<path d="M640 312 L776 310 L716 402 Z" fill="#2f4fb5" stroke="#1b1622" stroke-width="8"></path>
+<path d="M700 312 L776 310 L716 402 Z" fill="#1b1622" fill-opacity="0.25"></path>
+<g fill="#d9dde3" stroke="#1b1622" stroke-width="3">
+<circle cx="688" cy="340" r="7"></circle><circle cx="736" cy="340" r="7"></circle><circle cx="714" cy="374" r="6"></circle>
+</g>
+<path d="M682 340 h12 M688 334 v12 M730 340 h12 M736 334 v12 M709 374 h10 M714 369 v10" fill="none" stroke="#1b1622" stroke-width="2.5"></path>
+
+<!-- TĚLO žraloka -->
+<path d="M330 242 C430 232 520 192 640 176 C800 158 950 200 1040 258 C1080 284 1110 308 1114 322 C1084 340 1044 352 1000 354 C860 336 600 336 440 344 C400 330 360 318 330 302 Z" fill="#2f4fd0" stroke="#1b1622" stroke-width="10"></path>
+<path d="M360 236 C460 222 540 190 650 182 C780 172 900 198 990 240" fill="none" stroke="#ffffff" stroke-width="7" opacity="0.4"></path>
+<!-- BŘICHO hnědé, prohnuté dovnitř -->
+<path d="M436 330 C600 284 860 284 964 322 C962 334 958 342 952 349 C840 336 600 336 440 344 Z" fill="#d6a982" stroke="#1b1622" stroke-width="7"></path>
+<path d="M446 342 C600 330 840 330 948 346 C840 340 600 340 452 346 Z" fill="#1b1622" fill-opacity="0.22"></path>
+<!-- okénka na břiše -->
+<g fill="#eef3f8" stroke="#1b1622" stroke-width="4">
+<circle cx="510" cy="330" r="9"></circle><circle cx="565" cy="324" r="9"></circle><circle cx="620" cy="320" r="9"></circle><circle cx="675" cy="318" r="9"></circle><circle cx="730" cy="317" r="9"></circle><circle cx="785" cy="317" r="9"></circle><circle cx="840" cy="318" r="9"></circle><circle cx="895" cy="322" r="9"></circle>
+</g>
+<path d="M502 330 h16 M510 322 v16 M557 324 h16 M565 316 v16 M612 320 h16 M620 312 v16 M667 318 h16 M675 310 v16 M722 317 h16 M730 309 v16 M777 317 h16 M785 309 v16 M832 318 h16 M840 310 v16 M887 322 h16 M895 314 v16" fill="none" stroke="#1b1622" stroke-width="2.5"></path>
+<!-- ZUBY -->
+<path d="M980 322 L1110 320" fill="none" stroke="#1b1622" stroke-width="7"></path>
+<path d="M984 322 L994 344 L1004 322 L1016 344 L1026 321 L1038 342 L1048 321 L1060 340 L1070 320 L1080 336 L1090 320 L1098 332 L1106 320 Z" fill="#ffffff" stroke="#1b1622" stroke-width="4"></path>
+<!-- MECHANICKÉ OKO -->
+<circle cx="960" cy="252" r="32" fill="#ffffff" stroke="#1b1622" stroke-width="7"></circle>
+<g stroke="#e3463c" stroke-width="4">
+<path d="M960 252 L960 226 M960 252 L978 234 M960 252 L986 252 M960 252 L978 270 M960 252 L960 278 M960 252 L942 270 M960 252 L934 252 M960 252 L942 234"></path>
+</g>
+<circle cx="960" cy="252" r="10" fill="#e3463c" stroke="#1b1622" stroke-width="4"></circle>
+<path d="M944 236 q6 -6 14 -8" fill="none" stroke="#9aa3ad" stroke-width="4"></path>
+<!-- nýty na boku -->
+<g fill="#9aa3ad" stroke="#1b1622" stroke-width="3">
+<circle cx="420" cy="256" r="5"></circle><circle cx="520" cy="230" r="5"></circle><circle cx="860" cy="210" r="5"></circle><circle cx="1040" cy="286" r="5"></circle>
+</g>
+</g>
+</svg>

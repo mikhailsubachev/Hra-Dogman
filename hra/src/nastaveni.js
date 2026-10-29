@@ -45,6 +45,14 @@ const N = {
   },
   SKLUZ: 28,             // jak silně táhne kluzká paluba (< a >)
 
+  // Souboj s Robo-žralokem (úroveň 5), další čísla jsou v src/entities/Zralok.js
+  CUDLIK: {
+    naboje: 4,           // kolik bublin vystřelí, než se vybije
+    pauza: 450,          // jak často střílí (v milisekundách)
+    dobiti: 5000,        // za jak dlouho se vybitý čudlík znovu nabije
+    rychlost: 420,       // jak rychle letí bublina
+  },
+
   // adresa sdílené Síně slávy (server/vysledky.php na hostingu); prázdná = jen výsledky z tohoto zařízení
   SIN_SLAVY_ADRESA: 'https://www.subachev.com/dogman/vysledky.php',
 

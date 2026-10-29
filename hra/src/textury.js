@@ -148,6 +148,25 @@ const Textury = {
       g.fillStyle(0x343a40); [12, 24, 36, 48].forEach((x) => g.fillRect(x, 4, 5, 8));
     });
 
+    // --- souboj s Robo-žralokem ---
+    // čudlík bublinometu: kovový podstavec s velkým tlačítkem a trubkou nahoru
+    const cudlik = (barva) => (g) => {
+      g.fillStyle(0x1b1622); g.fillRoundedRect(0, 20, 64, 20, 6);
+      g.fillStyle(0x868e96); g.fillRoundedRect(3, 23, 58, 14, 4);
+      g.fillStyle(0x343a40); g.fillCircle(10, 30, 3); g.fillCircle(54, 30, 3);
+      g.fillStyle(0x1b1622); g.fillEllipse(32, 20, 44, 26);
+      g.fillStyle(barva); g.fillEllipse(32, 19, 36, 20);
+      g.fillStyle(0xffffff, 0.7); g.fillEllipse(25, 14, 12, 5);
+    };
+    kresli('cudlik', 64, 40, cudlik(0x40c057));
+    kresli('cudlik_prazdny', 64, 40, cudlik(0x868e96));
+    // bublina z bublinometu
+    kresli('strela', 30, 30, (g) => {
+      g.fillStyle(0xbfe9ff, 0.55); g.fillCircle(15, 15, 13);
+      g.lineStyle(3, 0xffffff); g.strokeCircle(15, 15, 13);
+      g.fillStyle(0xffffff, 0.95); g.fillEllipse(10, 9, 8, 4);
+    });
+
     // --- Čuňasova základna ---
     kresli('kov_hore', 48, 48, (g) => {
       g.fillStyle(0x4f6472); g.fillRect(0, 0, 48, 48);
@@ -334,6 +353,21 @@ const Textury = {
       svetla.push(scene.add.circle(x, 40, 9, 0xff6b6b).setScrollFactor(0.25, 0).setDepth(-18));
     }
     scene.tweens.add({ targets: svetla, alpha: 0.2, duration: 600, yoyo: true, repeat: -1 });
+    return g;
+  },
+
+  // žraločí hangár: tmavě modrá voda, mřížka a výstražné pruhy
+  hangar(scene) {
+    const g = scene.add.graphics().setScrollFactor(0).setDepth(-20);
+    g.fillGradientStyle(0x1c4f8a, 0x1c4f8a, 0x071a33, 0x071a33, 1);
+    g.fillRect(0, 0, 1400, N.VYSKA);
+    const pozadi = scene.add.graphics().setDepth(-19);
+    pozadi.lineStyle(3, 0x0b2a55, 0.7);
+    for (let x = 0; x < 1500; x += 96) pozadi.lineBetween(x, 0, x, N.VYSKA);
+    for (let y = 40; y < N.VYSKA; y += 96) pozadi.lineBetween(0, y, 1500, y);
+    for (let x = 0; x < 1500; x += 48) { // výstražný pruh nahoře
+      pozadi.fillStyle(x % 96 ? 0x1b1622 : 0xffd43b, 0.7); pozadi.fillTriangle(x, 0, x + 48, 0, x + 24, 18);
+    }
     return g;
   },
 
