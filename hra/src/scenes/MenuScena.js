@@ -40,13 +40,8 @@ class MenuScena extends Phaser.Scene {
       fontFamily: N.PISMO, fontSize: '28px', color: '#ffffff', stroke: '#0b2a55', strokeThickness: 6,
     }).setOrigin(0.5);
 
-    // nejlepší čas té úrovně ze Síně slávy všech hráčů
-    const rekord = this.add.text(S / 2, 398, '', {
-      fontFamily: N.PISMO, fontSize: '24px', color: '#ffd43b', stroke: '#0b2a55', strokeThickness: 5,
-    }).setOrigin(0.5);
-    this.rekordyUrovne(aktualni.id).then((rekordy) => {
-      if (this.sys.isActive() && rekordy[0]) rekord.setText(`🏆 ${rekordy[0].jmeno}  ${formatCas(rekordy[0].cas)}`);
-    });
+    // nejlepší čas té úrovně ze Síně slávy všech hráčů (jen pro přihlášené)
+    if (Ucet.prihlaseny) this.ukazRekord(aktualni.id);
 
     // výběr konkrétní úrovně a Síň slávy: vlevo nahoře, ať nezakrývají postavy
     const tlacitkoMenu = (y, popis, akce) => this.add.text(16, y, popis, {
@@ -106,6 +101,17 @@ class MenuScena extends Phaser.Scene {
     this.input.keyboard.on('keydown-ESC', () => this.zavriVyber());
   }
 
+  // pod tlačítkem HRÁT: nejrychlejší hráč úrovně
+  ukazRekord(id) {
+    const S = N.SIRKA;
+    const rekord = this.add.text(S / 2, 398, '', {
+      fontFamily: N.PISMO, fontSize: '24px', color: '#ffd43b', stroke: '#0b2a55', strokeThickness: 5,
+    }).setOrigin(0.5);
+    this.rekordyUrovne(id).then((rekordy) => {
+      if (this.sys.isActive() && rekordy[0]) rekord.setText(`🏆 ${rekordy[0].jmeno}  ${formatCas(rekordy[0].cas)}`);
+    });
+  }
+
   // tabulka úrovně: všichni hráči ze serveru, bez serveru (nebo když neodpoví) z tohoto zařízení
   async rekordyUrovne(id) {
     const rekordy = SdileneVysledky.zapnuto ? await SdileneVysledky.nacti(id) : null;
@@ -140,8 +146,8 @@ class MenuScena extends Phaser.Scene {
     UROVNE_HRY.forEach((u, i) => {
       const y = 160 + i * 82;
       const odemceno = Postup.jeOdemcena(u.id);
-      // ✓ a vlastní čas jen u úrovně, kterou hráč opravdu dohrál
-      const muj = postup[u.id] && postup[u.id].hotovo ? postup[u.id].nejrychleji : undefined;
+      // ✓ a vlastní čas jen přihlášenému hráči u úrovně, kterou opravdu dohrál
+      const muj = Ucet.prihlaseny && postup[u.id] && postup[u.id].hotovo ? postup[u.id].nejrychleji : undefined;
       const radek = this.add.rectangle(S / 2, y, 680, 68, odemceno ? 0x7048e8 : 0x343a40)
         .setStrokeStyle(5, 0x1b1b1b);
       const popis = `${odemceno ? '' : '🔒 '}${i + 1}: ${u.menu || u.nazev}${muj ? ' ✓' : ''}`;
