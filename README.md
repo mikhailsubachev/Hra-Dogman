@@ -35,7 +35,7 @@ Užitečné přepínače v adrese: `?dotyk=1` zapne dotykové ovládání i na P
 ## Co hra už umí
 
 - Menu, úvodní komiks (5 panelů), úroveň „Ponor 1: Dno přístavu“ a obrazovka „Mise splněna“.
-- Menu: HRÁT pokračuje první nedokončenou úrovní (po dohrání všech tou poslední). „☰ Vybrat úroveň“ otevře seznam úrovní: odemčené jdou spustit, u dokončených je ✓ a nejlepší čas.
+- Menu: HRÁT pokračuje první nedokončenou úrovní (po dohrání všech tou poslední). „☰ Vybrat úroveň“ otevře seznam úrovní: odemčené jdou spustit, u dokončených je ✓, vpravo nejrychlejší hráč úrovně. „🏆 Síň slávy“ ukáže nejlepší časy všech hráčů pro každou úroveň zvlášť, vidí ji i nepřihlášený host.
 - Úroveň 2 „Souboj s Robo-chobotnicí“: odemkne se po dokončení Ponoru 1 (tlačítko DALŠÍ, HRÁT nebo výběr úrovně v menu). Chobotnice třikrát udeří chapadlem (předem varuje „!“), od 2. kola střílí inkoust (nízký přeskoč, pod vysokým stůj). Pak se unaví a otevře kryt: skoč z prostřední plošiny na červený vypínač. Dokud je kryt otevřený, počítá se každý dopad na vypínač, klidně několik po sobě. Po 3 zásazích je poražena. Na hlavě chobotnice se mimo otevřený kryt stát nedá, setřese tě. Čuňas sedí v kabině, Bobánek fandí a ve 3. kole hází klíče. Štěk zruší chapadlo a rozprskne inkoust.
 - Úroveň 3 „Čuňasova základna“: zatopená kovová základna, odemkne se po souboji s chobotnicí. Proudy bublin vynesou Dog Mana nahoru na vysoké zdi, pohyblivé plošiny ho převezou přes šachty a miny po dotyku vybuchnou (Dog Man se vrátí na kontrolní bod, mina se za chvíli objeví znovu). Na konci stáhni velký vypínač, základna zhasne. Před i po úrovni je krátký komiks s Peťulkou.
 - Komiksové postavy podle kreseb dětí. Dog Man chodí, skáče (krátké zmáčknutí = nízký skok) a štěká.
