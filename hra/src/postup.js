@@ -29,7 +29,7 @@ const KOMIKS_PO_ZAKLADNE = [
 ];
 
 const UROVNE_HRY = [
-  { id: 'ponor1', scena: 'Ponor', data: { uroven: 'ponor1' }, nazev: 'Ponor 1', komiksPred: () => UVODNI_KOMIKS },
+  { id: 'ponor1', scena: 'Ponor', data: { uroven: 'ponor1' }, nazev: 'Ponor', komiksPred: () => UVODNI_KOMIKS },
   {
     id: 'chobotnice', scena: 'Chobotnice', data: {}, nazev: 'Chobotnice', menu: 'Souboj s Robo-chobotnicí',
     komiksPred: () => KOMIKS_PRED_CHOBOTNICI, komiksPo: () => KOMIKS_PO_CHOBOTNICI,

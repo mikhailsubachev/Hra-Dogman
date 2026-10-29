@@ -140,17 +140,24 @@ class MenuScena extends Phaser.Scene {
     UROVNE_HRY.forEach((u, i) => {
       const y = 160 + i * 82;
       const odemceno = Postup.jeOdemcena(u.id);
-      const hotovo = postup[u.id] && postup[u.id].hotovo;
+      // ✓ a vlastní čas jen u úrovně, kterou hráč opravdu dohrál
+      const muj = postup[u.id] && postup[u.id].hotovo ? postup[u.id].nejrychleji : undefined;
       const radek = this.add.rectangle(S / 2, y, 680, 68, odemceno ? 0x7048e8 : 0x343a40)
         .setStrokeStyle(5, 0x1b1b1b);
-      const popis = `${odemceno ? '' : '🔒 '}${i + 1}: ${u.menu || u.nazev}${hotovo ? ' ✓' : ''}`;
-      const text = this.add.text(S / 2 - 320, y, popis, {
+      const popis = `${odemceno ? '' : '🔒 '}${i + 1}: ${u.menu || u.nazev}${muj ? ' ✓' : ''}`;
+      const text = this.add.text(S / 2 - 320, muj ? y - 12 : y, popis, {
         fontFamily: N.PISMO, fontSize: '30px', color: odemceno ? '#ffffff' : '#adb5bd', stroke: '#1b1b1b', strokeThickness: 5,
       }).setOrigin(0, 0.5);
+      okno.add(radek);
+      if (muj) {
+        okno.add(this.add.text(S / 2 - 320, y + 18, `tvůj nejlepší čas: ${formatCas(muj)}`, {
+          fontFamily: N.PISMO, fontSize: '21px', color: '#8ce99a', stroke: '#1b1b1b', strokeThickness: 4,
+        }).setOrigin(0, 0.5));
+      }
       const info = this.add.text(S / 2 + 320, y, odemceno ? '' : `dokonči ${UROVNE_HRY[i - 1].nazev}`, {
         fontFamily: N.PISMO, fontSize: '22px', color: '#ffd43b', stroke: '#1b1b1b', strokeThickness: 5,
       }).setOrigin(1, 0.5);
-      okno.add([radek, text, info]);
+      okno.add([text, info]);
       if (odemceno) {
         radek.setInteractive({ useHandCursor: true }).on('pointerup', () => { Zvuky.klik(); Postup.spust(this, u.id); });
         this.rekordyUrovne(u.id).then((rekordy) => {

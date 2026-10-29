@@ -1,4 +1,4 @@
-// Skákací část mise: Dog Man pod vodou (Ponor 1 i Čuňasova základna).
+// Skákací část mise: Dog Man pod vodou (Ponor i Čuňasova základna).
 class PonorScena extends HerniScena {
   constructor() { super('Ponor'); }
 
