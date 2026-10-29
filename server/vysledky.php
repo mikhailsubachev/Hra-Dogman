@@ -4,6 +4,7 @@
 // data/vysledky.json vedle něj, databáze není potřeba.
 //
 //   GET  vysledky.php?uroven=ponor1                          -> nejlepší časy úrovně
+//   GET  vysledky.php?limity                                 -> nejkratší přijatý čas každé úrovně (kontrola, že běží nová verze)
 //   POST {"akce":"registrace","prezdivka","pin","postup"}    -> nový hráč, vrátí token
 //   POST {"akce":"prihlaseni","prezdivka","pin"}             -> token a postup hráče
 //   POST {"akce":"postup","token"}                           -> postup hráče
@@ -81,6 +82,7 @@ function uloz($f, $data) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    if (isset($_GET['limity'])) odpoved(['limity' => UROVNE]);
     $uroven = $_GET['uroven'] ?? '';
     if (!isset(UROVNE[$uroven])) odpoved(['chyba' => 'Neznámá úroveň'], 400);
     odpoved(['rekordy' => tabulka($data, $uroven)]);
