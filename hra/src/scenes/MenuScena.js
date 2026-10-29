@@ -179,21 +179,21 @@ class MenuScena extends Phaser.Scene {
     const S = N.SIRKA;
     this.otevriOkno('SÍŇ SLÁVY', 470);
     const okno = this.vyber;
-    const sirka = Math.min(300, (S - 40) / UROVNE_HRY.length - 10); // sloupce se vejdou i na úzkou obrazovku
+    const sirka = Math.min(210, (S - 40) / UROVNE_HRY.length - 10); // úzké sloupce: vejdou se i další úrovně
     UROVNE_HRY.forEach((u, i) => {
       const x = S / 2 + (i - (UROVNE_HRY.length - 1) / 2) * (sirka + 10);
-      const styl = { fontFamily: N.PISMO, fontSize: sirka < 260 ? '21px' : '24px', color: '#ffffff', stroke: '#0b2a55', strokeThickness: 5 };
+      const styl = { fontFamily: N.PISMO, fontSize: '20px', color: '#ffffff', stroke: '#0b2a55', strokeThickness: 5 };
       const nacitam = this.add.text(x, 200, 'Načítám…', { ...styl, color: '#d0ebff' }).setOrigin(0.5);
       okno.add([
-        this.add.rectangle(x, 270, sirka, 300, 0x1864ab, 0.95).setStrokeStyle(4, 0x1b1b1b),
-        this.add.text(x, 140, `${i + 1}: ${u.nazev}`, { ...styl, fontSize: '28px', color: '#ffd43b' }).setOrigin(0.5),
+        this.add.rectangle(x, 262, sirka, 280, 0x1864ab, 0.95).setStrokeStyle(4, 0x1b1b1b),
+        this.add.text(x, 140, `${i + 1}: ${u.nazev}`, { ...styl, fontSize: '24px', color: '#ffd43b' }).setOrigin(0.5),
         nacitam,
       ]);
       this.rekordyUrovne(u.id).then((rekordy) => {
         if (!nacitam.active) return;
         nacitam.setText(rekordy.length ? '' : 'Zatím prázdná');
         rekordy.slice(0, 7).forEach((r, j) => {
-          const y = 182 + j * 36;
+          const y = 178 + j * 32;
           const medaile = ['🥇', '🥈', '🥉'][j] || `${j + 1}.`;
           okno.add([
             this.add.text(x - sirka / 2 + 12, y, `${medaile} ${r.jmeno}`, styl).setOrigin(0, 0.5),
