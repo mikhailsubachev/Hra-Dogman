@@ -55,6 +55,13 @@ const Postup = {
     return !!(predchozi && predchozi.hotovo);
   },
 
+  // kam pokračuje HRÁT: první odemčená a nedokončená úroveň, po dohrání všech ta poslední
+  aktualni() {
+    const postup = Ulozeni.nacti();
+    const odemcene = UROVNE_HRY.filter((u) => this.jeOdemcena(u.id));
+    return odemcene.find((u) => !(postup[u.id] && postup[u.id].hotovo)) || odemcene[odemcene.length - 1];
+  },
+
   // spustí úroveň, s komiksem předem (nebo bez, při opakování)
   spust(scene, id, sKomiksem = true) {
     const u = this.najdi(id);

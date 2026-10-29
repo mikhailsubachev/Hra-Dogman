@@ -27,41 +27,41 @@ class MenuScena extends Phaser.Scene {
     this.tweens.add({ targets: cunas, angle: { from: -4, to: 4 }, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.inOut' });
     this.tweens.add({ targets: bobanek, y: '-=14', duration: 700, yoyo: true, repeat: -1, ease: 'Sine.inOut' });
 
-    // tlačítko HRÁT
-    const tlacitko = this.add.rectangle(S / 2, 300, 270, 96, 0xff922b)
+    // tlačítko HRÁT: pokračuje od poslední dosažené úrovně
+    const aktualni = Postup.aktualni();
+    const poradi = UROVNE_HRY.indexOf(aktualni) + 1;
+    const tlacitko = this.add.rectangle(S / 2, 290, 270, 96, 0xff922b)
       .setStrokeStyle(7, 0x1b1b1b).setInteractive({ useHandCursor: true });
-    const napis = this.add.text(S / 2, 302, 'HRÁT', {
+    const napis = this.add.text(S / 2, 292, 'HRÁT', {
       fontFamily: N.PISMO_NADPIS, fontSize: '64px', color: '#ffffff', stroke: '#1b1b1b', strokeThickness: 8,
     }).setOrigin(0.5);
     this.tweens.add({ targets: [tlacitko, napis], scale: 1.06, duration: 700, yoyo: true, repeat: -1, ease: 'Sine.inOut' });
+    this.add.text(S / 2, 362, `${poradi}: ${aktualni.menu || aktualni.nazev}`, {
+      fontFamily: N.PISMO, fontSize: '28px', color: '#ffffff', stroke: '#0b2a55', strokeThickness: 6,
+    }).setOrigin(0.5);
 
-    // další úrovně: každá se odemkne po dokončení předchozí
-    UROVNE_HRY.slice(1).forEach((u, i) => {
-      const odemceno = Postup.jeOdemcena(u.id);
-      const predchozi = UROVNE_HRY[i];
-      const popis = odemceno ? `${i + 2}: ${u.menu} ▶` : `🔒 ${i + 2}: ${u.nazev} (nejdřív dokonči ${predchozi.nazev})`;
-      const t = this.add.text(S / 2, 372 + i * 50, popis, {
-        fontFamily: N.PISMO, fontSize: '27px', color: odemceno ? '#ffffff' : '#a5d8ff', stroke: '#0b2a55', strokeThickness: 6,
-        backgroundColor: odemceno ? '#7048e8' : undefined, padding: { x: 14, y: 3 },
-      }).setOrigin(0.5);
-      if (odemceno) t.setInteractive({ useHandCursor: true }).on('pointerdown', () => { Zvuky.klik(); Postup.spust(this, u.id); });
-    });
-
-    // nejlepší čas Ponoru 1: ze sdílené Síně slávy, bez serveru z tohoto zařízení
-    const rekord = this.add.text(S / 2, 366 + (UROVNE_HRY.length - 1) * 50, '', {
+    // nejlepší čas té úrovně: ze sdílené Síně slávy, bez serveru z tohoto zařízení
+    const rekord = this.add.text(S / 2, 398, '', {
       fontFamily: N.PISMO, fontSize: '24px', color: '#ffd43b', stroke: '#0b2a55', strokeThickness: 5,
     }).setOrigin(0.5);
     const ukazRekord = (nejlepsi) => {
-      if (nejlepsi) rekord.setText(`🏆 Ponor 1: ${nejlepsi.jmeno}  ${formatCas(nejlepsi.cas)}`);
+      if (nejlepsi) rekord.setText(`🏆 ${nejlepsi.jmeno}  ${formatCas(nejlepsi.cas)}`);
     };
     if (SdileneVysledky.zapnuto) {
-      SdileneVysledky.nacti('ponor1').then((rekordy) => {
+      SdileneVysledky.nacti(aktualni.id).then((rekordy) => {
         if (!this.sys.isActive()) return;
-        ukazRekord(rekordy ? rekordy[0] : Ulozeni.rekordy('ponor1')[0]);
+        ukazRekord(rekordy ? rekordy[0] : Ulozeni.rekordy(aktualni.id)[0]);
       });
     } else {
-      ukazRekord(Ulozeni.rekordy('ponor1')[0]);
+      ukazRekord(Ulozeni.rekordy(aktualni.id)[0]);
     }
+
+    // výběr konkrétní úrovně
+    const vyber = this.add.text(S / 2, 446, '☰ VYBRAT ÚROVEŇ', {
+      fontFamily: N.PISMO, fontSize: '27px', color: '#ffffff', stroke: '#0b2a55', strokeThickness: 6,
+      backgroundColor: '#7048e8', padding: { x: 14, y: 3 },
+    }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+    vyber.on('pointerup', () => { Zvuky.klik(); this.ukazVyber(); });
 
     const napoveda = jeDotykoveZarizeni(this)
       ? 'Vlevo táhni palcem = chůze   ·   Vpravo ťukni = skok, 2× ťukni = HAF'
@@ -101,12 +101,68 @@ class MenuScena extends Phaser.Scene {
       fontFamily: N.PISMO, fontSize: '20px', color: '#a5d8ff',
     }).setOrigin(1, 1).setAlpha(0.8);
 
+    this.vyber = null;
     const start = () => {
+      if (this.vyber) return; // otevřený výběr úrovně
       Zvuky.klik();
-      Postup.spust(this, 'ponor1');
+      Postup.spust(this, aktualni.id);
     };
     tlacitko.on('pointerdown', start);
-    this.input.keyboard.once('keydown-ENTER', start);
-    this.input.keyboard.once('keydown-SPACE', start);
+    this.input.keyboard.on('keydown-ENTER', start);
+    this.input.keyboard.on('keydown-SPACE', start);
+    this.input.keyboard.on('keydown-ESC', () => this.zavriVyber());
+  }
+
+  // okno se seznamem úrovní: odemčené jdou spustit, u dokončených je ✓ a nejlepší čas hráče
+  ukazVyber() {
+    if (this.vyber) return;
+    const S = N.SIRKA;
+    const V = N.VYSKA;
+    const postup = Ulozeni.nacti();
+    const prvky = [];
+    const zavrit = this.add.rectangle(S / 2, V / 2, S, V, 0x0b2a55, 0.85).setInteractive();
+    zavrit.on('pointerup', () => this.zavriVyber());
+    prvky.push(zavrit);
+    prvky.push(this.add.text(S / 2, 70, 'VYBER ÚROVEŇ', {
+      fontFamily: N.PISMO_NADPIS, fontSize: '56px', color: '#ffd43b', stroke: '#1b1b1b', strokeThickness: 9,
+    }).setOrigin(0.5));
+
+    UROVNE_HRY.forEach((u, i) => {
+      const y = 160 + i * 82;
+      const odemceno = Postup.jeOdemcena(u.id);
+      const stav = postup[u.id] || {};
+      const radek = this.add.rectangle(S / 2, y, 620, 68, odemceno ? 0x7048e8 : 0x343a40)
+        .setStrokeStyle(5, 0x1b1b1b);
+      const popis = odemceno ? `${i + 1}: ${u.menu || u.nazev}` : `🔒 ${i + 1}: ${u.menu || u.nazev}`;
+      const text = this.add.text(S / 2 - 290, y, popis, {
+        fontFamily: N.PISMO, fontSize: '30px', color: odemceno ? '#ffffff' : '#adb5bd', stroke: '#1b1b1b', strokeThickness: 5,
+      }).setOrigin(0, 0.5);
+      const vpravo = stav.hotovo
+        ? `✓ ${stav.nejrychleji ? formatCas(stav.nejrychleji) : ''}`
+        : odemceno ? '▶' : `dokonči ${UROVNE_HRY[i - 1].nazev}`;
+      const info = this.add.text(S / 2 + 290, y, vpravo, {
+        fontFamily: N.PISMO, fontSize: odemceno ? '30px' : '22px', color: stav.hotovo ? '#8ce99a' : '#ffffff', stroke: '#1b1b1b', strokeThickness: 5,
+      }).setOrigin(1, 0.5);
+      prvky.push(radek, text, info);
+      if (odemceno) {
+        radek.setInteractive({ useHandCursor: true }).on('pointerup', () => { Zvuky.klik(); Postup.spust(this, u.id); });
+      }
+    });
+
+    const y = 160 + UROVNE_HRY.length * 82 + 10;
+    const zpet = this.add.text(S / 2, y, 'ZPĚT', {
+      fontFamily: N.PISMO_NADPIS, fontSize: '40px', color: '#ffffff', stroke: '#1b1b1b', strokeThickness: 7,
+      backgroundColor: '#ff922b', padding: { x: 26, y: 4 },
+    }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+    zpet.on('pointerup', () => { Zvuky.klik(); this.zavriVyber(); });
+    prvky.push(zpet);
+    this.vyber = this.add.container(0, 0, prvky).setDepth(200);
+  }
+
+  zavriVyber() {
+    if (!this.vyber) return;
+    this.vyber.destroy();
+    // tlačítko HRÁT reaguje na pointerdown: ať to samé ťuknutí hned nespustí hru
+    this.time.delayedCall(50, () => { this.vyber = null; });
   }
 }
