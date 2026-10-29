@@ -53,10 +53,15 @@ const Ucet = {
     return JSON.stringify(Ulozeni.urovne()) !== pred;
   },
 
-  // čas do Síně slávy (a zároveň postup); vrací { rekordy, poradi, zlepseni } nebo null
+  // čas do Síně slávy (a zároveň postup); vrací { rekordy, poradi, zlepseni },
+  // { chyba } když server čas odmítl, nebo null když neodpověděl
   async zapis(uroven, cas, kosti, celkem) {
     const o = await this.dotaz({ akce: 'zapis', uroven, cas, kosti, celkem });
     if (o && o.ok) return o.data;
+    if (o && !o.ok && o.data.chyba && !o.data.odhlasit) {
+      this.dotaz({ akce: 'uloz', postup: Ulozeni.urovne() });
+      return { chyba: o.data.chyba };
+    }
     // čas se nezapsal (třeba moc zápisů najednou): aspoň uložit postup
     this.dotaz({ akce: 'uloz', postup: Ulozeni.urovne() });
     return null;

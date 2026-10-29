@@ -18,12 +18,12 @@ const POVOLENE_ADRESY = [
     'https://mikhailsubachev.github.io',
     'http://localhost:8123',
 ];
-// úrovně a nejkratší čas (ms), který je ještě uvěřitelný
+// úrovně a nejkratší čas (ms), který je ještě uvěřitelný (s rezervou, šikovné děti jsou rychlé)
 const UROVNE = [
-    'ponor1' => 20000,
-    'chobotnice' => 15000,
-    'zakladna' => 20000,
-    'vrak' => 25000,
+    'ponor1' => 10000,
+    'chobotnice' => 5000,
+    'zakladna' => 10000,
+    'vrak' => 10000,
 ];
 const MAX_REKORDU = 50;          // kolik hráčů se pamatuje v tabulce úrovně
 const VRACET = 10;               // kolik časů se posílá hře

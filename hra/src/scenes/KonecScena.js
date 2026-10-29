@@ -73,15 +73,16 @@ class KonecScena extends Phaser.Scene {
     Ucet.zapis(this.uroven, this.cas, this.kostiVysledek, this.celkem).then((vysledek) => {
       if (!this.sys.isActive()) return;
       ukladam.destroy();
-      if (vysledek) {
+      if (vysledek && !vysledek.chyba) {
         this.ukazTabulku(vysledek.poradi, vysledek.rekordy, true);
         if (vysledek.poradi >= 0) Zvuky.checkpoint();
         if (!vysledek.zlepseni) this.poznamka('Tvůj rekord zůstává rychlejší');
         else if (vysledek.poradi >= 6) this.poznamka(`${Ucet.prezdivka}: ${vysledek.poradi + 1}. místo`);
       } else {
-        // server nejde: aspoň do tabulky tohoto zařízení
+        // server nejde nebo čas odmítl: aspoň do tabulky tohoto zařízení
         const rekordy = Ulozeni.pridejRekord(this.uroven, Ucet.prezdivka, this.cas, this.kostiVysledek);
         this.ukazTabulku(rekordy.findIndex((r) => r.jmeno === Ucet.prezdivka && r.cas === this.cas));
+        if (vysledek) this.poznamka(`Server čas nepřijal: ${vysledek.chyba}`);
       }
     });
   }
