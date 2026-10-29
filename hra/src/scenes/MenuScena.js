@@ -14,14 +14,16 @@ class MenuScena extends Phaser.Scene {
       fontFamily: N.PISMO_NADPIS, fontSize: '48px', color: '#ffffff', stroke: '#0b2a55', strokeThickness: 8,
     }).setOrigin(0.5);
 
-    // postavy
-    const dogman = this.add.image(170, 360, 'dogman');
+    // postavy: rozestavené od středu, na široké obrazovce (celá obrazovka na mobilu) se rozestoupí
+    const k = Math.min(S / N.ZAKLADNI_SIRKA, 1.35);
+    const odStredu = (dx) => S / 2 + dx * k;
+    const dogman = this.add.image(odStredu(-310), 360, 'dogman');
     dogman.setScale(230 / dogman.height);
-    const petulka = this.add.image(290, 430, 'petulka');
+    const petulka = this.add.image(odStredu(-190), 430, 'petulka');
     petulka.setScale(100 / petulka.height);
-    const cunas = this.add.image(770, 345, 'cunas');
+    const cunas = this.add.image(odStredu(290), 345, 'cunas');
     cunas.setScale(240 / cunas.height);
-    const bobanek = this.add.image(895, 430, 'bobanek');
+    const bobanek = this.add.image(odStredu(415), 430, 'bobanek');
     bobanek.setScale(100 / bobanek.height);
     this.tweens.add({ targets: [dogman, petulka], y: '-=10', duration: 1400, yoyo: true, repeat: -1, ease: 'Sine.inOut' });
     this.tweens.add({ targets: cunas, angle: { from: -4, to: 4 }, duration: 900, yoyo: true, repeat: -1, ease: 'Sine.inOut' });
@@ -59,7 +61,8 @@ class MenuScena extends Phaser.Scene {
     }).setOrigin(0.5);
 
     // na mobilu přepínač celé obrazovky (zapnout, nebo ji zase zrušit)
-    if (jeDotykoveZarizeni(this) && document.fullscreenEnabled) {
+    const prepinacObrazovky = jeDotykoveZarizeni(this) && document.fullscreenEnabled;
+    if (prepinacObrazovky) {
       const cela = !!document.fullscreenElement;
       this.add.text(16, 108, cela ? '✕ zrušit celou obrazovku' : '⛶ celá obrazovka', {
         fontFamily: N.PISMO, fontSize: '28px', color: '#ffffff', stroke: '#0b2a55', strokeThickness: 6,
@@ -85,9 +88,10 @@ class MenuScena extends Phaser.Scene {
     }
 
     // číslo verze, ať je poznat, jestli prohlížeč načetl tu nejnovější
-    this.add.text(S - 12, V - 10, `verze ${VERZE}`, {
+    // vlevo pod tlačítky: v rozích by ho na iPhonu schovalo zaoblení obrazovky
+    this.add.text(22, prepinacObrazovky ? 156 : 108, `verze ${VERZE}`, {
       fontFamily: N.PISMO, fontSize: '20px', color: '#a5d8ff',
-    }).setOrigin(1, 1).setAlpha(0.8);
+    }).setAlpha(0.8);
 
     this.vyber = null;
     const start = () => {
