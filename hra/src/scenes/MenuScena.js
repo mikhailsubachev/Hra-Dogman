@@ -140,11 +140,11 @@ class MenuScena extends Phaser.Scene {
     if (this.vyber) return;
     const S = N.SIRKA;
     const postup = Ulozeni.nacti();
-    this.otevriOkno('VYBER ÚROVEŇ', 160 + UROVNE_HRY.length * 82 + 10);
+    this.otevriOkno('VYBER ÚROVEŇ', 150 + UROVNE_HRY.length * 76 + 10);
     const okno = this.vyber;
 
     UROVNE_HRY.forEach((u, i) => {
-      const y = 160 + i * 82;
+      const y = 150 + i * 76;
       const odemceno = Postup.jeOdemcena(u.id);
       // ✓ a vlastní čas jen přihlášenému hráči u úrovně, kterou opravdu dohrál
       const muj = Ucet.prihlaseny && postup[u.id] && postup[u.id].hotovo ? postup[u.id].nejrychleji : undefined;
@@ -179,10 +179,10 @@ class MenuScena extends Phaser.Scene {
     const S = N.SIRKA;
     this.otevriOkno('SÍŇ SLÁVY', 470);
     const okno = this.vyber;
-    const sirka = 300;
+    const sirka = Math.min(300, (S - 40) / UROVNE_HRY.length - 10); // sloupce se vejdou i na úzkou obrazovku
     UROVNE_HRY.forEach((u, i) => {
       const x = S / 2 + (i - (UROVNE_HRY.length - 1) / 2) * (sirka + 10);
-      const styl = { fontFamily: N.PISMO, fontSize: '24px', color: '#ffffff', stroke: '#0b2a55', strokeThickness: 5 };
+      const styl = { fontFamily: N.PISMO, fontSize: sirka < 260 ? '21px' : '24px', color: '#ffffff', stroke: '#0b2a55', strokeThickness: 5 };
       const nacitam = this.add.text(x, 200, 'Načítám…', { ...styl, color: '#d0ebff' }).setOrigin(0.5);
       okno.add([
         this.add.rectangle(x, 270, sirka, 300, 0x1864ab, 0.95).setStrokeStyle(4, 0x1b1b1b),

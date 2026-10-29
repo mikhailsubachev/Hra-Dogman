@@ -36,6 +36,15 @@ const N = {
   PLOSINA: { rychlost: 80 },          // pohyblivá plošina (=)
   MINA: { obnova: 2500 },             // za jak dlouho se vybuchlá mina (X) vrátí
 
+  // Potopený vrak (úroveň 4)
+  SVETLO: {
+    max: 260,            // poloměr světla lampy, když je nabitá (v pixelech)
+    min: 110,            // poloměr, když je vybitá (úplná tma nebude nikdy)
+    vydrz: 22,           // za kolik sekund se lampa vybije
+    obnova: 6000,        // za jak dlouho svítící medúza (J) znovu nabije
+  },
+  SKLUZ: 28,             // jak silně táhne kluzká paluba (< a >)
+
   // adresa sdílené Síně slávy (server/vysledky.php na hostingu); prázdná = jen výsledky z tohoto zařízení
   SIN_SLAVY_ADRESA: 'https://subachev.com/dogman/vysledky.php',
 

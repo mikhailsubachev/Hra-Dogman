@@ -28,6 +28,20 @@ const KOMIKS_PO_ZAKLADNE = [
   { postava: 'petulka', mluvi: 'Peťulka', text: 'Hurá, Dog Mane! Teď už Čuňas žádné příšery nevyrobí.', vypravec: 'Aspoň na chvíli…' },
 ];
 
+const KOMIKS_PRED_VRAKEM = [
+  { postava: 'ponorka', vypravec: 'Ve tmě Čuňas utekl do starého potopeného vraku…' },
+  { postava: 'cunas', mluvi: 'Čuňas', text: 'Tady mě ten pes nikdy nenajde. Bobánku, počkej tu na mě!' },
+  { postava: 'bobanek', mluvi: 'Bobánek', text: 'Šéfe… tady je tma jak v pytli. Šéfe? ŠÉFE?!' },
+  { postava: 'petulka', mluvi: 'Peťulka', text: 'Dog Mane, Bobánek se ve vraku ztratil! Lampa na helmě ti ale dlouho nevydrží.' },
+  { postava: 'dogman', mluvi: 'Dog Man', text: 'HAF!', vypravec: 'Lampu dobiješ u svítících medúz. Zamčené dveře otevře klíček.' },
+];
+
+const KOMIKS_PO_VRAKU = [
+  { postava: 'bobanek', mluvi: 'Bobánek', text: 'Ty jsi mě našel! Já už se nikdy nebudu bát tmy… možná.' },
+  { postava: 'cunas', mluvi: 'Čuňas', text: 'Bobánku?! Ty se kamarádíš s tím psem?!', vypravec: 'Čuňas ujíždí okýnkem vraku v malé ponorce…' },
+  { postava: 'petulka', mluvi: 'Peťulka', text: 'Výborně, Dog Mane! Bobánek je v bezpečí.', vypravec: 'Ale kam Čuňas plave teď?' },
+];
+
 const UROVNE_HRY = [
   { id: 'ponor1', scena: 'Ponor', data: { uroven: 'ponor1' }, nazev: 'Ponor', komiksPred: () => UVODNI_KOMIKS },
   {
@@ -37,6 +51,10 @@ const UROVNE_HRY = [
   {
     id: 'zakladna', scena: 'Ponor', data: { uroven: 'zakladna' }, nazev: 'Základna', menu: 'Čuňasova základna',
     komiksPred: () => KOMIKS_PRED_ZAKLADNOU, komiksPo: () => KOMIKS_PO_ZAKLADNE,
+  },
+  {
+    id: 'vrak', scena: 'Ponor', data: { uroven: 'vrak' }, nazev: 'Vrak', menu: 'Potopený vrak',
+    komiksPred: () => KOMIKS_PRED_VRAKEM, komiksPo: () => KOMIKS_PO_VRAKU,
   },
 ];
 

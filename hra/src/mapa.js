@@ -8,6 +8,9 @@
 //   ^  proud bublin (vynese nahoru)  X  mina
 //   =  pohyblivá plošina, jezdí po dráze z pomlček -
 //   Z  velký vypínač základny (konec úrovně)
+// V potopeném vraku navíc:
+//   <  >  kluzká paluba (táhne doleva / doprava)   J  svítící medúza (dobije lampu)
+//   k  klíček            D  zamčené dveře          H  ztracený Bobánek (zachránit!)
 const UROVNE = {};
 
 function nactiMapu(text) {

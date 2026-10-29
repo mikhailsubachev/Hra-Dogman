@@ -23,6 +23,7 @@ const UROVNE = [
     'ponor1' => 20000,
     'chobotnice' => 15000,
     'zakladna' => 20000,
+    'vrak' => 25000,
 ];
 const MAX_REKORDU = 50;          // kolik hráčů se pamatuje v tabulce úrovně
 const VRACET = 10;               // kolik časů se posílá hře

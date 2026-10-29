@@ -206,16 +206,95 @@ const Textury = {
     kresli('paka', 72, 100, paka(false));
     kresli('paka_dole', 72, 100, paka(true));
 
-    // sady dlaždic pro mapu: 0 = povrch nahoře, 1 = vnitřek
-    const sadaDlazdic = (klic, hore, vnitrek) => {
+    // --- Potopený vrak ---
+    kresli('drevo_hore', 48, 48, (g) => {
+      g.fillStyle(0x5c3a1e); g.fillRect(0, 0, 48, 48);
+      g.fillStyle(0xa8743f); g.fillRect(0, 0, 48, 12);
+      g.fillStyle(0xc9925a); g.fillRect(0, 0, 48, 3);
+      g.fillStyle(0x3d2512); g.fillRect(0, 12, 48, 3); g.fillRect(0, 28, 48, 2); g.fillRect(30, 0, 2, 12);
+      g.fillStyle(0x2b1a0c); g.fillCircle(6, 6, 1.6); g.fillCircle(42, 6, 1.6);
+      g.fillStyle(0x4a2f17); g.fillRect(10, 38, 20, 2);
+    });
+    kresli('drevo', 48, 48, (g) => {
+      g.fillStyle(0x4a2f17); g.fillRect(0, 0, 48, 48);
+      g.fillStyle(0x3d2512); [0, 16, 32].forEach((y) => g.fillRect(0, y, 48, 2));
+      g.fillRect(14, 2, 2, 14); g.fillRect(36, 18, 2, 14); g.fillRect(20, 34, 2, 14);
+      g.fillStyle(0x5c3a1e); g.fillRect(4, 8, 8, 2); g.fillRect(26, 40, 10, 2);
+    });
+    // kluzká paluba porostlá řasou; šipky ukazují, kam to klouže
+    const skluz = (doleva) => (g) => {
+      g.fillStyle(0x5c3a1e); g.fillRect(0, 0, 48, 48);
+      g.fillStyle(0x2f9e44); g.fillRect(0, 0, 48, 12);
+      g.fillStyle(0x8ce99a); g.fillRect(0, 0, 48, 3);
+      g.fillStyle(0x2b8a3e); [8, 22, 38].forEach((x) => g.fillEllipse(x, 14, 10, 7));
+      g.fillStyle(0xd3f9d8);
+      for (const x of [12, 34]) {
+        if (doleva) g.fillTriangle(x - 6, 6, x + 4, 2, x + 4, 10); else g.fillTriangle(x + 6, 6, x - 4, 2, x - 4, 10);
+      }
+      g.fillStyle(0x3d2512); g.fillRect(0, 28, 48, 2);
+    };
+    kresli('skluz_l', 48, 48, skluz(true));
+    kresli('skluz_p', 48, 48, skluz(false));
+    // zamčené dveře kajuty (jeden díl, skládají se nad sebe) a zámek na nich
+    kresli('dvere', 48, 48, (g) => {
+      g.fillStyle(0x1b1622); g.fillRect(2, 0, 44, 48);
+      g.fillStyle(0x8b5a2b); g.fillRect(5, 0, 38, 48);
+      g.fillStyle(0x6b4220); g.fillRect(17, 0, 2, 48); g.fillRect(29, 0, 2, 48);
+      g.fillStyle(0x868e96); g.fillRect(5, 8, 38, 6); g.fillRect(5, 34, 38, 6);
+      g.fillStyle(0x495057); [9, 24, 39].forEach((x) => { g.fillCircle(x, 11, 1.8); g.fillCircle(x, 37, 1.8); });
+    });
+    kresli('zamek', 30, 34, (g) => {
+      g.lineStyle(5, 0x1b1622); g.strokeCircle(15, 12, 8);
+      g.lineStyle(3, 0xadb5bd); g.strokeCircle(15, 12, 8);
+      g.fillStyle(0x1b1622); g.fillRoundedRect(2, 13, 26, 21, 5);
+      g.fillStyle(0xfab005); g.fillRoundedRect(4, 15, 22, 17, 4);
+      g.fillStyle(0x1b1622); g.fillCircle(15, 22, 3); g.fillRect(14, 22, 3, 7);
+    });
+    // zlatý klíček od kajuty
+    kresli('klicek', 40, 22, (g) => {
+      g.fillStyle(0x1b1622); g.fillCircle(10, 11, 10); g.fillRect(16, 7, 24, 8); g.fillRect(30, 12, 5, 9); g.fillRect(36, 12, 4, 7);
+      g.fillStyle(0xffd43b); g.fillCircle(10, 11, 7.5); g.fillRect(17, 9, 21, 4); g.fillRect(31, 12, 3, 7); g.fillRect(36, 12, 2, 5);
+      g.fillStyle(0x1b1622); g.fillCircle(10, 11, 3);
+      g.fillStyle(0xffffff, 0.7); g.fillCircle(7, 7, 2);
+    });
+    // svítící medúza: kamarádka, dobije Dog Manovi lampu
+    kresli('svetluska', 48, 56, (g) => {
+      g.fillStyle(0x99e9f2, 0.25); g.fillCircle(24, 20, 23);
+      g.lineStyle(3, 0x66d9e8);
+      for (let i = 0; i < 4; i++) {
+        const x = 12 + i * 8;
+        g.beginPath(); g.moveTo(x, 24); g.lineTo(x + 3, 34); g.lineTo(x - 2, 44); g.lineTo(x + 2, 54); g.strokePath();
+      }
+      g.fillStyle(0xc5f6fa); g.slice(24, 25, 18, Math.PI, 0, false); g.fillPath();
+      g.fillStyle(0x66d9e8); g.fillRect(6, 24, 36, 4);
+      g.fillStyle(0x0b7285); g.fillCircle(18, 16, 2.5); g.fillCircle(30, 16, 2.5);
+      g.lineStyle(2, 0x0b7285); g.beginPath(); g.arc(24, 18, 5, 0.4, Math.PI - 0.4); g.strokePath();
+      g.fillStyle(0xffffff, 0.8); g.fillEllipse(16, 10, 9, 4);
+    });
+
+    // měkké kulaté světlo (uprostřed plné, k okraji slábne): díra do tmy kolem lampy
+    if (!scene.textures.exists('svetlo')) {
+      const c = scene.textures.createCanvas('svetlo', 256, 256);
+      const ctx = c.getContext();
+      const grad = ctx.createRadialGradient(128, 128, 0, 128, 128, 128);
+      grad.addColorStop(0, 'rgba(255,255,255,1)');
+      grad.addColorStop(0.5, 'rgba(255,255,255,0.9)');
+      grad.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 256, 256);
+      c.refresh();
+    }
+
+    // sady dlaždic pro mapu: 0 = povrch nahoře, 1 = vnitřek, případně 2 a 3 = kluzký povrch
+    const sadaDlazdic = (klic, ...dily) => {
       if (scene.textures.exists(klic)) return;
-      const sada = scene.textures.createCanvas(klic, 96, 48);
-      sada.draw(0, 0, scene.textures.get(hore).getSourceImage());
-      sada.draw(48, 0, scene.textures.get(vnitrek).getSourceImage());
+      const sada = scene.textures.createCanvas(klic, 48 * dily.length, 48);
+      dily.forEach((d, i) => sada.draw(48 * i, 0, scene.textures.get(d).getSourceImage()));
       sada.refresh();
     };
     sadaDlazdic('sada_dna', 'dno', 'skala');
     sadaDlazdic('sada_kov', 'kov_hore', 'kov');
+    sadaDlazdic('sada_vrak', 'drevo_hore', 'drevo', 'skluz_l', 'skluz_p');
   },
 
   // modrá voda s paprsky světla, přes celou obrazovku
@@ -255,6 +334,27 @@ const Textury = {
       svetla.push(scene.add.circle(x, 40, 9, 0xff6b6b).setScrollFactor(0.25, 0).setDepth(-18));
     }
     scene.tweens.add({ targets: svetla, alpha: 0.2, duration: 600, yoyo: true, repeat: -1 });
+    return g;
+  },
+
+  // potopený vrak: tmavá voda, žebra trupu, kulatá okénka a řetězy
+  vrak(scene) {
+    const g = scene.add.graphics().setScrollFactor(0).setDepth(-20);
+    g.fillGradientStyle(0x24505c, 0x24505c, 0x05090c, 0x05090c, 1);
+    g.fillRect(0, 0, 1400, N.VYSKA);
+    const pozadi = scene.add.graphics().setScrollFactor(0.3, 0).setDepth(-19);
+    for (let x = 0; x < 3600; x += 260) {
+      pozadi.fillStyle(0x2a1a0e, 0.9); // žebro trupu
+      pozadi.fillRect(x + 40, 0, 30, N.VYSKA);
+      pozadi.fillStyle(0x3b2614, 0.9); pozadi.fillRect(x + 44, 0, 8, N.VYSKA);
+      pozadi.fillStyle(0x1a1209); pozadi.fillCircle(x + 160, 200, 34); // okénko
+      pozadi.fillStyle(0x2b8fd6, 0.35); pozadi.fillCircle(x + 160, 200, 26);
+      pozadi.fillStyle(0xffffff, 0.15); pozadi.fillEllipse(x + 150, 190, 14, 6);
+      if ((x / 260) % 3 === 1) { // visící řetěz
+        pozadi.lineStyle(3, 0x495057, 0.9);
+        for (let y = 0; y < 260; y += 14) pozadi.strokeEllipse(x + 210, y, 8, 14);
+      }
+    }
     return g;
   },
 
