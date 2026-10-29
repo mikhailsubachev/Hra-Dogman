@@ -48,13 +48,13 @@ class MenuScena extends Phaser.Scene {
       if (this.sys.isActive() && rekordy[0]) rekord.setText(`🏆 ${rekordy[0].jmeno}  ${formatCas(rekordy[0].cas)}`);
     });
 
-    // výběr konkrétní úrovně a Síň slávy
-    const tlacitkoMenu = (x, popis, akce) => this.add.text(x, 446, popis, {
-      fontFamily: N.PISMO, fontSize: '27px', color: '#ffffff', stroke: '#0b2a55', strokeThickness: 6,
-      backgroundColor: '#7048e8', padding: { x: 14, y: 3 },
-    }).setOrigin(0.5).setInteractive({ useHandCursor: true }).on('pointerup', () => { Zvuky.klik(); akce(); });
-    tlacitkoMenu(S / 2 - 140, '☰ VYBRAT ÚROVEŇ', () => this.ukazVyber());
-    tlacitkoMenu(S / 2 + 140, '🏆 SÍŇ SLÁVY', () => this.ukazSinSlavy());
+    // výběr konkrétní úrovně a Síň slávy: vlevo nahoře, ať nezakrývají postavy
+    const tlacitkoMenu = (y, popis, akce) => this.add.text(16, y, popis, {
+      fontFamily: N.PISMO, fontSize: '26px', color: '#ffffff', stroke: '#0b2a55', strokeThickness: 6,
+      backgroundColor: '#7048e8', padding: { x: 12, y: 3 },
+    }).setInteractive({ useHandCursor: true }).on('pointerup', () => { Zvuky.klik(); akce(); });
+    tlacitkoMenu(12, '☰ VYBRAT ÚROVEŇ', () => this.ukazVyber());
+    tlacitkoMenu(60, '🏆 SÍŇ SLÁVY', () => this.ukazSinSlavy());
 
     const napoveda = jeDotykoveZarizeni(this)
       ? 'Vlevo táhni palcem = chůze   ·   Vpravo ťukni = skok, 2× ťukni = HAF'
@@ -66,7 +66,7 @@ class MenuScena extends Phaser.Scene {
     // na mobilu přepínač celé obrazovky (zapnout, nebo ji zase zrušit)
     if (jeDotykoveZarizeni(this) && document.fullscreenEnabled) {
       const cela = !!document.fullscreenElement;
-      this.add.text(16, 12, cela ? '✕ zrušit celou obrazovku' : '⛶ celá obrazovka', {
+      this.add.text(16, 108, cela ? '✕ zrušit celou obrazovku' : '⛶ celá obrazovka', {
         fontFamily: N.PISMO, fontSize: '28px', color: '#ffffff', stroke: '#0b2a55', strokeThickness: 6,
       }).setInteractive({ useHandCursor: true }).on('pointerup', () => {
         const prepni = cela ? document.exitFullscreen().catch(() => {}) : naCelouObrazovku();
