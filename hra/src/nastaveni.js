@@ -46,7 +46,7 @@ const N = {
   SKLUZ: 28,             // jak silně táhne kluzká paluba (< a >)
 
   // adresa sdílené Síně slávy (server/vysledky.php na hostingu); prázdná = jen výsledky z tohoto zařízení
-  SIN_SLAVY_ADRESA: 'https://subachev.com/dogman/vysledky.php',
+  SIN_SLAVY_ADRESA: 'https://www.subachev.com/dogman/vysledky.php',
 
   PISMO_NADPIS: '"Bangers", "Comic Sans MS", "Chalkboard SE", cursive',
   PISMO: '"Patrick Hand", "Comic Sans MS", "Chalkboard SE", sans-serif',

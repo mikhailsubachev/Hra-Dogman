@@ -1,6 +1,6 @@
 # Server hry: hráči a sdílená Síň slávy (Endora)
 
-Skript `vysledky.php` běží na https://subachev.com/dogman/vysledky.php a ukládá vše
+Skript `vysledky.php` běží na https://www.subachev.com/dogman/vysledky.php a ukládá vše
 do souboru `data/vysledky.json` (databáze není potřeba):
 
 - **hráče:** přezdívka + 4místný PIN (PIN je uložený jen jako otisk, ne čitelně),
@@ -13,7 +13,7 @@ Když server nejde, hra jede dál s postupem a tabulkou z daného zařízení.
 
 1. Přes **Souborový manažer** nebo FTP otevřete složku `dogman` na webu.
 2. Nahrajte nový `vysledky.php` (přepište starý). Složku `data` nechte, jsou v ní výsledky a hráči.
-3. Kontrola: `https://subachev.com/dogman/vysledky.php?uroven=ponor1` ukáže `{"rekordy":[...]}`.
+3. Kontrola: `https://www.subachev.com/dogman/vysledky.php?uroven=ponor1` ukáže `{"rekordy":[...]}`.
 
 První nahrání: u domény zapnout **SSL certifikát (Let's Encrypt)**, vytvořit složku `dogman`,
 nahrát skript a adresu zapsat do `hra/src/nastaveni.js` (`SIN_SLAVY_ADRESA`).
