@@ -60,13 +60,15 @@ class MenuScena extends Phaser.Scene {
       fontFamily: N.PISMO, fontSize: '26px', color: '#d0ebff',
     }).setOrigin(0.5);
 
-    // na mobilu přepínač celé obrazovky (zapnout, nebo ji zase zrušit)
-    const prepinacObrazovky = jeDotykoveZarizeni(this) && document.fullscreenEnabled;
+    // na mobilu přepínač celé obrazovky (zapnout, nebo ji zase zrušit).
+    // iPhone v Safari celou obrazovku neumí: tlačítko poradí přidat hru na plochu.
+    const prepinacObrazovky = jeDotykoveZarizeni(this) && !jeNaPlose();
     if (prepinacObrazovky) {
       const cela = !!document.fullscreenElement;
       this.add.text(16, 108, cela ? '✕ zrušit celou obrazovku' : '⛶ celá obrazovka', {
         fontFamily: N.PISMO, fontSize: '28px', color: '#ffffff', stroke: '#0b2a55', strokeThickness: 6,
       }).setInteractive({ useHandCursor: true }).on('pointerup', () => {
+        if (!document.fullscreenEnabled) { this.ukazNaPlochu(); return; }
         const prepni = cela ? document.exitFullscreen().catch(() => {}) : naCelouObrazovku();
         prepni.then(() => setTimeout(() => this.sys.isActive() && this.scene.restart(), 300));
       });
@@ -137,6 +139,24 @@ class MenuScena extends Phaser.Scene {
     }).setOrigin(0.5).setInteractive({ useHandCursor: true });
     zpet.on('pointerup', () => { Zvuky.klik(); this.zavriVyber(); });
     this.vyber = this.add.container(0, 0, [zavrit, titulek, zpet]).setDepth(200);
+  }
+
+  // iPhone: návod, jak hru přidat na plochu (pak běží přes celou obrazovku)
+  ukazNaPlochu() {
+    Zvuky.klik();
+    this.otevriOkno('CELÁ OBRAZOVKA', 440);
+    const S = N.SIRKA;
+    this.vyber.add(this.add.text(S / 2, 270, [
+      'Na iPhonu to Safari neumí, ale jde to takhle:',
+      '',
+      '1. V Safari ťukni na Sdílet ⬆ (nebo na ⋯ a potom Sdílet).',
+      '2. Vyber „Přidat na plochu“ a potvrď.',
+      '3. Hru pak spouštěj z ikony Dog Mana na ploše.',
+      '',
+      'Poběží přes celou obrazovku, bez adresního řádku.',
+    ].join('\n'), {
+      fontFamily: N.PISMO, fontSize: '28px', color: '#ffffff', stroke: '#0b2a55', strokeThickness: 5, align: 'center', lineSpacing: 4,
+    }).setOrigin(0.5));
   }
 
   // okno se seznamem úrovní: odemčené jdou spustit, vpravo nejlepší čas ze Síně slávy

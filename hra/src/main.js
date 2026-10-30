@@ -4,8 +4,9 @@
 // je hra širší, takže vyplní celou obrazovku bez černých pruhů po stranách.
 N.ZAKLADNI_SIRKA = 960;
 function sirkaPodleObrazovky() {
-  const w = window.innerWidth;
-  const h = window.innerHeight;
+  const obal = document.getElementById('hra'); // bez výřezu iPhonu
+  const w = (obal && obal.clientWidth) || window.innerWidth;
+  const h = (obal && obal.clientHeight) || window.innerHeight;
   if (!w || !h || h > w) return N.ZAKLADNI_SIRKA; // na výšku platí výzva „otoč telefon“
   return Math.round(Phaser.Math.Clamp((N.VYSKA * w) / h, 960, 1400) / 2) * 2;
 }
@@ -60,6 +61,13 @@ function naCelouObrazovku() {
     .then(() => screen.orientation && screen.orientation.lock && screen.orientation.lock('landscape').catch(() => {}))
     .catch(() => {});
 }
+// hra spuštěná z ikony na ploše (už běží přes celou obrazovku)
+function jeNaPlose() {
+  if (navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches) return true;
+  // display-mode: fullscreen platí i po zapnutí celé obrazovky tlačítkem, to se nepočítá
+  return window.matchMedia('(display-mode: fullscreen)').matches && !document.fullscreenElement;
+}
+
 if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
   document.addEventListener('touchend', naCelouObrazovku, { once: true });
 }
