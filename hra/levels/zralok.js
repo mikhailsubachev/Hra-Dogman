@@ -1,6 +1,6 @@
 // Úroveň 5: Souboj s Robo-žralokem (aréna na jednu obrazovku, 20 políček).
 // Žralok plave volně po celé aréně, horní čtyři řádky nechte prázdné.
-// Na širší obrazovce se aréna doleva sama prodlouží o kus dna.
+// Na širší obrazovce se aréna sama roztáhne do celé šířky.
 //   #  dno nebo plošina      .  voda
 //   S  start Dog Mana        V  průduch, ze kterého stoupají bubliny kyslíku
 //   C  čudlík bublinometu (stojí na políčku pod sebou; střílí, jen když na něm Dog Man stojí)

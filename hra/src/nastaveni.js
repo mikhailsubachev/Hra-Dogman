@@ -4,6 +4,7 @@ const N = {
   VYSKA: 540,
   DLAZDICE: 48,          // velikost jednoho políčka mapy v pixelech
   GRAVITACE: 650,        // pod vodou padáme pomaleji než na souši
+  PRIBLIZENI: 1.2,       // na širokém mobilu kamera ve skákacích úrovních přiblíží nejvýš tolikrát (1 = vůbec)
 
   DOGMAN: {
     rychlost: 210,       // jak rychle chodí

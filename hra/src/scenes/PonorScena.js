@@ -162,6 +162,7 @@ class PonorScena extends HerniScena {
 
     this.cameras.main.startFollow(this.hrac.telo, true, 0.12, 0.12);
     this.cameras.main.setDeadzone(80, 60);
+    this.zapniPriblizeni();
     this.cameras.main.fadeIn(400);
 
     this.ukazNazev(t(`uroven_${this.idUrovne}_titulek`));

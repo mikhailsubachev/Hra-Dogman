@@ -8,10 +8,11 @@ class ChobotniceScena extends HerniScena {
 
   create() {
     const uroven = UROVNE.chobotnice;
-    // na širší obrazovce prodloužit arénu doleva o kus dna, ať je chobotnice vždy celá vidět
-    let mapa = nactiMapu(uroven.mapa);
-    const navic = Math.max(0, Math.ceil((N.SIRKA - mapa[0].length * N.DLAZDICE) / N.DLAZDICE));
-    mapa = mapa.map((r) => (r.split('').every((z) => z === '#') ? '#' : '.').repeat(navic) + r);
+    // na širší obrazovce se aréna rozloží do celé šířky (plošiny a mezery se rozšíří);
+    // posledních 6 sloupců u chobotnice zůstane, ať jde na vypínač doskočit stejně jako dřív
+    const puvodni = nactiMapu(uroven.mapa);
+    const vlevo = roztahniMapu(puvodni.map((r) => r.slice(0, -6)), Math.ceil(N.SIRKA / N.DLAZDICE) - 6);
+    const mapa = vlevo.map((r, i) => r + puvodni[i].slice(-6));
     const T = N.DLAZDICE;
     this.sirkaSveta = mapa[0].length * T;
     this.vyskaSveta = mapa.length * T;

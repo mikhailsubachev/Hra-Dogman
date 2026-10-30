@@ -20,3 +20,20 @@ function nactiMapu(text) {
   const sirka = Math.max(...radky.map((r) => r.length));
   return radky.map((r) => r.padEnd(sirka, '.').replace(/ /g, '.'));
 }
+
+// Aréna na jednu obrazovku na širším displeji: mapu roztáhne do šířky (sloupců),
+// plošiny a mezery se rozšíří, postavy a předměty (jeden znak) zůstanou jednou.
+function roztahniMapu(mapa, sloupcu) {
+  const puvodni = mapa[0].length;
+  if (sloupcu <= puvodni) return mapa;
+  return mapa.map((radek) => {
+    let novy = '';
+    for (let c = 0; c < sloupcu; c++) {
+      const s = Math.floor((c * puvodni) / sloupcu);
+      const prvni = c === Math.ceil((s * sloupcu) / puvodni);
+      const znak = radek[s];
+      novy += znak === '#' || prvni ? znak : '.';
+    }
+    return novy;
+  });
+}

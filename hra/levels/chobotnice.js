@@ -1,6 +1,6 @@
 // Úroveň 2: Souboj s Robo-chobotnicí (aréna na jednu obrazovku, 20 políček).
 // Robo-chobotnice sedí vpravo (posledních 6 sloupců), tam nic nestavějte.
-// Na širší obrazovce se aréna doleva sama prodlouží o kus dna.
+// Na širší obrazovce se aréna sama roztáhne do celé šířky.
 //   #  dno nebo plošina      .  voda
 //   S  start Dog Mana        B  Bobánek (fandí šéfovi, ve 3. kole hází klíče)
 //   V  průduch, ze kterého stoupají bubliny kyslíku

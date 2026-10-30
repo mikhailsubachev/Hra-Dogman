@@ -172,8 +172,39 @@ class HerniScena extends Phaser.Scene {
   // po otočení telefonu: větší záběr kamery a přeskládaná lišta, hra běží dál
   prizpusobSirce() {
     this.cameras.main.setSize(N.SIRKA, N.VYSKA);
+    if (this.kameraLista) {
+      this.kameraLista.setSize(N.SIRKA, N.VYSKA);
+      this.cameras.main.setZoom(this.priblizeni());
+    }
     this.ukazatele.rozmisti();
     if (this.pozastaveno) this.vykresliPauzu();
+  }
+
+  // Na širokém displeji (mobil na šířku) je vidět víc do stran než na počítači a všechno
+  // vychází menší. Skákací úrovně proto kameru přiblíží, aby to vypadalo podobně jako na počítači.
+  priblizeni() {
+    return Phaser.Math.Clamp(N.SIRKA / N.ZAKLADNI_SIRKA, 1, N.PRIBLIZENI);
+  }
+
+  // přiblížená kamera pro svět a druhá, nepřiblížená, pro lištu, nápisy a pauzu
+  // (vše pevně na obrazovce s hloubkou 100 a víc); volá se v create() úrovně
+  zapniPriblizeni() {
+    const svet = this.cameras.main;
+    svet.setZoom(this.priblizeni());
+    const lista = this.cameras.add(0, 0, N.SIRKA, N.VYSKA);
+    this.kameraLista = lista;
+    const rozdel = () => {
+      for (const o of this.children.list) {
+        o.cameraFilter = o.scrollFactorX === 0 && o.depth >= 100 ? svet.id : lista.id;
+      }
+    };
+    rozdel();
+    this.events.on('postupdate', rozdel);
+    this.events.once('shutdown', () => {
+      this.events.off('postupdate', rozdel);
+      this.cameras.remove(lista);
+      this.kameraLista = null;
+    });
   }
 
   // ☰: pauza s tlačítky Pokračovat, Hlavní menu a (na mobilu) celá obrazovka
