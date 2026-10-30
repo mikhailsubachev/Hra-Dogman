@@ -1,6 +1,6 @@
 // Robo-žralok: boss úrovně 5. Řídí ho Čuňas z kabiny na hřbetě.
 // Plave sem a tam po aréně a vypouští malé žraloky, kteří honí Dog Mana.
-// Zranit ho jdou jen bubliny z čudlíků. Čím méně životů má, tím je rychlejší,
+// Zranit ho jdou jen bublinky z čudlíků; po zásahu ho to odhodí nahoru a upadne mu šroubek. Čím méně životů má, tím je rychlejší,
 // vypouští víc malých žraloků a od 2. kola dělá výpady na Dog Mana (předem varování „!“).
 const ZRALOK = {
   sirka: 330,          // šířka obrázku ve hře
@@ -147,6 +147,7 @@ class Zralok {
     const s = this.scene;
     this.zivoty--;
     this.nezranitelnyDo = s.time.now + ZRALOK.nezranitelnost;
+    this.odhod();
     this.obr.setTint(0xff6b6b);
     s.tweens.add({ targets: this.obr, alpha: 0.5, duration: 90, yoyo: true, repeat: 3, onComplete: () => { this.obr.clearTint(); this.obr.setAlpha(1); } });
     if (this.zivoty <= 0) {
@@ -158,9 +159,43 @@ class Zralok {
     return true;
   }
 
-  rozpadniSe() {
-    this.stav = 'konec';
+  // proud bublin ho nadzvedne a odstrčí kus dál (i z výpadu)
+  odhod() {
     const s = this.scene;
+    if (this.stav === 'varuje' || this.stav === 'vypad') this.vratSe();
+    s.tweens.killTweensOf(this);
+    const cilY = Math.max(70, this.y - 70);
+    const cilX = Phaser.Math.Clamp(this.x + this.smer * 60, 140, s.sirkaSveta - 140);
+    this.stav = 'odhozen';
+    s.tweens.add({
+      targets: this, y: cilY, x: cilX, duration: 450, ease: 'Quad.out',
+      onComplete: () => { if (this.stav === 'odhozen') { this.stav = 'plave'; this.vyskaCile = cilY; } },
+    });
+    this.dalsiVypad = Math.max(this.dalsiVypad, s.time.now + 2500);
+  }
+
+  // šroubek odpadne z trupu a spadne na dno, kde chvíli zůstane ležet
+  upustSroubek() {
+    const s = this.scene;
+    const c = this.casti()[0];
+    const sroub = s.add.image(c.x + Phaser.Math.Between(-c.sx * 0.7, c.sx * 0.7), c.y + c.sy * 0.6, 'sroubek').setDepth(4);
+    const dno = s.vyskaPodlahy - 8;
+    s.tweens.add({ targets: sroub, angle: Phaser.Math.Between(300, 720), duration: 900 });
+    s.tweens.add({ targets: sroub, x: sroub.x + Phaser.Math.Between(-60, 60), duration: 900 });
+    s.tweens.add({
+      targets: sroub, y: dno, duration: 900, ease: 'Quad.in',
+      onComplete: () => {
+        Zvuky.ton('triangle', 1400, 900, 0.08, 0.05);
+        s.tweens.add({ targets: sroub, y: dno - 14, duration: 140, yoyo: true, ease: 'Quad.out' });
+        s.tweens.add({ targets: sroub, alpha: 0, delay: 5000, duration: 600, onComplete: () => sroub.destroy() });
+      },
+    });
+  }
+
+  rozpadniSe() {
+    const s = this.scene;
+    s.tweens.killTweensOf(this);
+    this.stav = 'konec';
     Zvuky.konec();
     s.cameras.main.shake(700, 0.012);
     for (let i = 0; i < 5; i++) {

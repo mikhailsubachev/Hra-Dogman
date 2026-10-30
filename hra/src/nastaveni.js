@@ -47,10 +47,10 @@ const N = {
 
   // Souboj s Robo-žralokem (úroveň 5), další čísla jsou v src/entities/Zralok.js
   CUDLIK: {
-    naboje: 4,           // kolik bublin vystřelí, než se vybije
-    pauza: 450,          // jak často střílí (v milisekundách)
+    vydrz: 2500,         // jak dlouho proud bublin vydrží, než se čudlík vybije (v milisekundách)
+    pauza: 90,           // jak často vyletí další bublinka proudu
     dobiti: 5000,        // za jak dlouho se vybitý čudlík znovu nabije
-    rychlost: 420,       // jak rychle letí bublina
+    rychlost: 300,       // jak rychle bublinky stoupají
   },
 
   // adresa sdílené Síně slávy (server/vysledky.php na hostingu); prázdná = jen výsledky z tohoto zařízení

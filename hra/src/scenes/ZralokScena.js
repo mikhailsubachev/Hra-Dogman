@@ -1,6 +1,7 @@
 // Úroveň 5: souboj s Robo-žralokem v Čuňasově hangáru.
-// Po aréně jsou tři čudlíky. Když na čudlíku Dog Man stojí, bublinomet střílí
-// bubliny na žraloka. Po pár bublinách se čudlík vybije a chvíli se dobíjí.
+// Po aréně jsou tři čudlíky. Když na čudlíku Dog Man stojí, stoupá z něj nahoru
+// proud bublinek. Žralok dostane zásah, když proplave nad ním. Po chvíli se čudlík
+// vybije a chvíli se dobíjí.
 class ZralokScena extends HerniScena {
   constructor() { super('Zralok'); }
 
@@ -52,7 +53,7 @@ class ZralokScena extends HerniScena {
     this.mali = [];
     this.strely = [];
     this.cunasMluviDo = 0;
-    this.pripravHrace(start, { boss: 'ROBO-ŽRALOK', zivoty: ZRALOK.zivoty });
+    this.pripravHrace(start, { boss: 'ROBO-ŽRALOK', zivoty: ZRALOK.zivoty, ikona: 'sroubek' });
     this.physics.add.collider(this.hrac.telo, this.dlazdice);
     this.physics.add.overlap(this.hrac.telo, this.kysliky, (h, o) => this.seberKyslik(o));
     this.physics.add.overlap(this.hrac.telo, this.nepratele, (h, s) => this.dotekNepritele(s.nepritel));
@@ -76,7 +77,7 @@ class ZralokScena extends HerniScena {
   pridejCudlik(x, y) {
     const obr = this.add.image(x, y, 'cudlik').setOrigin(0.5, 1).setDepth(2);
     const ukazatel = this.add.graphics().setDepth(2);
-    this.cudliky.push({ x, y, obr, ukazatel, naboje: N.CUDLIK.naboje, dobitoV: 0, dalsiVystrel: 0, stisknuty: false });
+    this.cudliky.push({ x, y, obr, ukazatel, zbyva: N.CUDLIK.vydrz, dobitoV: 0, dalsiVystrel: 0, stisknuty: false });
   }
 
   update(cas, delta) {
@@ -84,7 +85,7 @@ class ZralokScena extends HerniScena {
     this.boss.update(cas, this.hrac);
     const telo = this.hrac.telo.body;
 
-    this.aktualizujCudliky(cas, telo);
+    this.aktualizujCudliky(cas, telo, delta);
     this.aktualizujStrely(delta);
     for (const m of this.mali) if (m.zivy) m.update(cas, this.hrac);
     this.mali = this.mali.filter((m) => m.zivy);
@@ -94,12 +95,12 @@ class ZralokScena extends HerniScena {
     this.ukazatele.update(0, this.kyslik, this.casHry);
   }
 
-  // stojí Dog Man na čudlíku? Pak bublinomet střílí, dokud má náboje.
-  aktualizujCudliky(cas, telo) {
+  // stojí Dog Man na čudlíku? Pak z něj stoupá proud bublinek, dokud se čudlík nevybije.
+  aktualizujCudliky(cas, telo, delta) {
     const naZemi = telo.blocked.down || telo.touching.down;
     for (const c of this.cudliky) {
-      if (!c.naboje && cas >= c.dobitoV) {
-        c.naboje = N.CUDLIK.naboje;
+      if (!c.zbyva && cas >= c.dobitoV) {
+        c.zbyva = N.CUDLIK.vydrz;
         c.obr.setTexture('cudlik');
         this.vyskakovaciText(c.x, c.y - 60, 'Nabito!', '#8ce99a', 26);
       }
@@ -107,59 +108,58 @@ class ZralokScena extends HerniScena {
       if (stoji !== c.stisknuty) {
         c.stisknuty = stoji;
         c.obr.setScale(1, stoji ? 0.6 : 1);
-        if (stoji) { Zvuky.klik(); c.dalsiVystrel = Math.max(c.dalsiVystrel, cas + 150); }
+        if (stoji) Zvuky.klik();
       }
-      if (stoji && c.naboje && cas >= c.dalsiVystrel && !this.hotovo && this.boss.stav !== 'ceka') {
-        c.dalsiVystrel = cas + N.CUDLIK.pauza;
-        this.vystrel(c);
-        c.naboje--;
-        if (!c.naboje) {
+      if (stoji && c.zbyva && !this.hotovo && this.boss.stav !== 'ceka') {
+        c.zbyva = Math.max(0, c.zbyva - delta);
+        if (cas >= c.dalsiVystrel) {
+          c.dalsiVystrel = cas + N.CUDLIK.pauza;
+          this.vypustBublinku(c);
+        }
+        if (!c.zbyva) {
           c.dobitoV = cas + N.CUDLIK.dobiti;
           c.obr.setTexture('cudlik_prazdny');
           this.vyskakovaciText(c.x, c.y - 60, 'Prázdný! Jiný čudlík!', '#ff8787', 26);
         }
       }
-      // tečky nad čudlíkem: kolik bublin ještě má
+      // proužek nad čudlíkem: kolik bublinek ještě má
+      const podil = c.zbyva / N.CUDLIK.vydrz;
       c.ukazatel.clear();
-      for (let i = 0; i < N.CUDLIK.naboje; i++) {
-        c.ukazatel.fillStyle(i < c.naboje ? 0x9be7ff : 0x343a40).fillCircle(c.x - (N.CUDLIK.naboje - 1) * 6 + i * 12, c.y - 48, 4);
-      }
+      c.ukazatel.fillStyle(0x343a40).fillRect(c.x - 24, c.y - 52, 48, 7);
+      c.ukazatel.fillStyle(0x9be7ff).fillRect(c.x - 24, c.y - 52, 48 * podil, 7);
     }
   }
 
-  // bublina letí z čudlíku na žraloka (míří tam, kde žralok je teď, takže se dá i minout)
-  vystrel(c) {
-    const cil = this.boss.casti()[0];
-    const x = c.x;
-    const y = c.y - 60;
-    const u = Phaser.Math.Angle.Between(x, y, cil.x, cil.y);
-    const b = this.add.image(x, y, 'strela').setDepth(6).setScale(0.5);
-    this.tweens.add({ targets: b, scale: 1, duration: 150 });
-    b.vx = Math.cos(u) * N.CUDLIK.rychlost;
-    b.vy = Math.sin(u) * N.CUDLIK.rychlost;
-    b.zivotnost = 2500;
+  // drobná bublinka proudu: stoupá rovně nahoru a trochu se vlní
+  vypustBublinku(c) {
+    const b = this.add.image(c.x + Phaser.Math.Between(-8, 8), c.y - 30, 'strela').setDepth(6)
+      .setScale(Phaser.Math.FloatBetween(0.35, 0.6));
+    b.x0 = b.x;
+    b.faze = Math.random() * 6;
+    b.vy = -N.CUDLIK.rychlost * Phaser.Math.FloatBetween(0.9, 1.1);
     this.strely.push(b);
-    Zvuky.ton('sine', 300, 700, 0.12, 0.06);
+    if (Math.random() < 0.3) Zvuky.ton('sine', 500, 900, 0.05, 0.02);
   }
 
   aktualizujStrely(delta) {
+    const cas = this.time.now;
     for (const b of this.strely) {
-      b.x += (b.vx * delta) / 1000;
       b.y += (b.vy * delta) / 1000;
-      b.zivotnost -= delta;
-      if (this.boss.stav !== 'konec' && this.boss.dotyka(b.x, b.y, 12)) {
+      b.x = b.x0 + Math.sin(cas * 0.012 + b.faze) * 5;
+      if (this.boss.stav !== 'konec' && this.boss.dotyka(b.x, b.y, 6)) {
         b.prasknuto = true;
-        this.vypustBublinky(b.x, b.y, 8);
+        this.vypustBublinky(b.x, b.y, 3);
         if (this.boss.zasah()) this.zasahZraloka(b.x, b.y);
       }
     }
-    this.strely = this.strely.filter((b) => (b.zivotnost > 0 && !b.prasknuto && b.y > -40 ? true : (b.destroy(), false)));
+    this.strely = this.strely.filter((b) => (!b.prasknuto && b.y > -30 ? true : (b.destroy(), false)));
   }
 
   zasahZraloka(x, y) {
     Zvuky.bum();
     this.rozsypSrouby(x, y, 10, 90);
     this.vyskakovaciText(x, y - 30, 'BLUB! ZÁSAH!', '#ffd43b', 38);
+    this.boss.upustSroubek();
     this.ukazatele.zivotyBosse(this.boss.zivoty);
     if (this.boss.zivoty <= 0) this.vyhra();
   }

@@ -20,8 +20,10 @@ class Ukazatele {
       scene.add.text(16, 12, nastaveni.boss, { ...styl, color: '#e5dbff' }).setScrollFactor(0).setDepth(100);
       this.srdce = [];
       for (let i = 0; i < nastaveni.zivoty; i++) {
-        this.srdce.push(scene.add.text(16 + i * 34, 48, '⚙', { ...styl, fontSize: '32px', color: '#b197fc' })
-          .setScrollFactor(0).setDepth(100));
+        // životy jako ozubená kolečka, nebo obrázek (ikona: klíč textury, třeba šroubek)
+        this.srdce.push(nastaveni.ikona
+          ? scene.add.image(28 + i * 26, 66, nastaveni.ikona).setScrollFactor(0).setDepth(100)
+          : scene.add.text(16 + i * 34, 48, '⚙', { ...styl, fontSize: '32px', color: '#b197fc' }).setScrollFactor(0).setDepth(100));
       }
     }
     this.stopky = scene.add.text(N.SIRKA / 2 - 20, 10, '', { ...styl, fontSize: '34px' })
@@ -79,10 +81,11 @@ class Ukazatele {
     this.svetloPruh.setFillStyle(podil < 0.25 ? 0xffa94d : 0xffe066);
   }
 
-  // kolik životů bossovi zbývá (vypnuté ozubené kolečko = ztracený život)
+  // kolik životů bossovi zbývá (šedé kolečko nebo vybledlý šroubek = ztracený život)
   zivotyBosse(zbyva) {
     this.srdce.forEach((s, i) => {
-      s.setColor(i < zbyva ? '#b197fc' : '#495057').setAlpha(i < zbyva ? 1 : 0.6);
+      if (s.setColor) s.setColor(i < zbyva ? '#b197fc' : '#495057').setAlpha(i < zbyva ? 1 : 0.6);
+      else s.setAlpha(i < zbyva ? 1 : 0.2);
       if (i === zbyva) this.scene.tweens.add({ targets: s, scale: { from: 1.8, to: 1 }, duration: 400 });
     });
   }

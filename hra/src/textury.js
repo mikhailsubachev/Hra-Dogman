@@ -160,6 +160,13 @@ const Textury = {
     };
     kresli('cudlik', 64, 40, cudlik(0x40c057));
     kresli('cudlik_prazdny', 64, 40, cudlik(0x868e96));
+    // šroubek, který odpadne ze žraloka (a ukazuje jeho životy v liště)
+    kresli('sroubek', 22, 28, (g) => {
+      g.fillStyle(0x1b1622); g.fillRect(7, 8, 8, 19); g.fillRoundedRect(1, 1, 20, 10, 3);
+      g.fillStyle(0xadb5bd); g.fillRect(9, 10, 4, 15); g.fillRoundedRect(3, 3, 16, 6, 2);
+      g.fillStyle(0x1b1622); for (let y = 13; y < 26; y += 4) g.fillRect(7, y, 8, 1.5);
+      g.fillStyle(0xffffff, 0.7); g.fillRect(5, 4, 6, 2);
+    });
     // bublina z bublinometu
     kresli('strela', 30, 30, (g) => {
       g.fillStyle(0xbfe9ff, 0.55); g.fillCircle(15, 15, 13);
