@@ -126,7 +126,7 @@ class Zralok {
       if (this.stav !== 'varuje') return;
       this.stav = 'vypad';
       this.obr.clearTint();
-      s.cunasRekne(Phaser.Utils.Array.GetRandom(['Kousni ho!', 'Plnou parou vpřed!', 'Chi chi! Ham!']));
+      s.cunasRekne(Phaser.Utils.Array.GetRandom(t('cunas_vypad')));
     });
   }
 
@@ -154,8 +154,8 @@ class Zralok {
       this.rozpadniSe();
       return true;
     }
-    if (this.zivoty % 4 === 0) s.cunasRekne('Grrr! Teď přidám!', undefined, undefined, true);
-    else s.cunasRekne(Phaser.Utils.Array.GetRandom(['Au! Moje ploutev!', 'Nech ty čudlíky!', 'Bublinky ne!', 'Au au au!']));
+    if (this.zivoty % 4 === 0) s.cunasRekne(t('cunas_pridam'), undefined, undefined, true);
+    else s.cunasRekne(Phaser.Utils.Array.GetRandom(t('cunas_au_zralok')));
     return true;
   }
 
@@ -213,7 +213,7 @@ class Zralok {
     sklo.fillStyle(0xbfe9ff, 0.25).fillCircle(0, 0, 40).lineStyle(6, 0x1b1622).strokeCircle(0, 0, 40);
     kabina.add([cunas, sklo]);
     s.tweens.add({ targets: kabina, y: -150, x: kabina.x + 160, angle: 40, duration: 1800, delay: 500, ease: 'Quad.in' });
-    s.time.delayedCall(450, () => s.cunasRekne('Já se vrátím!!!', kabina.x - 40, kabina.y - 60, true));
+    s.time.delayedCall(450, () => s.cunasRekne(t('cunas_vratim'), kabina.x - 40, kabina.y - 60, true));
     this.obr.setTint(0x777777);
     s.tweens.add({ targets: this.obr, y: s.vyskaPodlahy + 40, angle: 160, alpha: 0, duration: 1800, delay: 400, ease: 'Quad.in' });
   }
@@ -235,7 +235,7 @@ class MalyZralok extends Nepritel {
   skokShora() {
     this.znic();
     this.scene.rozsypSrouby(this.sprite.x, this.sprite.y);
-    return 'KRACH!';
+    return t('krach');
   }
 
   update(cas, hrac) {

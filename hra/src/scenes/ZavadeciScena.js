@@ -20,10 +20,10 @@ class ZavadeciScena extends Phaser.Scene {
   constructor() { super('Zavadeci'); }
 
   preload() {
-    const text = this.add.text(N.SIRKA / 2, N.VYSKA / 2, 'Načítám…', {
+    const text = this.add.text(N.SIRKA / 2, N.VYSKA / 2, t('nacitam'), {
       fontFamily: N.PISMO_NADPIS, fontSize: '40px', color: '#ffffff',
     }).setOrigin(0.5);
-    this.load.on('progress', (p) => text.setText(`Načítám… ${Math.round(p * 100)} %`));
+    this.load.on('progress', (p) => text.setText(t('nacitam_procenta', { procenta: Math.round(p * 100) })));
     this.load.on('loaderror', (soubor) => console.warn('Nepodařilo se načíst', soubor.src));
     for (const [jmeno, p] of Object.entries(POSTAVY)) {
       this.load.svg(jmeno, `assets/sprites/${jmeno}.svg?v=${VERZE}`, { width: Math.round(p.vyska * p.pomer), height: p.vyska });

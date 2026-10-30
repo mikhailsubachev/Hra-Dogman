@@ -7,7 +7,7 @@
 // Tip: na vypínač se nejlépe skáče z prostřední plošiny.
 
 UROVNE.chobotnice = {
-  nazev: 'Souboj s Robo-chobotnicí',
+  // název úrovně je v texty/cs.js (uroven_chobotnice_titulek)
   mapa: `
 ....................
 ....................

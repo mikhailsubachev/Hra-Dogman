@@ -24,7 +24,7 @@ class Nepritel {
   // Dog Man na něj skočil shora. Vrací text, který vyskočí nad nepřítelem.
   skokShora() {
     this.omrac(2000);
-    return 'BOING!';
+    return t('boing');
   }
 
   znic() {
@@ -65,7 +65,7 @@ class RobotickaRybka extends Nepritel {
   skokShora() {
     this.znic();
     this.scene.rozsypSrouby(this.sprite.x, this.sprite.y);
-    return 'KRACH!';
+    return t('krach');
   }
 
   update(cas) {
@@ -92,7 +92,7 @@ class Meduza extends Nepritel {
 
   skokShora() {
     this.omrac(N.SKOK_NA_NEPRITELE.omraceniMeduzy);
-    return 'BZZZT!';
+    return t('bzzzt');
   }
 
   update(cas) {
@@ -116,7 +116,7 @@ class Bobanek extends Nepritel {
 
   skokShora() {
     this.omrac(N.SKOK_NA_NEPRITELE.omraceniBobanka);
-    return 'Ouvej!';
+    return t('ouvej');
   }
 
   update(cas, hrac) {
@@ -129,7 +129,7 @@ class Bobanek extends Nepritel {
 
     if (vidi && !this.honi) {
       this.honi = true;
-      this.scene.vyskakovaciText(s.x, s.y - 50, 'Ham ham!', '#a9e34b');
+      this.scene.vyskakovaciText(s.x, s.y - 50, t('ham_ham'), '#a9e34b');
     } else if (!vidi) {
       this.honi = false;
     }
@@ -147,7 +147,7 @@ class Bobanek extends Nepritel {
     if (this.honi && (b.blocked.left || b.blocked.right) && cas > this.bumPauzaDo) {
       this.bumPauzaDo = cas + 3000;
       Zvuky.bum();
-      this.scene.vyskakovaciText(s.x, s.y - 50, 'BUM!', '#ffd43b');
+      this.scene.vyskakovaciText(s.x, s.y - 50, t('bum'), '#ffd43b');
       this.scene.cameras.main.shake(120, 0.004);
       this.omrac(1200);
     }

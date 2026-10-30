@@ -31,14 +31,14 @@ class HerniScena extends Phaser.Scene {
 
   // název úrovně a na mobilu krátká nápověda k ovládání
   ukazNazev(nazev) {
-    const t = this.add.text(N.SIRKA / 2, 110, nazev, {
+    const titulek = this.add.text(N.SIRKA / 2, 110, nazev, {
       fontFamily: N.PISMO_NADPIS, fontSize: '54px', color: '#ffffff', stroke: '#0b2a55', strokeThickness: 10,
     }).setOrigin(0.5).setScrollFactor(0).setDepth(200);
-    this.tweens.add({ targets: t, alpha: 0, delay: 1800, duration: 700, onComplete: () => t.destroy() });
+    this.tweens.add({ targets: titulek, alpha: 0, delay: 1800, duration: 700, onComplete: () => titulek.destroy() });
     if (this.dotyk) {
       const styl = { fontFamily: N.PISMO, fontSize: '34px', color: '#ffffff', stroke: '#0b2a55', strokeThickness: 7, align: 'center' };
-      const vlevo = this.add.text(N.SIRKA * 0.25, N.VYSKA - 90, '◀ táhni ▶\nchůze', styl).setOrigin(0.5).setScrollFactor(0).setDepth(200);
-      const vpravo = this.add.text(N.SIRKA * 0.75, N.VYSKA - 90, 'ťukni = skok\n2× ťukni = HAF', styl).setOrigin(0.5).setScrollFactor(0).setDepth(200);
+      const vlevo = this.add.text(N.SIRKA * 0.25, N.VYSKA - 90, t('napoveda_tahni'), styl).setOrigin(0.5).setScrollFactor(0).setDepth(200);
+      const vpravo = this.add.text(N.SIRKA * 0.75, N.VYSKA - 90, t('napoveda_tukni'), styl).setOrigin(0.5).setScrollFactor(0).setDepth(200);
       const cara = this.add.rectangle(N.SIRKA / 2, N.VYSKA / 2 + 40, 3, N.VYSKA - 160, 0xffffff, 0.35).setScrollFactor(0).setDepth(200);
       this.tweens.add({ targets: [vlevo, vpravo, cara], alpha: 0, delay: 3500, duration: 800, onComplete: () => [vlevo, vpravo, cara].forEach((o) => o.destroy()) });
     }
@@ -56,9 +56,9 @@ class HerniScena extends Phaser.Scene {
       this.kyslik -= (N.KYSLIK.ubytekZaSekundu * delta) / 1000;
       if (this.kyslik < N.KYSLIK.max * 0.25 && !this.varovaniKysliku) {
         this.varovaniKysliku = true;
-        this.vyskakovaciText(this.hrac.x, this.hrac.y - 60, 'Málo kyslíku!', '#ff6b6b');
+        this.vyskakovaciText(this.hrac.x, this.hrac.y - 60, t('malo_kysliku'), '#ff6b6b');
       }
-      if (this.kyslik <= 0) this.zasah('Došel kyslík!');
+      if (this.kyslik <= 0) this.zasah(t('dosel_kyslik'));
     }
     if (this.zacatek === null) this.zacatek = this.time.now;
     if (!this.hotovo) this.casHry = this.time.now - this.zacatek;
@@ -120,7 +120,7 @@ class HerniScena extends Phaser.Scene {
       this.vyskakovaciText(nepritel.sprite.x, nepritel.sprite.y - 40, hlaska, '#ffd43b');
       return;
     }
-    if (nepritel.nebezpecny) this.zasah('AU!');
+    if (nepritel.nebezpecny) this.zasah(t('au'));
   }
 
   haf(cas) {
@@ -132,11 +132,11 @@ class HerniScena extends Phaser.Scene {
     }
     this.hafPripravenOd = cas + N.HAF.pauza;
     Zvuky.haf();
-    this.vyskakovaciText(this.hrac.x, this.hrac.y - 50, 'HAF!', '#ffd43b', 44);
+    this.vyskakovaciText(this.hrac.x, this.hrac.y - 50, t('haf'), '#ffd43b', 44);
     const kruh = this.add.circle(this.hrac.x, this.hrac.y, N.HAF.dosah).setStrokeStyle(6, 0xffd43b, 0.9).setDepth(4).setScale(0.1);
     this.tweens.add({ targets: kruh, scale: 1, alpha: 0, duration: 380, onComplete: () => kruh.destroy() });
     if (this.omracHafem()) Zvuky.omraceni();
-    if (N.KYSLIK.zapnuto && this.kyslik <= 0) this.zasah('Uštěkal se!');
+    if (N.KYSLIK.zapnuto && this.kyslik <= 0) this.zasah(t('ustekal_se'));
   }
 
   // co štěkot omráčí; úrovně mohou přidat vlastní cíle (chapadla)
@@ -206,24 +206,25 @@ class HerniScena extends Phaser.Scene {
     const prvky = [];
     const pridej = (o) => { prvky.push(o.setScrollFactor(0).setDepth(300)); return o; };
     pridej(this.add.rectangle(0, 0, S, N.VYSKA, 0x0b2a55, 0.8).setOrigin(0).setInteractive()); // pod pauzou se nehraje
-    pridej(this.add.text(S / 2, 100, 'PAUZA', {
+    pridej(this.add.text(S / 2, 100, t('pauza'), {
       fontFamily: N.PISMO_NADPIS, fontSize: '72px', color: '#ffd43b', stroke: '#1b1b1b', strokeThickness: 10,
     }).setOrigin(0.5));
     const tlacitko = (y, popis, akce) => {
       const r = pridej(this.add.rectangle(S / 2, y, 440, 74, 0xff922b).setStrokeStyle(6, 0x1b1b1b).setInteractive({ useHandCursor: true }));
-      pridej(this.add.text(S / 2, y + 2, popis, {
+      const napis = pridej(this.add.text(S / 2, y + 2, popis, {
         fontFamily: N.PISMO_NADPIS, fontSize: '38px', color: '#ffffff', stroke: '#1b1b1b', strokeThickness: 7,
       }).setOrigin(0.5));
+      if (napis.width > 410) napis.setScale(410 / napis.width); // dlouhý překlad se zmenší
       r.on('pointerup', () => { Zvuky.klik(); akce(); });
     };
     // po přepnutí celé obrazovky se tlačítka přeskládají (jiný popis, jiná šířka)
     const poPrepnuti = () => setTimeout(() => this.pozastaveno && this.vykresliPauzu(), 300);
-    tlacitko(210, '▶ POKRAČOVAT', () => this.pokracuj());
-    tlacitko(300, 'HLAVNÍ MENU', () => this.doMenu());
+    tlacitko(210, t('pauza_pokracovat'), () => this.pokracuj());
+    tlacitko(300, t('pauza_menu'), () => this.doMenu());
     if (document.fullscreenElement) {
-      tlacitko(390, 'ZRUŠIT CELOU OBRAZOVKU', () => document.exitFullscreen().catch(() => {}).then(poPrepnuti));
+      tlacitko(390, t('pauza_zrusit_celou'), () => document.exitFullscreen().catch(() => {}).then(poPrepnuti));
     } else if (document.fullscreenEnabled && this.dotyk) {
-      tlacitko(390, '⛶ CELÁ OBRAZOVKA', () => naCelouObrazovku().then(poPrepnuti));
+      tlacitko(390, t('pauza_cela'), () => naCelouObrazovku().then(poPrepnuti));
     }
     this.prvkyPauzy = prvky;
   }

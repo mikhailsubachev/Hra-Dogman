@@ -7,7 +7,7 @@
 // Tip: čudlík se po pár bublinách vybije, pak běž na jiný.
 
 UROVNE.zralok = {
-  nazev: 'Souboj s Robo-žralokem',
+  // název úrovně je v texty/cs.js (uroven_zralok_titulek)
   mapa: `
 ....................
 ....................

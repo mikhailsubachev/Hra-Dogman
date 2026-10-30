@@ -117,7 +117,7 @@ class PonorScena extends HerniScena {
       this.paka = this.add.image(konec.x, konec.y, 'paka').setOrigin(0.5, 1).setDepth(2).setScale(1.25);
       this.cilZona = this.add.zone(konec.x, konec.y - 50, 70, 100);
       this.physics.add.existing(this.cilZona, true);
-      const sipka = this.sipkaCile = this.add.text(konec.x, konec.y - 160, 'VYPNI! ▼', {
+      const sipka = this.sipkaCile = this.add.text(konec.x, konec.y - 160, t('vypni'), {
         fontFamily: N.PISMO_NADPIS, fontSize: '30px', color: '#ffd43b', stroke: '#1b1b1b', strokeThickness: 6,
       }).setOrigin(0.5).setDepth(3);
       this.tweens.add({ targets: sipka, y: '-=12', duration: 500, yoyo: true, repeat: -1 });
@@ -128,7 +128,7 @@ class PonorScena extends HerniScena {
       this.tweens.add({ targets: this.ponorka, y: '-=6', duration: 1500, yoyo: true, repeat: -1, ease: 'Sine.inOut' });
       this.cilZona = this.add.zone(konec.x, konec.y - 50, 220, 100);
       this.physics.add.existing(this.cilZona, true);
-      const sipka = this.add.text(konec.x, konec.y - 150, 'NASTUP! ▼', {
+      const sipka = this.add.text(konec.x, konec.y - 150, t('nastup'), {
         fontFamily: N.PISMO_NADPIS, fontSize: '30px', color: '#ffd43b', stroke: '#1b1b1b', strokeThickness: 6,
       }).setOrigin(0.5).setDepth(3);
       this.tweens.add({ targets: sipka, y: '-=12', duration: 500, yoyo: true, repeat: -1 });
@@ -164,7 +164,7 @@ class PonorScena extends HerniScena {
     this.cameras.main.setDeadzone(80, 60);
     this.cameras.main.fadeIn(400);
 
-    this.ukazNazev(uroven.nazev);
+    this.ukazNazev(t(`uroven_${this.idUrovne}_titulek`));
 
     if (PARAMETRY.get('debug') === '1') this.physics.world.createDebugGraphic();
   }
@@ -177,7 +177,7 @@ class PonorScena extends HerniScena {
     if (this.hledany) this.pohybHledaneho(cas);
     if (this.tmavost) this.aktualizujTmu(delta);
     // propadl se dírou ve dně
-    if (this.hrac.y > this.vyskaSveta + 40 && !this.hrac.zmrazeny) this.zasah('Žbluňk!');
+    if (this.hrac.y > this.vyskaSveta + 40 && !this.hrac.zmrazeny) this.zasah(t('zblunk'));
     this.ukazatele.update(this.pocetKosti, this.kyslik, this.casHry);
   }
 
@@ -199,7 +199,7 @@ class PonorScena extends HerniScena {
     this.svetlo = 1;
     this.varovaniKysliku = false;
     Zvuky.checkpoint();
-    this.vyskakovaciText(bojka.x, bojka.y - 60, 'Kontrolní bod!', '#69db7c');
+    this.vyskakovaciText(bojka.x, bojka.y - 60, t('kontrolni_bod'), '#69db7c');
   }
 
   // X: mina vybuchne, Dog Man se vrátí na kontrolní bod, mina se za chvíli objeví znovu
@@ -211,7 +211,7 @@ class PonorScena extends HerniScena {
     const kruh = this.add.circle(mina.x, mina.y, 60, 0xffa94d, 0.8).setDepth(7).setScale(0.2);
     this.tweens.add({ targets: kruh, scale: 1.4, alpha: 0, duration: 400, onComplete: () => kruh.destroy() });
     this.rozsypSrouby(mina.x, mina.y, 10, 90);
-    this.zasah('BUM!');
+    this.zasah(t('bum'));
     this.time.delayedCall(N.MINA.obnova, () => {
       mina.body.enable = true;
       mina.setVisible(true).setScale(0.2);
@@ -231,7 +231,7 @@ class PonorScena extends HerniScena {
     if (this.hledany && !this.hledany.zachranen) {
       if (this.time.now > (this.napovedaCile || 0)) {
         this.napovedaCile = this.time.now + 2500;
-        this.vyskakovaciText(this.hrac.x, this.hrac.y - 60, 'Nejdřív najdi Bobánka!', '#ffd43b');
+        this.vyskakovaciText(this.hrac.x, this.hrac.y - 60, t('nejdriv_bobanek'), '#ffd43b');
       }
       return;
     }
@@ -262,9 +262,9 @@ class PonorScena extends HerniScena {
     this.cameras.main.flash(300, 255, 80, 80);
     const tma = this.add.rectangle(0, 0, 1400, N.VYSKA, 0x000000, 0).setOrigin(0).setScrollFactor(0).setDepth(40);
     this.tweens.add({ targets: tma, fillAlpha: 0.45, duration: 900 });
-    this.vyskakovaciText(this.paka.x, this.paka.y - 130, 'ZÁKLADNA VYPNUTA!', '#69db7c', 44);
+    this.vyskakovaciText(this.paka.x, this.paka.y - 130, t('zakladna_vypnuta'), '#69db7c', 44);
     this.time.delayedCall(700, () => this.rekni(this.cameras.main.scrollX + N.SIRKA / 2, this.cameras.main.scrollY + 200,
-      'Čuňas z reproduktoru: NEEE! Moje základna!', '#7048e8', 2000).setScrollFactor(1));
+      t('cunas_reproduktor'), '#7048e8', 2000).setScrollFactor(1));
     this.time.delayedCall(2600, () => this.dokonceno({ kosti: this.pocetKosti, celkem: this.celkemKosti }));
   }
 
@@ -353,7 +353,7 @@ class PonorScena extends HerniScena {
     k.destroy();
     this.klice++;
     Zvuky.checkpoint();
-    this.vyskakovaciText(k.x, k.y - 30, 'Klíček!', '#ffd43b');
+    this.vyskakovaciText(k.x, k.y - 30, t('klicek'), '#ffd43b');
     this.ukazatele.klice(this.klice);
   }
 
@@ -362,7 +362,7 @@ class PonorScena extends HerniScena {
     if (!this.klice) {
       if (this.time.now > (this.napovedaDveri || 0)) {
         this.napovedaDveri = this.time.now + 2500;
-        this.vyskakovaciText(this.hrac.x, this.hrac.y - 60, 'Zamčeno! Najdi klíček', '#ffd43b');
+        this.vyskakovaciText(this.hrac.x, this.hrac.y - 60, t('zamceno'), '#ffd43b');
       }
       return;
     }
@@ -370,7 +370,7 @@ class PonorScena extends HerniScena {
     this.klice--;
     this.ukazatele.klice(this.klice);
     Zvuky.konec();
-    this.vyskakovaciText(dvere.zamek.x, dvere.zamek.y - 40, 'Odemčeno!', '#69db7c');
+    this.vyskakovaciText(dvere.zamek.x, dvere.zamek.y - 40, t('odemceno'), '#69db7c');
     dvere.dily.forEach((d) => { d.body.enable = false; });
     this.tweens.add({ targets: dvere.zamek, y: dvere.zamek.y + 80, alpha: 0, angle: 90, duration: 500 });
     this.tweens.add({ targets: dvere.dily, scaleX: 0.15, x: '-=20', alpha: 0.6, duration: 450, ease: 'Sine.in' });
@@ -383,7 +383,7 @@ class PonorScena extends HerniScena {
     j.setAlpha(0.35);
     this.svetlo = 1;
     Zvuky.kyslik();
-    this.vyskakovaciText(j.x, j.y - 40, 'Světlo!', '#99e9f2');
+    this.vyskakovaciText(j.x, j.y - 40, t('svetlo'), '#99e9f2');
     this.time.delayedCall(N.SVETLO.obnova, () => { j.nabita = true; j.setAlpha(1); });
   }
 
@@ -414,8 +414,8 @@ class PonorScena extends HerniScena {
     this.tweens.killTweensOf(h.obrazek);
     h.obrazek.setAngle(0).setOrigin(0.5);
     h.obrazek.y -= 44;
-    this.rekni(h.obrazek.x, h.obrazek.y - 50, 'Dog Mane! Ty jsi mě našel!', '#2b8a3e', 2000);
-    this.vyskakovaciText(this.hrac.x, this.hrac.y - 70, 'Bobánek zachráněn!', '#69db7c', 40);
+    this.rekni(h.obrazek.x, h.obrazek.y - 50, t('bobanek_nasel'), '#2b8a3e', 2000);
+    this.vyskakovaciText(this.hrac.x, this.hrac.y - 70, t('bobanek_zachranen'), '#69db7c', 40);
   }
 
   pohybHledaneho(cas) {
@@ -426,7 +426,7 @@ class PonorScena extends HerniScena {
       const d = Phaser.Math.Distance.Between(this.hrac.x, this.hrac.y, o.x, o.y);
       if (d < 9 * N.DLAZDICE && cas > h.volaniOd) {
         h.volaniOd = cas + 3500;
-        const hlasky = ['Šéfe? Haló?', 'Je tu někdo?', 'Já se bojím tmy!'];
+        const hlasky = t('bobanek_vola');
         this.rekni(o.x, o.y - 100, hlasky[Math.floor(cas / 3500) % hlasky.length], '#1b1622', 1800);
       }
       return;

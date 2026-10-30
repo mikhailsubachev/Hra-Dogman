@@ -72,11 +72,15 @@ if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
   document.addEventListener('touchend', naCelouObrazovku, { once: true });
 }
 
+Jazyk.nacti();
 const ceskaPismena = 'ČĚŠŘŽÝÁÍÉŮÚ čěšřžýáíéůú';
+const azbuka = 'ДОГМЭН Свинтус под водой ёЁ';
 Promise.race([
   Promise.all([
     document.fonts.load('40px "Bangers"', ceskaPismena),
     document.fonts.load('20px "Patrick Hand"', ceskaPismena),
+    document.fonts.load('600 40px "Oswald"', azbuka),
+    document.fonts.load('20px "Pangolin"', azbuka),
   ]),
   new Promise((hotovo) => setTimeout(hotovo, 2000)),
 ]).catch(() => {}).then(() => {

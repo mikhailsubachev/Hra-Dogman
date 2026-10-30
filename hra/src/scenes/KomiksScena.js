@@ -1,17 +1,9 @@
-// Úvodní komiks. Panely jsou jen text a obrázky, takže je děti mohou snadno přepsat.
-const UVODNI_KOMIKS = [
-  { postava: 'ponorka', vypravec: 'Přístav. Z moře mizí lodě a na pláž vyplavují podivné šroubky…' },
-  { postava: 'cunas', mluvi: 'Čuňas', text: 'Chi chi chi! S mými robotickými příšerami ovládnu celé moře!' },
-  { postava: 'bobanek', mluvi: 'Bobánek', text: 'Šéfe, a můžu taky řídit tu velkou chobotnici?' },
-  { postava: 'cunas', mluvi: 'Čuňas', text: 'NE! Ty hlídej dno. A ať tě nevidí ten pes!' },
-  { postava: 'dogman', mluvi: 'Dog Man', text: 'HAF!', vypravec: 'Dog Man si nasadí skafandr a skočí do vody. Mise začíná!' },
-];
-
+// Komiks mezi úrovněmi. Panely jsou v texty/*.js (komiks_...), děti je mohou snadno přepsat.
 class KomiksScena extends Phaser.Scene {
   constructor() { super('Komiks'); }
 
   init(data) {
-    this.panely = data.panely || UVODNI_KOMIKS;
+    this.panely = data.panely || t('komiks_uvod');
     this.dalsi = data.dalsi || { scena: 'Ponor', data: { uroven: 'ponor1' } };
   }
 
@@ -21,12 +13,12 @@ class KomiksScena extends Phaser.Scene {
     this.konci = false;
     this.obsah = null;
 
-    this.add.text(N.SIRKA - 20, 14, 'Přeskočit ▶▶', {
+    this.add.text(N.SIRKA - 20, 14, t('komiks_preskocit'), {
       fontFamily: N.PISMO_NADPIS, fontSize: '28px', color: '#ffffff', stroke: '#0b2a55', strokeThickness: 6,
     }).setOrigin(1, 0).setDepth(10).setInteractive({ useHandCursor: true })
       .on('pointerdown', (p, x, y, e) => { e.stopPropagation(); this.konec(); });
 
-    this.pokracuj = this.add.text(N.SIRKA / 2, N.VYSKA - 26, 'Klepni nebo zmáčkni mezerník ▶', {
+    this.pokracuj = this.add.text(N.SIRKA / 2, N.VYSKA - 26, t('komiks_pokracuj'), {
       fontFamily: N.PISMO, fontSize: '26px', color: '#ffffff',
     }).setOrigin(0.5).setDepth(10);
     this.tweens.add({ targets: this.pokracuj, alpha: 0.3, duration: 600, yoyo: true, repeat: -1 });
@@ -80,7 +72,7 @@ class KomiksScena extends Phaser.Scene {
       g.strokeRoundedRect(bx - 240, by - 95, 480, 190, 40);
       g.fillStyle(0xffffff); g.fillRect(bx - 205, by + 45, 40, 30); // schová čáru mezi bublinou a ocáskem
       c.add(g);
-      c.add(this.add.text(bx - 210, by - 85, p.mluvi.toUpperCase(), {
+      c.add(this.add.text(bx - 210, by - 85, t(`jmeno_${p.mluvi}`).toUpperCase(), {
         fontFamily: N.PISMO_NADPIS, fontSize: '28px', color: '#e8590c',
       }));
       c.add(this.add.text(bx, by + 12, p.text, {

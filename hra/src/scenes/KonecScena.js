@@ -19,7 +19,7 @@ class KonecScena extends Phaser.Scene {
     Textury.voda(this);
     Textury.bublinky(this);
 
-    this.add.text(S / 2, 54, 'MISE SPLNĚNA!', {
+    this.add.text(S / 2, 54, t('konec_nadpis'), {
       fontFamily: N.PISMO_NADPIS, fontSize: '74px', color: '#ffd43b', stroke: '#1b1b1b', strokeThickness: 11,
     }).setOrigin(0.5).setAngle(-2);
 
@@ -37,15 +37,15 @@ class KonecScena extends Phaser.Scene {
     const styl = { fontFamily: N.PISMO, fontSize: '32px', color: '#ffffff', stroke: '#0b2a55', strokeThickness: 6 };
     this.add.text(240, 215, `⏱ ${formatCas(cas)}`, { ...styl, fontFamily: N.PISMO_NADPIS, fontSize: '54px', color: '#ffd43b' }).setOrigin(0.5);
     if (souboj) {
-      this.add.text(240, 270, 'Robo-chobotnice poražena!', styl).setOrigin(0.5);
-      this.add.text(240, 308, `Zásahy: ${zasahu || 0}`, styl).setOrigin(0.5);
+      this.add.text(240, 270, t(uroven === 'zralok' ? 'konec_zralok' : 'konec_chobotnice'), styl).setOrigin(0.5);
+      this.add.text(240, 308, t('konec_zasahy', { pocet: zasahu || 0 }), styl).setOrigin(0.5);
     } else {
-      this.add.text(240, 270, `Kosti: ${kosti} / ${celkem}`, styl).setOrigin(0.5);
-      this.add.text(240, 308, `Zničené rybky: ${zniceno || 0}`, styl).setOrigin(0.5);
+      this.add.text(240, 270, t('konec_kosti', { kosti, celkem }), styl).setOrigin(0.5);
+      this.add.text(240, 308, t('konec_rybky', { pocet: zniceno || 0 }), styl).setOrigin(0.5);
     }
 
     // pravá půlka: Síň slávy
-    this.add.text(690, 112, 'SÍŇ SLÁVY', {
+    this.add.text(690, 112, t('sin_nadpis'), {
       fontFamily: N.PISMO_NADPIS, fontSize: '40px', color: '#ffffff', stroke: '#1b1b1b', strokeThickness: 7,
     }).setOrigin(0.5);
     this.tabulka = this.add.container(0, 0);
@@ -56,9 +56,9 @@ class KonecScena extends Phaser.Scene {
 
     this.prizpusobSirce();
     const dalsi = Postup.dalsi(uroven);
-    this.tlacitko(110, 488, 'ZNOVU', () => Postup.spust(this, uroven, false), 190, 70);
-    this.tlacitko(315, 488, 'MENU', () => this.scene.start('Menu'), 190, 70);
-    if (dalsi) this.tlacitko(520, 488, 'DALŠÍ ▶', () => Postup.spust(this, dalsi.id, true), 190, 70);
+    this.tlacitko(110, 488, t('konec_znovu'), () => Postup.spust(this, uroven, false), 190, 70);
+    this.tlacitko(315, 488, t('konec_menu'), () => this.scene.start('Menu'), 190, 70);
+    if (dalsi) this.tlacitko(520, 488, t('konec_dalsi'), () => Postup.spust(this, dalsi.id, true), 190, 70);
   }
 
   // obsah je rozvržený na šířku 960, na širší obrazovce ho kamera vycentruje
@@ -69,33 +69,33 @@ class KonecScena extends Phaser.Scene {
 
   // přihlášený hráč: čas se zapíše pod jeho přezdívkou
   zapisHrace() {
-    const ukladam = this.add.text(690, 220, 'Ukládám…', { fontFamily: N.PISMO, fontSize: '30px', color: '#d0ebff' }).setOrigin(0.5);
+    const ukladam = this.add.text(690, 220, t('konec_ukladam'), { fontFamily: N.PISMO, fontSize: '30px', color: '#d0ebff' }).setOrigin(0.5);
     Ucet.zapis(this.uroven, this.cas, this.kostiVysledek, this.celkem).then((vysledek) => {
       if (!this.sys.isActive()) return;
       ukladam.destroy();
       if (vysledek && !vysledek.chyba) {
         this.ukazTabulku(vysledek.poradi, vysledek.rekordy, true);
         if (vysledek.poradi >= 0) Zvuky.checkpoint();
-        if (!vysledek.zlepseni) this.poznamka('Tvůj rekord zůstává rychlejší');
-        else if (vysledek.poradi >= 6) this.poznamka(`${Ucet.prezdivka}: ${vysledek.poradi + 1}. místo`);
+        if (!vysledek.zlepseni) this.poznamka(t('konec_rekord_zustava'));
+        else if (vysledek.poradi >= 6) this.poznamka(t('konec_misto', { jmeno: Ucet.prezdivka, misto: vysledek.poradi + 1 }));
       } else {
         // server nejde nebo čas odmítl: aspoň do tabulky tohoto zařízení
         const rekordy = Ulozeni.pridejRekord(this.uroven, Ucet.prezdivka, this.cas, this.kostiVysledek);
         this.ukazTabulku(rekordy.findIndex((r) => r.jmeno === Ucet.prezdivka && r.cas === this.cas));
-        if (vysledek) this.poznamka(`Server čas nepřijal: ${vysledek.chyba}`);
+        if (vysledek) this.poznamka(t('konec_server_neprijal', { chyba: prelozChybu(vysledek.chyba) }));
       }
     });
   }
 
   // host: tabulku vidí, ale zapisují se jen přihlášení
   ukazProHosta() {
-    const cekam = this.add.text(690, 220, 'Načítám…', { fontFamily: N.PISMO, fontSize: '30px', color: '#d0ebff' }).setOrigin(0.5);
+    const cekam = this.add.text(690, 220, t('nacitam'), { fontFamily: N.PISMO, fontSize: '30px', color: '#d0ebff' }).setOrigin(0.5);
     SdileneVysledky.nacti(this.uroven).then((rekordy) => {
       if (!this.sys.isActive()) return;
       cekam.destroy();
       if (rekordy) this.ukazTabulku(-1, rekordy, true);
       else this.ukazTabulku(-1);
-      this.poznamka('Přihlas se v menu a tvůj čas se zapíše!');
+      this.poznamka(t('konec_prihlas_se'));
     });
   }
 
@@ -111,21 +111,21 @@ class KonecScena extends Phaser.Scene {
   }
 
   zeptejSeNaJmeno(misto) {
-    const vyzva = this.add.text(690, 170, `${misto}. místo! Kdo hrál?`, {
+    const vyzva = this.add.text(690, 170, t('konec_misto_kdo', { misto }), {
       fontFamily: N.PISMO, fontSize: '32px', color: '#ffd43b', stroke: '#0b2a55', strokeThickness: 6,
     }).setOrigin(0.5);
     const policko = this.add.dom(690, 230, 'input', [
-      'width: 280px', 'font: 30px "Patrick Hand", sans-serif', 'padding: 6px 12px', 'border: 4px solid #1b1b1b',
+      'width: 280px', 'font: 30px "Patrick Hand", "Pangolin", sans-serif', 'padding: 6px 12px', 'border: 4px solid #1b1b1b',
       'border-radius: 12px', 'text-align: center', 'outline: none',
     ].join(';'));
     const input = policko.node;
     input.maxLength = 12;
     input.value = Ulozeni.posledniJmeno();
-    input.placeholder = 'Tvoje jméno';
+    input.placeholder = t('konec_tvoje_jmeno');
     this.time.delayedCall(100, () => input.focus());
 
     const ulozit = () => {
-      const jmeno = input.value.trim().slice(0, 12) || 'Neznámý hrdina';
+      const jmeno = input.value.trim().slice(0, 12) || t('konec_neznamy');
       Zvuky.checkpoint();
       const rekordy = Ulozeni.pridejRekord(this.uroven, jmeno, this.cas, this.kostiVysledek);
       const index = rekordy.findIndex((r) => r.jmeno === jmeno && r.cas === this.cas);
@@ -138,19 +138,19 @@ class KonecScena extends Phaser.Scene {
       e.stopPropagation(); // písmena a Enter nepatří hře, jen políčku
       if (e.key === 'Enter') ulozit();
     });
-    const tl = this.tlacitko(690, 305, 'ZAPSAT', ulozit, 200, 64);
+    const tl = this.tlacitko(690, 305, t('konec_zapsat'), ulozit, 200, 64);
   }
 
   ukazTabulku(zvyraznit, vsechny = Ulozeni.rekordy(this.uroven), sdilena = false) {
     const rekordy = vsechny.slice(0, SdileneVysledky.zapnuto ? 6 : 7); // pod tabulkou se serverem je místo na poznámku
     if (SdileneVysledky.zapnuto) {
-      this.tabulka.add(this.add.text(690, 146, sdilena ? '🌍 všichni hráči' : '📱 jen toto zařízení (server nedostupný)', {
+      this.tabulka.add(this.add.text(690, 146, sdilena ? t('konec_vsichni') : t('konec_jen_zarizeni'), {
         fontFamily: N.PISMO, fontSize: '22px', color: '#a5d8ff',
       }).setOrigin(0.5));
     }
     const odshora = SdileneVysledky.zapnuto ? 186 : 160;
     if (!rekordy.length) {
-      this.tabulka.add(this.add.text(690, 220, 'Zatím prázdná', { fontFamily: N.PISMO, fontSize: '30px', color: '#d0ebff' }).setOrigin(0.5));
+      this.tabulka.add(this.add.text(690, 220, t('sin_prazdna'), { fontFamily: N.PISMO, fontSize: '30px', color: '#d0ebff' }).setOrigin(0.5));
       return;
     }
     rekordy.forEach((r, i) => {
@@ -175,10 +175,11 @@ class KonecScena extends Phaser.Scene {
 
   tlacitko(x, y, popis, akce, sirka = 220, vyska = 76) {
     const r = this.add.rectangle(x, y, sirka, vyska, 0xff922b).setStrokeStyle(6, 0x1b1b1b).setInteractive({ useHandCursor: true });
-    const t = this.add.text(x, y + 2, popis, {
+    const napis = this.add.text(x, y + 2, popis, {
       fontFamily: N.PISMO_NADPIS, fontSize: `${Math.round(vyska * 0.58)}px`, color: '#ffffff', stroke: '#1b1b1b', strokeThickness: 7,
     }).setOrigin(0.5);
+    if (napis.width > sirka - 20) napis.setScale((sirka - 20) / napis.width); // dlouhý překlad se zmenší
     r.on('pointerdown', () => { Zvuky.klik(); akce(); });
-    return [r, t];
+    return [r, napis];
   }
 }

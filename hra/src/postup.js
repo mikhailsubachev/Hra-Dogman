@@ -1,78 +1,22 @@
-// Pořadí úrovní, komiksy mezi nimi a odemykání.
+// Pořadí úrovní, komiksy mezi nimi a odemykání. Názvy úrovní a texty komiksů jsou v texty/*.js.
 // Další úroveň se odemkne, když je předchozí dokončená (nebo s ?vse=1 v adrese).
-const KOMIKS_PRED_CHOBOTNICI = [
-  { postava: 'ponorka', vypravec: 'Dog Man doplul až k Čuňasově podmořské základně…' },
-  { postava: 'chobotnice', mluvi: 'Čuňas', text: 'Chi chi! Seznam se s mou Robo-chobotnicí!' },
-  { postava: 'bobanek', mluvi: 'Bobánek', text: 'Šéfe, a kde má ta chobotnice vypínač?' },
-  { postava: 'cunas', mluvi: 'Čuňas', text: 'Pšt! Ten je schovaný pod krytem na hlavě!' },
-  { postava: 'dogman', mluvi: 'Dog Man', text: 'HAF!', vypravec: 'Uhýbej chapadlům. Až se chobotnice unaví, skoč jí na vypínač!' },
-];
-
-const KOMIKS_PO_CHOBOTNICI = [
-  { postava: 'cunas', mluvi: 'Čuňas', text: 'Moje chobotnice! To ti nedaruju, pejsku!', vypravec: 'Kabina s Čuňasem vystřelila k hladině…' },
-  { postava: 'bobanek', mluvi: 'Bobánek', text: 'Šéfe, počkej na mě! Já neumím plavat tak rychle!' },
-  { postava: 'dogman', mluvi: 'Dog Man', text: 'HAF HAF!', vypravec: 'Přístav je zase v bezpečí. Ale na jak dlouho?' },
-];
-
-const KOMIKS_PRED_ZAKLADNOU = [
-  { postava: 'ponorka', vypravec: 'Stopa šroubků vede k Čuňasově tajné základně na dně moře…' },
-  { postava: 'petulka', mluvi: 'Peťulka', text: 'Dog Mane! Uvnitř je velký vypínač. Když ho stáhneš, základna zhasne!' },
-  { postava: 'cunas', mluvi: 'Čuňas', text: 'Bobánku! Zapni miny a pusť bublinové proudy!' },
-  { postava: 'bobanek', mluvi: 'Bobánek', text: 'Kterým čudlíkem, šéfe? Tím červeným, nebo tím červeným?' },
-  { postava: 'dogman', mluvi: 'Dog Man', text: 'HAF!', vypravec: 'Proud bublin tě vynese nahoru. Na miny nesahej!' },
-];
-
-const KOMIKS_PO_ZAKLADNE = [
-  { postava: 'cunas', mluvi: 'Čuňas', text: 'Tma! Kdo mi zhasnul?! To zase ten pes!' },
-  { postava: 'bobanek', mluvi: 'Bobánek', text: 'Šéfe, já se ve tmě bojím…' },
-  { postava: 'petulka', mluvi: 'Peťulka', text: 'Hurá, Dog Mane! Teď už Čuňas žádné příšery nevyrobí.', vypravec: 'Aspoň na chvíli…' },
-];
-
-const KOMIKS_PRED_VRAKEM = [
-  { postava: 'ponorka', vypravec: 'Ve tmě Čuňas utekl do starého potopeného vraku…' },
-  { postava: 'cunas', mluvi: 'Čuňas', text: 'Tady mě ten pes nikdy nenajde. Bobánku, počkej tu na mě!' },
-  { postava: 'bobanek', mluvi: 'Bobánek', text: 'Šéfe… tady je tma jak v pytli. Šéfe? ŠÉFE?!' },
-  { postava: 'petulka', mluvi: 'Peťulka', text: 'Dog Mane, Bobánek se ve vraku ztratil! Lampa na helmě ti ale dlouho nevydrží.' },
-  { postava: 'dogman', mluvi: 'Dog Man', text: 'HAF!', vypravec: 'Lampu dobiješ u svítících medúz. Zamčené dveře otevře klíček.' },
-];
-
-const KOMIKS_PO_VRAKU = [
-  { postava: 'bobanek', mluvi: 'Bobánek', text: 'Ty jsi mě našel! Já už se nikdy nebudu bát tmy… možná.' },
-  { postava: 'cunas', mluvi: 'Čuňas', text: 'Bobánku?! Ty se kamarádíš s tím psem?!', vypravec: 'Čuňas ujíždí okýnkem vraku v malé ponorce…' },
-  { postava: 'petulka', mluvi: 'Peťulka', text: 'Výborně, Dog Mane! Bobánek je v bezpečí.', vypravec: 'Ale kam Čuňas plave teď?' },
-];
-
-const KOMIKS_PRED_ZRALOKEM = [
-  { postava: 'ponorka', vypravec: 'Stopa Čuňasovy ponorky vede do obrovského podmořského hangáru…' },
-  { postava: 'zralok', mluvi: 'Čuňas', text: 'Chi chi! Seznam se s mým Robo-žralokem! Má zuby z nerezu!' },
-  { postava: 'bobanek', mluvi: 'Bobánek', text: 'Dog Mane! Na podlaze jsou zelené čudlíky. Když na nich stojíš, střílí bubliny!' },
-  { postava: 'petulka', mluvi: 'Peťulka', text: 'Pozor na malé žraloky! Odežeň je štěkotem.' },
-  { postava: 'dogman', mluvi: 'Dog Man', text: 'HAF!', vypravec: 'Stoupni si na čudlík. Když se vybije, běž na jiný!' },
-];
-
-const KOMIKS_PO_ZRALOKOVI = [
-  { postava: 'cunas', mluvi: 'Čuňas', text: 'Můj žralok! Celý se rozsypal na šroubky!', vypravec: 'Kabina s Čuňasem vystřelila pryč…' },
-  { postava: 'bobanek', mluvi: 'Bobánek', text: 'Šéfe Dog Mane, to bylo bublin! Můžu si jeden šroubek nechat?' },
-  { postava: 'dogman', mluvi: 'Dog Man', text: 'HAF HAF!', vypravec: 'Moře je zase o kousek bezpečnější.' },
-];
-
 const UROVNE_HRY = [
-  { id: 'ponor1', scena: 'Ponor', data: { uroven: 'ponor1' }, nazev: 'Ponor', komiksPred: () => UVODNI_KOMIKS },
+  { id: 'ponor1', scena: 'Ponor', data: { uroven: 'ponor1' }, komiksPred: () => t('komiks_uvod') },
   {
-    id: 'chobotnice', scena: 'Chobotnice', data: {}, nazev: 'Chobotnice', menu: 'Souboj s Robo-chobotnicí',
-    komiksPred: () => KOMIKS_PRED_CHOBOTNICI, komiksPo: () => KOMIKS_PO_CHOBOTNICI,
+    id: 'chobotnice', scena: 'Chobotnice', data: {},
+    komiksPred: () => t('komiks_pred_chobotnici'), komiksPo: () => t('komiks_po_chobotnici'),
   },
   {
-    id: 'zakladna', scena: 'Ponor', data: { uroven: 'zakladna' }, nazev: 'Základna', menu: 'Čuňasova základna',
-    komiksPred: () => KOMIKS_PRED_ZAKLADNOU, komiksPo: () => KOMIKS_PO_ZAKLADNE,
+    id: 'zakladna', scena: 'Ponor', data: { uroven: 'zakladna' },
+    komiksPred: () => t('komiks_pred_zakladnou'), komiksPo: () => t('komiks_po_zakladne'),
   },
   {
-    id: 'vrak', scena: 'Ponor', data: { uroven: 'vrak' }, nazev: 'Vrak', menu: 'Potopený vrak',
-    komiksPred: () => KOMIKS_PRED_VRAKEM, komiksPo: () => KOMIKS_PO_VRAKU,
+    id: 'vrak', scena: 'Ponor', data: { uroven: 'vrak' },
+    komiksPred: () => t('komiks_pred_vrakem'), komiksPo: () => t('komiks_po_vraku'),
   },
   {
-    id: 'zralok', scena: 'Zralok', data: {}, nazev: 'Robo-žralok', menu: 'Souboj s Robo-žralokem',
-    komiksPred: () => KOMIKS_PRED_ZRALOKEM, komiksPo: () => KOMIKS_PO_ZRALOKOVI,
+    id: 'zralok', scena: 'Zralok', data: {},
+    komiksPred: () => t('komiks_pred_zralokem'), komiksPo: () => t('komiks_po_zralokovi'),
   },
 ];
 

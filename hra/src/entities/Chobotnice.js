@@ -202,7 +202,7 @@ class Chobotnice {
       if (u.zruseno || Math.abs(u.x - x) > dosah) continue;
       u.zruseno = true;
       neco = true;
-      this.scene.vyskakovaciText(u.x, this.scene.vyskaPodlahy - 140, 'BZZT!', '#74c0fc');
+      this.scene.vyskakovaciText(u.x, this.scene.vyskaPodlahy - 140, t('bzzt'), '#74c0fc');
       this.stahniChapadlo(u);
     }
     for (const k of this.inkousty) {
@@ -223,8 +223,8 @@ class Chobotnice {
     s.tweens.add({ targets: this.kryt, angle: -110, duration: 400, delay: 500 });
     this.zareni = s.tweens.add({ targets: this.vypinac, scale: 1.25, duration: 300, yoyo: true, repeat: -1, delay: 600 });
     this.telo.setTint(0xd0bfff);
-    s.time.delayedCall(450, () => s.vyskakovaciText(this.x0 - 150, CHOBOTNICE.yDole - 130, 'VYPÍNAČ!', '#ffd43b', 40));
-    s.cunasRekne(Phaser.Utils.Array.GetRandom(['Ne! Kryt se otevřel!', 'Uf, chobotnice se unavila…', 'Bobánku, zavři ten kryt!']));
+    s.time.delayedCall(450, () => s.vyskakovaciText(this.x0 - 150, CHOBOTNICE.yDole - 130, t('vypinac'), '#ffd43b', 40));
+    s.cunasRekne(Phaser.Utils.Array.GetRandom(t('cunas_kryt')));
   }
 
   zavriKryt() {
@@ -242,8 +242,8 @@ class Chobotnice {
     const kolo = Math.min(CHOBOTNICE.kola.length - 1, CHOBOTNICE.zivoty - this.zivoty);
     s.tweens.add({ targets: this.kontejner, y: CHOBOTNICE.yNahore, duration: 600, ease: 'Sine.inOut', onComplete: () => this.dalsiKolo(kolo) });
     s.cunasRekne(this.zasahuVOkne
-      ? Phaser.Utils.Array.GetRandom(['Au! Teď se zlobím!', 'Bobánku, oprav ji!'])
-      : Phaser.Utils.Array.GetRandom(['Chi chi! Zkus to znovu!', 'Moc pomalý, pejsku!']));
+      ? Phaser.Utils.Array.GetRandom(t('cunas_zlobi'))
+      : Phaser.Utils.Array.GetRandom(t('cunas_posmech')));
   }
 
   // Dog Man skočil na vypínač: dokud je kryt otevřený, počítá se každý zásah
@@ -265,7 +265,7 @@ class Chobotnice {
       s.time.delayedCall(500, () => this.rozpadniSe());
       return true;
     }
-    s.cunasRekne(Phaser.Utils.Array.GetRandom(['Au! Moje chobotnice!', 'Ne! Nech ten vypínač!', 'Au au au!']));
+    s.cunasRekne(Phaser.Utils.Array.GetRandom(t('cunas_au_chobotnice')));
     return true;
   }
 
@@ -291,7 +291,7 @@ class Chobotnice {
     sklo.fillStyle(0xbfe9ff, 0.25).fillCircle(0, 0, 54).lineStyle(7, 0x1b1622).strokeCircle(0, 0, 54);
     kabina.add([this.cunas, sklo]);
     s.tweens.add({ targets: kabina, y: -150, x: this.x0 + 160, angle: 40, duration: 1800, delay: 500, ease: 'Quad.in' });
-    s.time.delayedCall(450, () => s.cunasRekne('Já se vrátím!!!', kabina.x - 40, kabina.y - 80));
+    s.time.delayedCall(450, () => s.cunasRekne(t('cunas_vratim'), kabina.x - 40, kabina.y - 80));
     s.tweens.add({ targets: this.kontejner, y: 700, alpha: 0, angle: 25, duration: 1600, delay: 400, ease: 'Quad.in' });
     this.zed.destroy();
   }

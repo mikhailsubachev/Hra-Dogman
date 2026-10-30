@@ -30,7 +30,8 @@ class Ukazatele {
       .setOrigin(0.5, 0).setScrollFactor(0).setDepth(100);
 
     if (N.KYSLIK.zapnuto) {
-      this.kyslikPopis = scene.add.text(N.SIRKA - 330, 12, 'KYSLÍK', styl).setScrollFactor(0).setDepth(100);
+      this.kyslikPopis = scene.add.text(N.SIRKA - 330, 12, t('lista_kyslik'), styl).setScrollFactor(0).setDepth(100);
+      if (this.kyslikPopis.width > 100) this.kyslikPopis.setScale(100 / this.kyslikPopis.width); // delší překlad
       this.ramecek = scene.add.rectangle(N.SIRKA - 225, 18, 170, 22).setOrigin(0, 0)
         .setStrokeStyle(3, 0xffffff).setFillStyle(0x0b2a55, 0.5).setScrollFactor(0).setDepth(100);
       this.pruh = scene.add.rectangle(N.SIRKA - 222, 21, 164, 16, 0x4dabf7).setOrigin(0, 0)
@@ -38,7 +39,8 @@ class Ukazatele {
     }
 
     if (nastaveni.svetlo) {
-      this.svetloPopis = scene.add.text(N.SIRKA - 330, 46, 'SVĚTLO', { ...styl, fontSize: '24px' }).setScrollFactor(0).setDepth(100);
+      this.svetloPopis = scene.add.text(N.SIRKA - 330, 46, t('lista_svetlo'), { ...styl, fontSize: '24px' }).setScrollFactor(0).setDepth(100);
+      if (this.svetloPopis.width > 100) this.svetloPopis.setScale(100 / this.svetloPopis.width);
       this.svetloRamecek = scene.add.rectangle(N.SIRKA - 225, 52, 170, 18).setOrigin(0, 0)
         .setStrokeStyle(3, 0xffffff).setFillStyle(0x0b2a55, 0.5).setScrollFactor(0).setDepth(100);
       this.svetloPruh = scene.add.rectangle(N.SIRKA - 222, 55, 164, 12, 0xffe066).setOrigin(0, 0)

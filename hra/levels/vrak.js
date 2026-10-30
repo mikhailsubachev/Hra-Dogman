@@ -12,7 +12,7 @@
 // tma: [sloupec mapy, jak moc je tma (0 = světlo, 1 = úplná tma)], mezi nimi plynulý přechod
 
 UROVNE.vrak = {
-  nazev: 'Potopený vrak',
+  // název úrovně je v texty/cs.js (uroven_vrak_titulek)
   prostredi: 'vrak',
   tma: [[0, 0.35], [22, 0.35], [33, 0.92], [138, 0.92], [146, 0.45]],
   mapa: `

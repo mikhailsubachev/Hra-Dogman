@@ -10,7 +10,7 @@
 //   S  start Dog Mana         Z  velký vypínač základny (konec)
 
 UROVNE.zakladna = {
-  nazev: 'Čuňasova základna',
+  // název úrovně je v texty/cs.js (uroven_zakladna_titulek)
   prostredi: 'zakladna',
   mapa: `
 ............................................................................................................................................

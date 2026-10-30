@@ -24,12 +24,12 @@ const Ucet = {
     const telo = { akce, prezdivka, pin };
     if (akce === 'registrace') telo.postup = Ulozeni.urovne(Ulozeni.KLIC_HOSTA);
     const o = await SdileneVysledky.dotaz('', telo);
-    if (!o) return 'Server neodpovídá. Je zapnutý internet?';
-    if (!o.ok) return o.data.chyba || 'Něco se nepovedlo';
+    if (!o) return t('ucet_server_neodpovida');
+    if (!o.ok) return o.data.chyba ? prelozChybu(o.data.chyba) : t('ucet_nepovedlo');
     try {
       localStorage.setItem(this.KLIC, JSON.stringify({ token: o.data.token, prezdivka: o.data.prezdivka }));
     } catch (e) {
-      return 'Tento prohlížeč neumí nic uložit (soukromé okno?)';
+      return t('ucet_neumi_ulozit');
     }
     Ulozeni.spojUrovne(o.data.postup);
     return null;

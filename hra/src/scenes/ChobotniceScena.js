@@ -48,7 +48,7 @@ class ChobotniceScena extends HerniScena {
     }));
 
     this.kysliky = this.physics.add.group({ allowGravity: false });
-    this.pripravHrace(start, { boss: 'ROBO-CHOBOTNICE', zivoty: CHOBOTNICE.zivoty });
+    this.pripravHrace(start, { boss: t('boss_chobotnice'), zivoty: CHOBOTNICE.zivoty });
     this.physics.add.collider(this.hrac.telo, this.dlazdice);
     this.physics.add.overlap(this.hrac.telo, this.kysliky, (h, o) => this.seberKyslik(o));
 
@@ -67,13 +67,13 @@ class ChobotniceScena extends HerniScena {
 
     this.cameras.main.startFollow(this.hrac.telo, true, 0.12, 0.12);
     this.cameras.main.fadeIn(400);
-    this.ukazNazev(uroven.nazev);
+    this.ukazNazev(t('uroven_chobotnice_titulek'));
 
     // bubliny kyslíku z průduchů
     this.time.addEvent({ delay: 6500, loop: true, startAt: 3500, callback: () => this.vypustKyslik() });
     // souboj začne po krátké chvilce
     this.time.delayedCall(2200, () => {
-      this.cunasRekne('Chi chi! Seznam se s mou Robo-chobotnicí!');
+      this.cunasRekne(t('cunas_chobotnice_start'));
       this.boss.start();
     });
     if (PARAMETRY.get('debug') === '1') this.physics.world.createDebugGraphic();
@@ -92,8 +92,8 @@ class ChobotniceScena extends HerniScena {
       }
       // na hlavě se během útoku stát nedá, chobotnice Dog Mana setřese
       if (this.boss.stav !== 'unava' && this.boss.stav !== 'konec' && this.naHlaveChobotnice()) this.odhodHraceZHlavy();
-      if (this.boss.zasahujeChapadlo(telo)) this.zasah('AU! Chapadlo!');
-      if (this.boss.zasahujeInkoust(telo)) this.zasah('Fuj, inkoust!');
+      if (this.boss.zasahujeChapadlo(telo)) this.zasah(t('au_chapadlo'));
+      if (this.boss.zasahujeInkoust(telo)) this.zasah(t('fuj_inkoust'));
       this.aktualizujKlice(cas, telo);
     }
     // bubliny kyslíku stoupají a nahoře prasknou
@@ -105,13 +105,13 @@ class ChobotniceScena extends HerniScena {
   zasahVypinace() {
     if (!this.boss.zasah()) return;
     Zvuky.bum();
-    this.vyskakovaciText(this.hrac.x, this.hrac.y - 60, 'KLIK! ZÁSAH!', '#ffd43b', 40);
+    this.vyskakovaciText(this.hrac.x, this.hrac.y - 60, t('klik_zasah'), '#ffd43b', 40);
     this.ukazatele.zivotyBosse(this.boss.zivoty);
     // Dog Man se odrazí rovně nahoru a může na vypínač dopadnout znovu
     this.hrac.odraz(true);
     this.hrac.nezranitelnyDo = this.time.now + 1200;
     if (this.boss.zivoty <= 0) this.vyhra();
-    else if (this.bobanek) this.time.delayedCall(700, () => this.bobanekRekne('Šéfe, já to spravím!'));
+    else if (this.bobanek) this.time.delayedCall(700, () => this.bobanekRekne(t('bobanek_spravim')));
   }
 
   // stojí Dog Man na hlavě chobotnice?
@@ -125,7 +125,7 @@ class ChobotniceScena extends HerniScena {
     const telo = this.hrac.telo.body;
     if (telo.center.x > this.boss.x0 - 170 && telo.bottom < this.vyskaPodlahy - 60) {
       this.hrac.odhod(-430, -380);
-      this.vyskakovaciText(this.hrac.x, this.hrac.y - 50, 'BOING!', '#ffd43b');
+      this.vyskakovaciText(this.hrac.x, this.hrac.y - 50, t('boing'), '#ffd43b');
     }
   }
 
@@ -135,7 +135,7 @@ class ChobotniceScena extends HerniScena {
       this.bobanekOmracenDo = this.time.now + N.HAF.omraceni;
       this.bobanek.setTint(0x99ddff);
       this.time.delayedCall(N.HAF.omraceni, () => this.bobanek && this.bobanek.clearTint());
-      this.bobanekRekne('Ouvej!');
+      this.bobanekRekne(t('ouvej'));
       neco = true;
     }
     return neco;
@@ -152,7 +152,7 @@ class ChobotniceScena extends HerniScena {
       k.vx = (cilX - k.x) / 1.2;
       k.vy = -360;
       this.klice.push(k);
-      if (Math.random() < 0.4) this.bobanekRekne('Šéfe, chytej! … Jejda.');
+      if (Math.random() < 0.4) this.bobanekRekne(t('bobanek_chytej'));
     }
     const dt = this.game.loop.delta / 1000;
     for (const k of this.klice) {
@@ -162,7 +162,7 @@ class ChobotniceScena extends HerniScena {
       k.rotation += 0.25;
       if (Math.abs(k.x - telo.center.x) < 14 + telo.halfWidth && Math.abs(k.y - telo.center.y) < 10 + telo.halfHeight) {
         k.zasah = true;
-        this.zasah('Au, klíč!');
+        this.zasah(t('au_klic'));
       }
     }
     this.klice = this.klice.filter((k) => (k.y < this.vyskaPodlahy && !k.zasah ? true : (k.destroy(), false)));
@@ -194,7 +194,7 @@ class ChobotniceScena extends HerniScena {
     this.hrac.nezranitelnyDo = Infinity;
     if (this.bobanek) {
       this.time.delayedCall(1600, () => {
-        this.bobanekRekne('Šéfe, počkej na mě!');
+        this.bobanekRekne(t('bobanek_pockej'));
         this.tweens.add({ targets: this.bobanek, x: -120, duration: 1800, delay: 400, ease: 'Quad.in' });
       });
     }

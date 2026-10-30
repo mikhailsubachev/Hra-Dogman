@@ -56,8 +56,9 @@ const N = {
   // adresa sdílené Síně slávy (server/vysledky.php na hostingu); prázdná = jen výsledky z tohoto zařízení
   SIN_SLAVY_ADRESA: 'https://www.subachev.com/dogman/vysledky.php',
 
-  PISMO_NADPIS: '"Bangers", "Comic Sans MS", "Chalkboard SE", cursive',
-  PISMO: '"Patrick Hand", "Comic Sans MS", "Chalkboard SE", sans-serif',
+  // Bangers a Patrick Hand neumí azbuku: ruská písmena se vezmou z Oswald a Pangolin
+  PISMO_NADPIS: '"Bangers", "Oswald", "Comic Sans MS", "Chalkboard SE", cursive',
+  PISMO: '"Patrick Hand", "Pangolin", "Comic Sans MS", "Chalkboard SE", sans-serif',
 };
 
 // ?debug=1 v adrese ukáže fyzikální obdélníky, ?dotyk=1 ukáže dotyková tlačítka i na PC

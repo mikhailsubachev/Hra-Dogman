@@ -53,7 +53,7 @@ class ZralokScena extends HerniScena {
     this.mali = [];
     this.strely = [];
     this.cunasMluviDo = 0;
-    this.pripravHrace(start, { boss: 'ROBO-ŽRALOK', zivoty: ZRALOK.zivoty, ikona: 'sroubek' });
+    this.pripravHrace(start, { boss: t('boss_zralok'), zivoty: ZRALOK.zivoty, ikona: 'sroubek' });
     this.physics.add.collider(this.hrac.telo, this.dlazdice);
     this.physics.add.overlap(this.hrac.telo, this.kysliky, (h, o) => this.seberKyslik(o));
     this.physics.add.overlap(this.hrac.telo, this.nepratele, (h, s) => this.dotekNepritele(s.nepritel));
@@ -62,14 +62,14 @@ class ZralokScena extends HerniScena {
 
     this.cameras.main.startFollow(this.hrac.telo, true, 0.12, 0.12);
     this.cameras.main.fadeIn(400);
-    this.ukazNazev(uroven.nazev);
+    this.ukazNazev(t('uroven_zralok_titulek'));
 
     this.time.addEvent({ delay: 6500, loop: true, startAt: 3500, callback: () => this.vypustKyslik() });
     this.time.delayedCall(2200, () => {
-      this.cunasRekne('Chi chi! Můj Robo-žralok tě sní i se skafandrem!', undefined, undefined, true);
+      this.cunasRekne(t('cunas_zralok_start'), undefined, undefined, true);
       this.boss.start();
     });
-    this.time.delayedCall(4800, () => this.vyskakovaciText(this.cudliky[0].x, this.cudliky[0].y - 70, 'Stoupni si na čudlík!', '#ffd43b', 30));
+    this.time.delayedCall(4800, () => this.vyskakovaciText(this.cudliky[0].x, this.cudliky[0].y - 70, t('stoupni_na_cudlik'), '#ffd43b', 30));
     if (PARAMETRY.get('debug') === '1') this.physics.world.createDebugGraphic();
   }
 
@@ -89,7 +89,7 @@ class ZralokScena extends HerniScena {
     this.aktualizujStrely(delta);
     for (const m of this.mali) if (m.zivy) m.update(cas, this.hrac);
     this.mali = this.mali.filter((m) => m.zivy);
-    if (!this.hrac.zmrazeny && !this.hotovo && this.boss.stav !== 'konec' && this.boss.dotykaTela(telo)) this.zasah('KOUS!');
+    if (!this.hrac.zmrazeny && !this.hotovo && this.boss.stav !== 'konec' && this.boss.dotykaTela(telo)) this.zasah(t('kous'));
 
     for (const o of this.kysliky.getChildren()) if (o.y < 70) o.destroy();
     this.ukazatele.update(0, this.kyslik, this.casHry);
@@ -102,7 +102,7 @@ class ZralokScena extends HerniScena {
       if (!c.zbyva && cas >= c.dobitoV) {
         c.zbyva = N.CUDLIK.vydrz;
         c.obr.setTexture('cudlik');
-        this.vyskakovaciText(c.x, c.y - 60, 'Nabito!', '#8ce99a', 26);
+        this.vyskakovaciText(c.x, c.y - 60, t('nabito'), '#8ce99a', 26);
       }
       const stoji = naZemi && !this.hrac.zmrazeny && Math.abs(telo.center.x - c.x) < 30 && Math.abs(telo.bottom - c.y) < 8;
       if (stoji !== c.stisknuty) {
@@ -119,7 +119,7 @@ class ZralokScena extends HerniScena {
         if (!c.zbyva) {
           c.dobitoV = cas + N.CUDLIK.dobiti;
           c.obr.setTexture('cudlik_prazdny');
-          this.vyskakovaciText(c.x, c.y - 60, 'Prázdný! Jiný čudlík!', '#ff8787', 26);
+          this.vyskakovaciText(c.x, c.y - 60, t('prazdny_cudlik'), '#ff8787', 26);
         }
       }
       // proužek nad čudlíkem: kolik bublinek ještě má
@@ -158,7 +158,7 @@ class ZralokScena extends HerniScena {
   zasahZraloka(x, y) {
     Zvuky.bum();
     this.rozsypSrouby(x, y, 10, 90);
-    this.vyskakovaciText(x, y - 30, 'BLUB! ZÁSAH!', '#ffd43b', 38);
+    this.vyskakovaciText(x, y - 30, t('blub_zasah'), '#ffd43b', 38);
     this.boss.upustSroubek();
     this.ukazatele.zivotyBosse(this.boss.zivoty);
     if (this.boss.zivoty <= 0) this.vyhra();
@@ -180,7 +180,7 @@ class ZralokScena extends HerniScena {
       if (!m.zivy) continue;
       if (Phaser.Math.Distance.Between(this.hrac.x, this.hrac.y, m.sprite.x, m.sprite.y) < N.HAF.dosah) {
         this.rozsypSrouby(m.sprite.x, m.sprite.y);
-        this.vyskakovaciText(m.sprite.x, m.sprite.y - 30, 'KRACH!', '#ffd43b');
+        this.vyskakovaciText(m.sprite.x, m.sprite.y - 30, t('krach'), '#ffd43b');
         m.znic();
         this.zniceno++;
         neco = true;
