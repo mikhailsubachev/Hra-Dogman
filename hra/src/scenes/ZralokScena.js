@@ -171,12 +171,12 @@ class ZralokScena extends HerniScena {
     Zvuky.ton('square', 600, 300, 0.15, 0.04);
   }
 
-  // štěk zničí malé žraloky v dosahu
-  omracHafem() {
+  // štěk nebo bublina zničí malé žraloky v dosahu
+  omrac(x, y, dosah) {
     let neco = false;
     for (const m of this.mali) {
       if (!m.zivy) continue;
-      if (Phaser.Math.Distance.Between(this.hrac.x, this.hrac.y, m.sprite.x, m.sprite.y) < N.HAF.dosah) {
+      if (Phaser.Math.Distance.Between(x, y, m.sprite.x, m.sprite.y) < dosah) {
         this.rozsypSrouby(m.sprite.x, m.sprite.y);
         this.vyskakovaciText(m.sprite.x, m.sprite.y - 30, t('krach'), '#ffd43b');
         m.znic();

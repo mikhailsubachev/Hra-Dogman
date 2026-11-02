@@ -35,6 +35,7 @@ const Zvuky = {
   kyslik()     { this.ton('sine', 300, 900, 0.18, 0.1); this.ton('sine', 500, 1200, 0.12, 0.07, 0.08); },
   zasah()      { this.ton('square', 420, 110, 0.35, 0.07); },
   haf()        { this.ton('sawtooth', 380, 170, 0.12, 0.1); this.ton('sawtooth', 430, 190, 0.14, 0.1, 0.16); },
+  bubl()       { this.ton('sine', 260, 900, 0.12, 0.14); this.ton('sine', 420, 1300, 0.1, 0.08, 0.08); },
   omraceni()   { this.ton('square', 900, 300, 0.25, 0.04); },
   bum()        { this.ton('triangle', 160, 50, 0.3, 0.2); },
   checkpoint() { [523, 659, 784].forEach((f, i) => this.ton('triangle', f, f, 0.15, 0.1, i * 0.1)); },

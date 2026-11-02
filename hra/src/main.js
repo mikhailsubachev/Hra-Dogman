@@ -73,6 +73,7 @@ if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
 }
 
 Jazyk.nacti();
+Postava.nacti();
 const ceskaPismena = 'ČĚŠŘŽÝÁÍÉŮÚ čěšřžýáíéůú';
 const azbuka = 'ДОГМЭН Свинтус под водой ёЁ';
 Promise.race([

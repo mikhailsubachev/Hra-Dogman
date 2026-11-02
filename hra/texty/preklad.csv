@@ -27,8 +27,8 @@
 "menu_hrat";"HRÁT";"PLAY";"ИГРАТЬ"
 "menu_vybrat";"☰ VYBRAT ÚROVEŇ";"☰ CHOOSE LEVEL";"☰ ВЫБРАТЬ УРОВЕНЬ"
 "menu_sin_slavy";"🏆 SÍŇ SLÁVY";"🏆 HALL OF FAME";"🏆 ЗАЛ СЛАВЫ"
-"menu_napoveda_dotyk";"Vlevo táhni palcem = chůze   ·   Vpravo ťukni = skok, 2× ťukni = HAF";"Drag on the left = walk   ·   Tap on the right = jump, double tap = WOOF";"Слева веди пальцем = ходьба   ·   Справа нажми = прыжок, 2 раза = ГАВ"
-"menu_napoveda_klavesy";"Šipky = chůze   ·   Mezerník = skok   ·   X = HAF!   ·   Esc = menu";"Arrows = walk   ·   Space = jump   ·   X = WOOF!   ·   Esc = menu";"Стрелки = ходьба   ·   Пробел = прыжок   ·   X = ГАВ!   ·   Esc = меню"
+"menu_napoveda_dotyk";"Vlevo táhni palcem = chůze   ·   Vpravo ťukni = skok, 2× ťukni = {schopnost}";"Drag on the left = walk   ·   Tap on the right = jump, double tap = {schopnost}";"Слева веди пальцем = ходьба   ·   Справа нажми = прыжок, 2 раза = {schopnost}"
+"menu_napoveda_klavesy";"Šipky = chůze   ·   Mezerník = skok   ·   X = {schopnost}   ·   Esc = menu";"Arrows = walk   ·   Space = jump   ·   X = {schopnost}   ·   Esc = menu";"Стрелки = ходьба   ·   Пробел = прыжок   ·   X = {schopnost}   ·   Esc = меню"
 "menu_cela_obrazovka";"⛶ celá obrazovka";"⛶ full screen";"⛶ весь экран"
 "menu_zrusit_celou";"✕ zrušit celou obrazovku";"✕ exit full screen";"✕ выйти из полного экрана"
 "menu_prihlasit";"👤 Přihlásit se";"👤 Log in";"👤 Войти"
@@ -64,9 +64,9 @@ chůze";"◀ drag ▶
 walk";"◀ веди ▶
 ходьба"
 "napoveda_tukni";"ťukni = skok
-2× ťukni = HAF";"tap = jump
-double tap = WOOF";"нажми = прыжок
-2 раза = ГАВ"
+2× ťukni = {schopnost}";"tap = jump
+double tap = {schopnost}";"нажми = прыжок
+2 раза = {schopnost}"
 "lista_kyslik";"KYSLÍK";"OXYGEN";"ВОЗДУХ"
 "lista_svetlo";"SVĚTLO";"LIGHT";"СВЕТ"
 "pauza";"PAUZA";"PAUSE";"ПАУЗА"
@@ -75,9 +75,11 @@ double tap = WOOF";"нажми = прыжок
 "pauza_zrusit_celou";"ZRUŠIT CELOU OBRAZOVKU";"EXIT FULL SCREEN";"ВЫЙТИ ИЗ ПОЛНОГО ЭКРАНА"
 "pauza_cela";"⛶ CELÁ OBRAZOVKA";"⛶ FULL SCREEN";"⛶ ВЕСЬ ЭКРАН"
 "haf";"HAF!";"WOOF!";"ГАВ!"
+"bubl";"BUBL!";"BLOOP!";"БУЛЬ!"
 "malo_kysliku";"Málo kyslíku!";"Low on oxygen!";"Мало воздуха!"
 "dosel_kyslik";"Došel kyslík!";"Out of oxygen!";"Воздух кончился!"
 "ustekal_se";"Uštěkal se!";"Barked out!";"Загавкался!"
+"vybublala_se";"Vybublala se!";"Bubbled out!";"Набулькалась!"
 "au";"AU!";"OUCH!";"АЙ!"
 "boing";"BOING!";"BOING!";"БОЙНЬ!"
 "krach";"KRACH!";"CRASH!";"ТРАХ!"

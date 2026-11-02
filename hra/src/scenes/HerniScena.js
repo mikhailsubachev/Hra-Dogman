@@ -1,4 +1,4 @@
-// Společný základ všech hratelných úrovní: Dog Man, ovládání, kyslík, štěkot,
+// Společný základ všech hratelných úrovní: hráč, ovládání, kyslík, štěkot a bubliny,
 // zásahy, horní lišta a efekty. Jednotlivé úrovně (Ponor, Chobotnice) z něj dědí.
 class HerniScena extends Phaser.Scene {
   // připraví Dog Mana, ovládání a stav hry; volá se v create() každé úrovně
@@ -38,7 +38,7 @@ class HerniScena extends Phaser.Scene {
     if (this.dotyk) {
       const styl = { fontFamily: N.PISMO, fontSize: '34px', color: '#ffffff', stroke: '#0b2a55', strokeThickness: 7, align: 'center' };
       const vlevo = this.add.text(N.SIRKA * 0.25, N.VYSKA - 90, t('napoveda_tahni'), styl).setOrigin(0.5).setScrollFactor(0).setDepth(200);
-      const vpravo = this.add.text(N.SIRKA * 0.75, N.VYSKA - 90, t('napoveda_tukni'), styl).setOrigin(0.5).setScrollFactor(0).setDepth(200);
+      const vpravo = this.add.text(N.SIRKA * 0.75, N.VYSKA - 90, t('napoveda_tukni', { schopnost: Postava.schopnost }), styl).setOrigin(0.5).setScrollFactor(0).setDepth(200);
       const cara = this.add.rectangle(N.SIRKA / 2, N.VYSKA / 2 + 40, 3, N.VYSKA - 160, 0xffffff, 0.35).setScrollFactor(0).setDepth(200);
       this.tweens.add({ targets: [vlevo, vpravo, cara], alpha: 0, delay: 3500, duration: 800, onComplete: () => [vlevo, vpravo, cara].forEach((o) => o.destroy()) });
     }
@@ -50,7 +50,7 @@ class HerniScena extends Phaser.Scene {
     const ov = this.ctiOvladani();
     if (Phaser.Input.Keyboard.JustDown(this.klavesy.ESC)) { this.doMenu(); return null; }
     this.hrac.update(ov, cas);
-    if (ov.hafStisknut) this.haf(cas);
+    if (ov.hafStisknut) this.schopnost(cas);
 
     if (N.KYSLIK.zapnuto && !this.hotovo && !this.hrac.zmrazeny) {
       this.kyslik -= (N.KYSLIK.ubytekZaSekundu * delta) / 1000;
@@ -123,30 +123,70 @@ class HerniScena extends Phaser.Scene {
     if (nepritel.nebezpecny) this.zasah(t('au'));
   }
 
-  haf(cas) {
+  // druhé tlačítko: Dog Man štěká, Peťulka vystřelí bublinu
+  schopnost(cas) {
     if (cas < this.hafPripravenOd || this.hrac.zmrazeny || this.hotovo) return;
-    // štěk stojí kyslík, jiný limit nemá: kdo se uštěká, utone
+    const petulka = this.hrac.druh === 'petulka';
+    const nastaveni = petulka ? N.BUBLINA : N.HAF;
+    // stojí kyslík, jiný limit nemá: kdo se uštěká, utone
     if (N.KYSLIK.zapnuto) {
-      this.kyslik -= N.HAF.kyslik;
-      this.vyskakovaciText(this.hrac.x + 50, this.hrac.y - 20, `-${N.HAF.kyslik} O2`, '#74c0fc', 24);
+      this.kyslik -= nastaveni.kyslik;
+      this.vyskakovaciText(this.hrac.x + 50, this.hrac.y - 20, `-${nastaveni.kyslik} O2`, '#74c0fc', 24);
     }
-    this.hafPripravenOd = cas + N.HAF.pauza;
+    this.hafPripravenOd = cas + nastaveni.pauza;
+    if (petulka) this.vystrelBublinu();
+    else this.haf();
+    if (N.KYSLIK.zapnuto && this.kyslik <= 0) this.zasah(t(petulka ? 'vybublala_se' : 'ustekal_se'));
+  }
+
+  haf() {
     Zvuky.haf();
     this.vyskakovaciText(this.hrac.x, this.hrac.y - 50, t('haf'), '#ffd43b', 44);
     const kruh = this.add.circle(this.hrac.x, this.hrac.y, N.HAF.dosah).setStrokeStyle(6, 0xffd43b, 0.9).setDepth(4).setScale(0.1);
     this.tweens.add({ targets: kruh, scale: 1, alpha: 0, duration: 380, onComplete: () => kruh.destroy() });
-    if (this.omracHafem()) Zvuky.omraceni();
-    if (N.KYSLIK.zapnuto && this.kyslik <= 0) this.zasah(t('ustekal_se'));
+    if (this.omrac(this.hrac.x, this.hrac.y, N.HAF.dosah, N.HAF.omraceni)) Zvuky.omraceni();
   }
 
-  // co štěkot omráčí; úrovně mohou přidat vlastní cíle (chapadla)
-  omracHafem() {
+  // bublina letí rovně ve směru pohledu; praskne o zeď, o robota, nebo když doletí
+  vystrelBublinu() {
+    Zvuky.bubl();
+    const h = this.hrac;
+    const B = N.BUBLINA;
+    this.vyskakovaciText(h.x, h.y - 46, t('bubl'), '#99e9f2', 34);
+    const y0 = h.y - 6;
+    const bublina = this.add.image(h.x + h.smer * 24, y0, 'strela').setDepth(6).setScale(0.6);
+    const praskni = () => {
+      if (!bublina.active) return;
+      this.vypustBublinky(bublina.x, bublina.y, 4);
+      bublina.destroy();
+    };
+    this.tweens.add({ targets: bublina, scale: 1, duration: 150 });
+    this.tweens.add({
+      targets: bublina,
+      x: bublina.x + h.smer * B.dolet,
+      duration: (B.dolet / B.rychlost) * 1000,
+      onUpdate: (tween) => {
+        if (!bublina.active) return;
+        bublina.y = y0 + Math.sin(tween.progress * 12) * 6 - tween.progress * 30; // trochu se vlní a stoupá
+        const zed = this.dlazdice && this.dlazdice.getTileAtWorldXY(bublina.x, bublina.y);
+        if ((zed && zed.collides) || this.omrac(bublina.x, bublina.y, B.zasah, B.omraceni)) {
+          if (!zed || !zed.collides) Zvuky.omraceni();
+          tween.stop();
+          praskni();
+        }
+      },
+      onComplete: praskni,
+    });
+  }
+
+  // co omráčí štěk nebo bublina v daném místě; úrovně mohou přidat vlastní cíle (chapadla)
+  omrac(x, y, dosah, doba) {
     let zasazeno = false;
     for (const n of this.seznamNepratel) {
       if (!n.zivy) continue;
-      const d = Phaser.Math.Distance.Between(this.hrac.x, this.hrac.y, n.sprite.x, n.sprite.y);
-      if (d < N.HAF.dosah && n.nebezpecny) {
-        n.omrac(N.HAF.omraceni);
+      const d = Phaser.Math.Distance.Between(x, y, n.sprite.x, n.sprite.y);
+      if (d < dosah && n.nebezpecny) {
+        n.omrac(doba);
         zasazeno = true;
       }
     }

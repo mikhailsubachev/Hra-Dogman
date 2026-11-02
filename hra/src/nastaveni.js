@@ -10,6 +10,10 @@ const N = {
     rychlost: 210,       // jak rychle chodí
     skok: 440,           // jak vysoko skáče
     maxPad: 300,         // nejvyšší rychlost padání (voda brzdí)
+    vyska: 72,           // velikost postavy (v pixelech)
+  },
+  PETULKA: {
+    vyska: 60,           // Peťulka je menší: vejde se i do škvíry vysoké jedno políčko (Dog Man ne)
   },
 
   HAF: {
@@ -17,6 +21,16 @@ const N = {
     dosah: 190,          // jak daleko štěkot omráčí roboty
     omraceni: 2500,      // na jak dlouho (v milisekundách)
     pauza: 1200,         // jak dlouho se musí čekat na další štěk
+  },
+
+  // Peťulka místo štěkání střílí bubliny: omráčí jen toho, koho trefí, ale dostřelí daleko
+  BUBLINA: {
+    kyslik: 5,           // kolik kyslíku stojí jedna bublina
+    rychlost: 430,       // jak rychle letí
+    dolet: 400,          // jak daleko doletí (v pixelech)
+    zasah: 40,           // jak blízko musí proletět kolem robota
+    omraceni: 2500,      // na jak dlouho robota omráčí (v milisekundách)
+    pauza: 650,          // jak dlouho se musí čekat na další bublinu
   },
 
   SKOK_NA_NEPRITELE: {

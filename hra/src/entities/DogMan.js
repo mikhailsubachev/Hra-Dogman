@@ -1,22 +1,30 @@
-// Dog Man: jediná hratelná postava.
+// Hratelná postava: Dog Man, nebo menší Peťulka (podle volby v menu, viz src/postava.js).
 // Fyzika je neviditelné "tělo", obrázek se k němu jen přikresluje. Díky tomu
 // může obrázek houpat a naklánět se, aniž by to rozbilo srážky s dnem.
+
+// fyzikální tělo jako díl obrázku [šířka, výška, odsazení zleva, odsazení shora], spodek přesně u bot
+const TELA_POSTAV = {
+  dogman: [0.34, 0.7, 0.37, 0.245],   // jen trup a hlava (plášť a nunčaky nepočítáme)
+  petulka: [0.38, 0.62, 0.42, 0.37],  // bez ocasu a uší
+};
+
 class DogMan {
-  constructor(scene, x, y) {
+  constructor(scene, x, y, druh = Postava.kod) {
     this.scene = scene;
+    this.druh = druh;
     // velikost postavy ve hře (výška v pixelech); obrázek se zmenší, ať je jakkoli velký
-    const VYSKA_POSTAVY = 72;
-    this.telo = scene.physics.add.sprite(x, y, 'dogman').setVisible(false);
+    const vyska = druh === 'petulka' ? N.PETULKA.vyska : N.DOGMAN.vyska;
+    this.telo = scene.physics.add.sprite(x, y, druh).setVisible(false);
     const w = this.telo.width;
     const h = this.telo.height;
-    this.meritko = VYSKA_POSTAVY / h;
+    this.meritko = vyska / h;
     this.telo.setScale(this.meritko);
-    // fyzikální tělo: jen trup a hlava (plášť a nunčaky nepočítáme), spodek přesně u bot
-    this.telo.body.setSize(w * 0.34, h * 0.7).setOffset(w * 0.37, h * 0.245);
+    const [sirka, vyskaTela, zleva, shora] = TELA_POSTAV[druh];
+    this.telo.body.setSize(w * sirka, h * vyskaTela).setOffset(w * zleva, h * shora);
     this.telo.body.setMaxVelocity(N.DOGMAN.rychlost, 2000);
     this.telo.setCollideWorldBounds(true);
 
-    this.obrazek = scene.add.image(x, y, 'dogman').setDepth(5).setScale(this.meritko);
+    this.obrazek = scene.add.image(x, y, druh).setDepth(5).setScale(this.meritko);
     this.smer = 1;
     this.pohyb = 0;
     this.naZemi = false;

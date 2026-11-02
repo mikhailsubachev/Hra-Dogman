@@ -20,8 +20,8 @@ class MenuScena extends Phaser.Scene {
     const odStredu = (dx) => S / 2 + dx * k;
     const dogman = this.add.image(odStredu(-310), 360, 'dogman');
     dogman.setScale(230 / dogman.height);
-    const petulka = this.add.image(odStredu(-190), 430, 'petulka');
-    petulka.setScale(100 / petulka.height);
+    const petulka = this.add.image(odStredu(-190), 425, 'petulka');
+    petulka.setScale(115 / petulka.height);
     const cunas = this.add.image(odStredu(290), 345, 'cunas');
     cunas.setScale(240 / cunas.height);
     const bobanek = this.add.image(odStredu(415), 430, 'bobanek');
@@ -54,12 +54,41 @@ class MenuScena extends Phaser.Scene {
     tlacitkoMenu(12, t('menu_vybrat'), () => this.ukazVyber());
     tlacitkoMenu(60, t('menu_sin_slavy'), () => this.ukazSinSlavy());
 
-    const napoveda = jeDotykoveZarizeni(this)
-      ? t('menu_napoveda_dotyk')
-      : t('menu_napoveda_klavesy');
-    this.add.text(S / 2, V - 34, napoveda, {
+    const napoveda = this.add.text(S / 2, V - 34, '', {
       fontFamily: N.PISMO, fontSize: '26px', color: '#d0ebff',
     }).setOrigin(0.5);
+
+    // výběr postavy: ťuknutím na Dog Mana nebo Peťulku (nebo na jmenovku nad nimi)
+    const postavy = [
+      { kod: 'dogman', obrazek: dogman, y: 236 },
+      { kod: 'petulka', obrazek: petulka, y: 352 },
+    ];
+    const ukazVolbu = () => {
+      for (const p of postavy) {
+        const vybrana = p.kod === Postava.kod;
+        p.obrazek.setAlpha(vybrana ? 1 : 0.55);
+        p.jmenovka.setText(`${vybrana ? '✔ ' : ''}${t(`jmeno_${p.kod}`)}`)
+          .setColor(vybrana ? '#1b1b1b' : '#ffffff')
+          .setStroke('#0b2a55', vybrana ? 0 : 5)
+          .setBackgroundColor(vybrana ? '#ffd43b' : '#0b2a55');
+      }
+      const klic = jeDotykoveZarizeni(this) ? 'menu_napoveda_dotyk' : 'menu_napoveda_klavesy';
+      napoveda.setText(t(klic, { schopnost: Postava.schopnost }));
+    };
+    for (const p of postavy) {
+      p.jmenovka = this.add.text(p.obrazek.x, p.y, '', {
+        fontFamily: N.PISMO, fontSize: '24px', stroke: '#0b2a55', padding: { x: 10, y: 2 },
+      }).setOrigin(0.5, 1).setDepth(1);
+      const vyber = () => {
+        if (this.vyber || Postava.kod === p.kod) return;
+        Zvuky.klik();
+        Postava.nastav(p.kod);
+        ukazVolbu();
+      };
+      p.jmenovka.setInteractive({ useHandCursor: true }).on('pointerup', vyber);
+      p.obrazek.setInteractive({ useHandCursor: true }).on('pointerup', vyber);
+    }
+    ukazVolbu();
 
     // na mobilu přepínač celé obrazovky (zapnout, nebo ji zase zrušit).
     // iPhone v Safari celou obrazovku neumí: tlačítko poradí přidat hru na plochu.

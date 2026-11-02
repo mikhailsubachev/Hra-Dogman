@@ -130,12 +130,13 @@ class ChobotniceScena extends HerniScena {
     }
   }
 
-  omracHafem() {
-    let neco = this.boss.omracHafem(this.hrac.x, this.hrac.y, N.HAF.dosah);
-    if (this.bobanek && Phaser.Math.Distance.Between(this.hrac.x, this.hrac.y, this.bobanek.x, this.bobanek.y - 40) < N.HAF.dosah) {
-      this.bobanekOmracenDo = this.time.now + N.HAF.omraceni;
+  omrac(x, y, dosah, doba) {
+    let neco = this.boss.omracHafem(x, y, dosah);
+    if (this.bobanek && this.time.now >= (this.bobanekOmracenDo || 0)
+      && Phaser.Math.Distance.Between(x, y, this.bobanek.x, this.bobanek.y - 40) < dosah) {
+      this.bobanekOmracenDo = this.time.now + doba;
       this.bobanek.setTint(0x99ddff);
-      this.time.delayedCall(N.HAF.omraceni, () => this.bobanek && this.bobanek.clearTint());
+      this.time.delayedCall(doba, () => this.bobanek && this.bobanek.clearTint());
       this.bobanekRekne(t('ouvej'));
       neco = true;
     }

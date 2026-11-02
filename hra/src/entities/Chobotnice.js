@@ -195,7 +195,7 @@ class Chobotnice {
     return !!zasazena;
   }
 
-  // štěk zruší blízké chapadlo a rozprskne inkoust
+  // štěk (nebo Peťulčina bublina) zruší blízké chapadlo a rozprskne inkoust
   omracHafem(x, y, dosah) {
     let neco = false;
     for (const u of this.chapadla) {

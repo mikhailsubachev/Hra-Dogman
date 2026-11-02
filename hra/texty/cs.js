@@ -36,8 +36,8 @@ TEXTY.cs = {
   menu_hrat: 'HRÁT',
   menu_vybrat: '☰ VYBRAT ÚROVEŇ',
   menu_sin_slavy: '🏆 SÍŇ SLÁVY',
-  menu_napoveda_dotyk: 'Vlevo táhni palcem = chůze   ·   Vpravo ťukni = skok, 2× ťukni = HAF',
-  menu_napoveda_klavesy: 'Šipky = chůze   ·   Mezerník = skok   ·   X = HAF!   ·   Esc = menu',
+  menu_napoveda_dotyk: 'Vlevo táhni palcem = chůze   ·   Vpravo ťukni = skok, 2× ťukni = {schopnost}',
+  menu_napoveda_klavesy: 'Šipky = chůze   ·   Mezerník = skok   ·   X = {schopnost}   ·   Esc = menu',
   menu_cela_obrazovka: '⛶ celá obrazovka',
   menu_zrusit_celou: '✕ zrušit celou obrazovku',
   menu_prihlasit: '👤 Přihlásit se',
@@ -53,7 +53,7 @@ TEXTY.cs = {
 
   // ovládání a horní lišta
   napoveda_tahni: '◀ táhni ▶\nchůze',
-  napoveda_tukni: 'ťukni = skok\n2× ťukni = HAF',
+  napoveda_tukni: 'ťukni = skok\n2× ťukni = {schopnost}',
   lista_kyslik: 'KYSLÍK',
   lista_svetlo: 'SVĚTLO',
   pauza: 'PAUZA',
@@ -64,9 +64,11 @@ TEXTY.cs = {
 
   // výkřiky během hry
   haf: 'HAF!',
+  bubl: 'BUBL!',
   malo_kysliku: 'Málo kyslíku!',
   dosel_kyslik: 'Došel kyslík!',
   ustekal_se: 'Uštěkal se!',
+  vybublala_se: 'Vybublala se!',
   au: 'AU!',
   boing: 'BOING!',
   krach: 'KRACH!',
