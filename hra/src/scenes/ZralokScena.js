@@ -171,7 +171,16 @@ class ZralokScena extends HerniScena {
     Zvuky.ton('square', 600, 300, 0.15, 0.04);
   }
 
-  // štěk nebo bublina zničí malé žraloky v dosahu
+  // Peťulčina bublina obalí malého žraloka a odnese ho pryč
+  zasahBublinou(x, y, dosah) {
+    const cil = this.mali.find((m) => m.zivy && Phaser.Math.Distance.Between(x, y, m.sprite.x, m.sprite.y) < dosah);
+    if (!cil) return false;
+    cil.odnesBublinou();
+    this.zniceno++;
+    return true;
+  }
+
+  // štěk zničí malé žraloky v dosahu
   omrac(x, y, dosah) {
     let neco = false;
     for (const m of this.mali) {

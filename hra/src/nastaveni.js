@@ -23,13 +23,13 @@ const N = {
     pauza: 1200,         // jak dlouho se musí čekat na další štěk
   },
 
-  // Peťulka místo štěkání střílí bubliny: omráčí jen toho, koho trefí, ale dostřelí daleko
+  // Peťulka místo štěkání střílí bubliny: trefeného robota obalí a odnese na hladinu (Bobánka jen omráčí)
   BUBLINA: {
     kyslik: 5,           // kolik kyslíku stojí jedna bublina
     rychlost: 430,       // jak rychle letí
     dolet: 400,          // jak daleko doletí (v pixelech)
     zasah: 40,           // jak blízko musí proletět kolem robota
-    omraceni: 2500,      // na jak dlouho robota omráčí (v milisekundách)
+    omraceni: 2500,      // na jak dlouho omráčí Bobánka (v milisekundách)
     pauza: 650,          // jak dlouho se musí čekat na další bublinu
   },
 

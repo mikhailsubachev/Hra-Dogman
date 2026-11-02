@@ -37,6 +37,22 @@ class Nepritel {
     });
   }
 
+  // Peťulčina bublina ho obalí a odnese nahoru na hladinu
+  odnesBublinou() {
+    const scene = this.scene;
+    const s = this.sprite;
+    this.zivy = false;
+    s.body.enable = false;
+    s.clearTint();
+    const obal = scene.add.image(s.x, s.y, 'strela').setDepth(s.depth + 1).setAlpha(0.8);
+    obal.setScale((Math.max(s.displayWidth, s.displayHeight) * 1.2) / obal.width);
+    const kolebani = scene.tweens.add({ targets: [s, obal], x: '+=12', duration: 450, yoyo: true, repeat: -1, ease: 'Sine.inOut' });
+    scene.tweens.add({
+      targets: [s, obal], y: -100, duration: Math.max(900, ((s.y + 100) / 180) * 1000), ease: 'Sine.in',
+      onComplete: () => { kolebani.remove(); s.destroy(); obal.destroy(); },
+    });
+  }
+
   // vrací true, dokud je omráčený (pak se jen točí)
   omracenyKrok(cas) {
     if (cas < this.omracenDo) {

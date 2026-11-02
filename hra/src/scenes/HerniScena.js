@@ -153,7 +153,7 @@ class HerniScena extends Phaser.Scene {
     const h = this.hrac;
     const B = N.BUBLINA;
     this.vyskakovaciText(h.x, h.y - 46, t('bubl'), '#99e9f2', 34);
-    const y0 = h.y - 6;
+    const y0 = h.y + 8; // nízko, ať trefí i robota na dně
     const bublina = this.add.image(h.x + h.smer * 24, y0, 'strela').setDepth(6).setScale(0.6);
     const praskni = () => {
       if (!bublina.active) return;
@@ -167,9 +167,9 @@ class HerniScena extends Phaser.Scene {
       duration: (B.dolet / B.rychlost) * 1000,
       onUpdate: (tween) => {
         if (!bublina.active) return;
-        bublina.y = y0 + Math.sin(tween.progress * 12) * 6 - tween.progress * 30; // trochu se vlní a stoupá
+        bublina.y = y0 + Math.sin(tween.progress * 12) * 4; // letí rovně, jen se trochu vlní
         const zed = this.dlazdice && this.dlazdice.getTileAtWorldXY(bublina.x, bublina.y);
-        if ((zed && zed.collides) || this.omrac(bublina.x, bublina.y, B.zasah, B.omraceni)) {
+        if ((zed && zed.collides) || this.zasahBublinou(bublina.x, bublina.y, B.zasah)) {
           if (!zed || !zed.collides) Zvuky.omraceni();
           tween.stop();
           praskni();
@@ -179,7 +179,21 @@ class HerniScena extends Phaser.Scene {
     });
   }
 
-  // co omráčí štěk nebo bublina v daném místě; úrovně mohou přidat vlastní cíle (chapadla)
+  // bublina obalí prvního robota v dosahu a odnese ho na hladinu; Bobánka jen omráčí
+  zasahBublinou(x, y, dosah) {
+    const cil = this.seznamNepratel.find((n) => n.zivy && n.nebezpecny
+      && Phaser.Math.Distance.Between(x, y, n.sprite.x, n.sprite.y) < dosah);
+    if (!cil) return false;
+    if (cil instanceof Bobanek) {
+      cil.omrac(N.BUBLINA.omraceni);
+    } else {
+      cil.odnesBublinou();
+      this.zniceno++;
+    }
+    return true;
+  }
+
+  // co omráčí štěk v daném místě; úrovně mohou přidat vlastní cíle (chapadla)
   omrac(x, y, dosah, doba) {
     let zasazeno = false;
     for (const n of this.seznamNepratel) {

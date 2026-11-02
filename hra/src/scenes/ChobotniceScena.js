@@ -130,6 +130,9 @@ class ChobotniceScena extends HerniScena {
     }
   }
 
+  // bublina chapadlo zruší a Bobánka omráčí, stejně jako štěk
+  zasahBublinou(x, y, dosah) { return this.omrac(x, y, dosah, N.BUBLINA.omraceni); }
+
   omrac(x, y, dosah, doba) {
     let neco = this.boss.omracHafem(x, y, dosah);
     if (this.bobanek && this.time.now >= (this.bobanekOmracenDo || 0)
