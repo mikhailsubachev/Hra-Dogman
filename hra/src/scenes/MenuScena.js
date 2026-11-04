@@ -167,9 +167,13 @@ class MenuScena extends Phaser.Scene {
   }
 
   // tabulka úrovně: všichni hráči ze serveru, bez serveru (nebo když neodpoví) z tohoto zařízení
+  // (mistni = server nebyl k dispozici, jsou to jen časy z tohoto zařízení)
   async rekordyUrovne(id) {
     const rekordy = SdileneVysledky.zapnuto ? await SdileneVysledky.nacti(id) : null;
-    return rekordy || Ulozeni.rekordy(id);
+    if (rekordy) return rekordy;
+    const mistni = Ulozeni.rekordy(id);
+    mistni.mistni = SdileneVysledky.zapnuto;
+    return mistni;
   }
 
   // tmavé okno přes menu s nadpisem a tlačítkem ZPĚT; obsah doplní volající do this.vyber
@@ -246,6 +250,7 @@ class MenuScena extends Phaser.Scene {
     this.otevriOkno(t('sin_nadpis'), 470);
     const okno = this.vyber;
     const sirka = Math.min(210, (S - 40) / UROVNE_HRY.length - 10); // úzké sloupce: vejdou se i další úrovně
+    let varovani = null; // jednou pod tabulkami: server neodpověděl a proč
     UROVNE_HRY.forEach((u, i) => {
       const x = S / 2 + (i - (UROVNE_HRY.length - 1) / 2) * (sirka + 10);
       const styl = { fontFamily: N.PISMO, fontSize: '20px', color: '#ffffff', stroke: '#0b2a55', strokeThickness: 5 };
@@ -258,6 +263,13 @@ class MenuScena extends Phaser.Scene {
       this.rekordyUrovne(u.id).then((rekordy) => {
         if (!nacitam.active) return;
         nacitam.setText(rekordy.length ? '' : t('sin_prazdna'));
+        if (rekordy.mistni && !varovani) {
+          varovani = this.add.text(S / 2, 418, t('sin_server_neodpovida', { chyba: SdileneVysledky.chyba }), {
+            fontFamily: N.PISMO, fontSize: '20px', color: '#ffd43b', stroke: '#0b2a55', strokeThickness: 5, align: 'center',
+            wordWrap: { width: S - 60 },
+          }).setOrigin(0.5);
+          okno.add(varovani);
+        }
         rekordy.slice(0, 7).forEach((r, j) => {
           const y = 178 + j * 32;
           const medaile = ['🥇', '🥈', '🥉'][j] || `${j + 1}.`;

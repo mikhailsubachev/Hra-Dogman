@@ -59,6 +59,7 @@ It will fill the whole screen, without the address bar.";"Safari на iPhone т�
 "vyber_dokonci";"dokonči {uroven}";"finish {uroven}";"пройди «{uroven}»"
 "sin_nadpis";"SÍŇ SLÁVY";"HALL OF FAME";"ЗАЛ СЛАВЫ"
 "sin_prazdna";"Zatím prázdná";"Empty so far";"Пока пусто"
+"sin_server_neodpovida";"Server se Síní slávy neodpovídá ({chyba}), ukazuji jen časy z tohoto zařízení.";"The Hall of Fame server is not answering ({chyba}), showing only times from this device.";"Сервер Зала славы не отвечает ({chyba}), показываю только результаты с этого устройства."
 "napoveda_tahni";"◀ táhni ▶
 chůze";"◀ drag ▶
 walk";"◀ веди ▶

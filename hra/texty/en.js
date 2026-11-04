@@ -46,6 +46,7 @@ TEXTY.en = {
   vyber_dokonci: 'finish {uroven}',
   sin_nadpis: 'HALL OF FAME',
   sin_prazdna: 'Empty so far',
+  sin_server_neodpovida: 'The Hall of Fame server is not answering ({chyba}), showing only times from this device.',
 
   napoveda_tahni: '◀ drag ▶\nwalk',
   napoveda_tukni: 'tap = jump\ndouble tap = {schopnost}',

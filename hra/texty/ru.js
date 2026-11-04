@@ -46,6 +46,7 @@ TEXTY.ru = {
   vyber_dokonci: 'пройди «{uroven}»',
   sin_nadpis: 'ЗАЛ СЛАВЫ',
   sin_prazdna: 'Пока пусто',
+  sin_server_neodpovida: 'Сервер Зала славы не отвечает ({chyba}), показываю только результаты с этого устройства.',
 
   napoveda_tahni: '◀ веди ▶\nходьба',
   napoveda_tukni: 'нажми = прыжок\n2 раза = {schopnost}',

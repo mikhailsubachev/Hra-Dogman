@@ -50,6 +50,7 @@ TEXTY.cs = {
   vyber_dokonci: 'dokonči {uroven}',
   sin_nadpis: 'SÍŇ SLÁVY',
   sin_prazdna: 'Zatím prázdná',
+  sin_server_neodpovida: 'Server se Síní slávy neodpovídá ({chyba}), ukazuji jen časy z tohoto zařízení.',
 
   // ovládání a horní lišta
   napoveda_tahni: '◀ táhni ▶\nchůze',
