@@ -179,12 +179,12 @@ class HerniScena extends Phaser.Scene {
     });
   }
 
-  // bublina obalí prvního robota v dosahu a odnese ho na hladinu; Bobánka jen omráčí
+  // bublina obalí prvního robota v dosahu a odnese ho na hladinu; Bobánka a úhoře jen omráčí
   zasahBublinou(x, y, dosah) {
     const cil = this.seznamNepratel.find((n) => n.zivy && n.nebezpecny
       && Phaser.Math.Distance.Between(x, y, n.sprite.x, n.sprite.y) < dosah);
     if (!cil) return false;
-    if (cil instanceof Bobanek) {
+    if (cil instanceof Bobanek || cil.velky) {
       cil.omrac(N.BUBLINA.omraceni);
     } else {
       cil.odnesBublinou();

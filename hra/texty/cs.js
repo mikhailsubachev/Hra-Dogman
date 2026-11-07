@@ -29,6 +29,9 @@ TEXTY.cs = {
   uroven_zralok: 'Robo-žralok',
   uroven_zralok_menu: 'Souboj s Robo-žralokem',
   uroven_zralok_titulek: 'Souboj s Robo-žralokem',
+  uroven_elektrarna: 'Elektrárna',
+  uroven_elektrarna_menu: 'Čuňasova elektrárna',
+  uroven_elektrarna_titulek: 'Čuňasova elektrárna',
 
   // menu
   menu_nadpis: 'DOG MAN',
@@ -220,6 +223,17 @@ TEXTY.cs = {
     { postava: 'cunas', mluvi: 'cunas', text: 'Můj žralok! Celý se rozsypal na šroubky!', vypravec: 'Kabina s Čuňasem vystřelila pryč…' },
     { postava: 'bobanek', mluvi: 'bobanek', text: 'Šéfe Dog Mane, to bylo bublin! Můžu si jeden šroubek nechat?' },
     { postava: 'dogman', mluvi: 'dogman', text: 'HAF HAF!', vypravec: 'Moře je zase o kousek bezpečnější.' },
+  ],
+  komiks_pred_elektrarnou: [
+    { postava: 'cunas', mluvi: 'cunas', text: 'Chi chi! Moje elektrárna pohání všechny mé roboty. A hlídají ji električtí úhoři!' },
+    { postava: 'uhor', vypravec: 'Elektrický úhoř se chvíli nabíjí (bliká a jiskří) a pak pustí blesky do okolí.' },
+    { postava: 'petulka', mluvi: 'petulka', text: 'Elektrárna má tři patra a troje zamčené dveře. Klíčky jsou schované jinde!' },
+    { postava: 'dogman', mluvi: 'dogman', text: 'HAF!', vypravec: 'Najdi klíček, vrať se ke dveřím a doplav až k ponorce.' },
+  ],
+  komiks_po_elektrarne: [
+    { postava: 'uhor', vypravec: 'Úhoři jsou volní a elektrárna je bez proudu.' },
+    { postava: 'cunas', mluvi: 'cunas', text: 'Kdo mi vypnul proud?! Teď se mi vybijí všichni roboti!' },
+    { postava: 'dogman', mluvi: 'dogman', text: 'HAF HAF!', vypravec: 'Další Čuňasův plán je v háji.' },
   ],
   komiks_preskocit: 'Přeskočit ▶▶',
   komiks_pokracuj: 'Klepni nebo zmáčkni mezerník ▶',

@@ -26,6 +26,9 @@ TEXTY.en = {
   uroven_zralok: 'Robo-Shark',
   uroven_zralok_menu: 'Robo-Shark Battle',
   uroven_zralok_titulek: 'Robo-Shark Battle',
+  uroven_elektrarna: 'Power Plant',
+  uroven_elektrarna_menu: 'Piggles’ Power Plant',
+  uroven_elektrarna_titulek: 'Piggles’ Power Plant',
 
   menu_nadpis: 'DOG MAN',
   menu_podtitul: 'Piggles Under the Sea',
@@ -225,6 +228,17 @@ TEXTY.en = {
     { postava: 'cunas', mluvi: 'cunas', text: 'My shark! It fell apart into screws!', vypravec: 'The cabin with Piggles shot away…' },
     { postava: 'bobanek', mluvi: 'bobanek', text: 'Boss Dog Man, so many bubbles! Can I keep one screw?' },
     { postava: 'dogman', mluvi: 'dogman', text: 'WOOF WOOF!', vypravec: 'The sea is a little bit safer again.' },
+  ],
+  komiks_pred_elektrarnou: [
+    { postava: 'cunas', mluvi: 'cunas', text: 'Hee hee! My power plant runs all my robots. And electric eels guard it!' },
+    { postava: 'uhor', vypravec: 'An electric eel charges up for a moment (it flashes and sparks), then shoots lightning all around.' },
+    { postava: 'petulka', mluvi: 'petulka', text: 'The power plant has three floors and three locked doors. The keys are hidden somewhere else!' },
+    { postava: 'dogman', mluvi: 'dogman', text: 'WOOF!', vypravec: 'Find a key, go back to the door and swim all the way to the submarine.' },
+  ],
+  komiks_po_elektrarne: [
+    { postava: 'uhor', vypravec: 'The eels are free and the power plant is out of power.' },
+    { postava: 'cunas', mluvi: 'cunas', text: 'Who cut my power?! Now all my robots will run flat!' },
+    { postava: 'dogman', mluvi: 'dogman', text: 'WOOF WOOF!', vypravec: 'Another Piggles plan is ruined.' },
   ],
   komiks_preskocit: 'Skip ▶▶',
   komiks_pokracuj: 'Tap or press space ▶',

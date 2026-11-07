@@ -82,6 +82,7 @@ class PonorScena extends HerniScena {
           case 'R': this.seznamNepratel.push(new RobotickaRybka(this, x, y)); break;
           case 'M': this.seznamNepratel.push(new Meduza(this, x, y)); break;
           case 'B': this.seznamNepratel.push(new Bobanek(this, x, y)); break;
+          case 'U': this.seznamNepratel.push(new ElektrickyUhor(this, x, y)); break;
           case 'X': {
             const m = this.miny.create(x, y, 'mina').setDepth(3);
             m.body.setCircle(15, 7, 7);
@@ -331,6 +332,21 @@ class PonorScena extends HerniScena {
     const b = p.body;
     if (b.left <= p.minX) b.setVelocityX(N.PLOSINA.rychlost);
     else if (b.right >= p.maxX) b.setVelocityX(-N.PLOSINA.rychlost);
+  }
+
+  // U: blesky úhoře zasáhnou Dog Mana a omráčí ostatní roboty v jeho okolí
+  uderBlesku(uhor) {
+    const { x, y } = uhor.sprite;
+    const dosah = N.UHOR.dosah;
+    const telo = this.hrac.telo.body;
+    // nejbližší bod těla, ať blesk zasáhne i hlavu nebo nohy
+    const bx = Phaser.Math.Clamp(x, telo.left, telo.right);
+    const by = Phaser.Math.Clamp(y, telo.top, telo.bottom);
+    if (Phaser.Math.Distance.Between(x, y, bx, by) < dosah) this.zasah(t('bzzt'));
+    for (const n of this.seznamNepratel) {
+      if (n === uhor || !n.zivy || !n.nebezpecny) continue;
+      if (Phaser.Math.Distance.Between(x, y, n.sprite.x, n.sprite.y) < dosah) n.omrac(2000);
+    }
   }
 
   // --- potopený vrak ---

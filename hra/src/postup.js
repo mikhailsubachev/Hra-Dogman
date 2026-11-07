@@ -18,6 +18,10 @@ const UROVNE_HRY = [
     id: 'zralok', scena: 'Zralok', data: {},
     komiksPred: () => t('komiks_pred_zralokem'), komiksPo: () => t('komiks_po_zralokovi'),
   },
+  {
+    id: 'elektrarna', scena: 'Ponor', data: { uroven: 'elektrarna' },
+    komiksPred: () => t('komiks_pred_elektrarnou'), komiksPo: () => t('komiks_po_elektrarne'),
+  },
 ];
 
 const Postup = {

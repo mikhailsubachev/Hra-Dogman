@@ -26,6 +26,7 @@ const UROVNE = [
     'zakladna' => 10000,
     'vrak' => 10000,
     'zralok' => 8000,
+    'elektrarna' => 15000,
 ];
 const MAX_REKORDU = 50;          // kolik hráčů se pamatuje v tabulce úrovně
 const VRACET = 10;               // kolik časů se posílá hře

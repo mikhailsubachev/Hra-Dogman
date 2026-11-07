@@ -60,6 +60,18 @@ const N = {
   },
   SKLUZ: 28,             // jak silně táhne kluzká paluba (< a >)
 
+  // Elektrický úhoř (U) v Čuňasově elektrárně (úroveň 6)
+  UHOR: {
+    sirka: 132,          // jak je velký (v pixelech)
+    rychlost: 40,        // jak rychle plave
+    rozsah: 2,           // kolik políček odplave na každou stranu
+    klid: [2400, 4200],  // po kolika milisekundách (od do) se znovu nabije
+    nabijeni: 1100,      // jak dlouho jiskří a bliká, než vypustí blesky (varování)
+    vyboj: 650,          // jak dlouho blesky trvají
+    dosah: 125,          // jak daleko od středu úhoře blesky zasáhnou
+    omraceni: 3500,      // na jak dlouho ho omráčí skok shora nebo štěk
+  },
+
   // Souboj s Robo-žralokem (úroveň 5), další čísla jsou v src/entities/Zralok.js
   CUDLIK: {
     vydrz: 2500,         // jak dlouho proud bublin vydrží, než se čudlík vybije (v milisekundách)

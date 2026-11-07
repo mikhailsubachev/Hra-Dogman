@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 220" width="640" height="220">
+<!-- Elektrický úhoř podle dětské kresby: šedé tělo, červené oko, tmavé žábry a skvrny. Kouká doleva. -->
+<g stroke-linejoin="round" stroke-linecap="round">
+<!-- zubatý hřbet -->
+<path d="M150 66 L170 40 L192 64 L216 38 L240 66 L266 44 L290 72 L318 52 L340 80 L368 62 L388 88 L416 72 L434 96 L462 84 L478 106 L506 98 L520 116"
+ fill="#6c757d" stroke="#1b1622" stroke-width="9"></path>
+<!-- ocasní ploutev -->
+<path d="M560 140 L626 104 L612 150 L632 186 L566 166 Z" fill="#6c757d" stroke="#1b1622" stroke-width="9"></path>
+<!-- tělo -->
+<path d="M64 66 C36 70 20 92 20 114 C20 142 42 160 74 162 L200 166 C300 174 400 182 470 176 C520 172 556 164 584 154 C592 150 592 140 582 136 C540 120 492 104 440 94 C360 80 280 64 200 62 C150 60 104 60 64 66 Z"
+ fill="#adb5bd" stroke="#1b1622" stroke-width="10"></path>
+<!-- tmavší spodek -->
+<path d="M30 132 C40 152 56 160 76 160 L200 164 C300 172 400 180 470 174 C520 170 556 162 582 152 C540 156 480 162 400 160 C300 156 200 148 120 144 C80 142 50 140 30 132 Z"
+ fill="#1b1622" fill-opacity="0.22"></path>
+<!-- světlý odlesk na hřbetě -->
+<path d="M90 80 C150 72 260 76 360 94" fill="none" stroke="#ffffff" stroke-opacity="0.55" stroke-width="8"></path>
+<!-- tlama -->
+<path d="M22 116 L112 118" fill="none" stroke="#1b1622" stroke-width="9"></path>
+<path d="M40 118 L48 128 L56 118 M70 118 L78 128 L86 118" fill="#ffffff" stroke="#1b1622" stroke-width="4"></path>
+<!-- červené oko -->
+<circle cx="122" cy="96" r="17" fill="#e03131" stroke="#1b1622" stroke-width="7"></circle>
+<circle cx="117" cy="91" r="5" fill="#ffffff"></circle>
+<!-- žábry -->
+<rect x="168" y="80" width="18" height="62" rx="9" fill="#343a40" stroke="#1b1622" stroke-width="5"></rect>
+<rect x="210" y="84" width="18" height="60" rx="9" fill="#343a40" stroke="#1b1622" stroke-width="5"></rect>
+<!-- skvrny -->
+<circle cx="268" cy="122" r="9" fill="#495057"></circle>
+<circle cx="300" cy="134" r="7" fill="#495057"></circle>
+<circle cx="326" cy="116" r="8" fill="#495057"></circle>
+<circle cx="372" cy="132" r="7" fill="#495057"></circle>
+<circle cx="420" cy="128" r="6" fill="#495057"></circle>
+<!-- jiskřičky -->
+<path d="M150 30 L162 14 L158 30 L172 18" fill="none" stroke="#4dabf7" stroke-width="6"></path>
+<path d="M330 44 L344 26 L340 42 L356 30" fill="none" stroke="#4dabf7" stroke-width="6"></path>
+<path d="M150 184 L140 204 L156 196 L148 214" fill="none" stroke="#4dabf7" stroke-width="6"></path>
+<path d="M420 198 L410 214 L426 206" fill="none" stroke="#4dabf7" stroke-width="6"></path>
+</g>
+</svg>

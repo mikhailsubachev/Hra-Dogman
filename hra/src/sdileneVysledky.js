@@ -42,6 +42,7 @@ const SdileneVysledky = {
   async nacti(uroven) {
     const adresa = `?uroven=${encodeURIComponent(uroven)}`;
     const o = (await this.dotaz(adresa)) || (await this.dotaz(adresa));
+    if (o && !o.ok) this.chyba = prelozChybu(o.data.chyba || 'HTTP'); // třeba úroveň, kterou server ještě nezná
     return o && o.ok && Array.isArray(o.data.rekordy) ? o.data.rekordy : null;
   },
 };

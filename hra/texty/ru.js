@@ -26,6 +26,9 @@ TEXTY.ru = {
   uroven_zralok: 'Робо-акула',
   uroven_zralok_menu: 'Битва с Робо-акулой',
   uroven_zralok_titulek: 'Битва с Робо-акулой',
+  uroven_elektrarna: 'Электростанция',
+  uroven_elektrarna_menu: 'Электростанция Свинтуса',
+  uroven_elektrarna_titulek: 'Электростанция Свинтуса',
 
   menu_nadpis: 'ДОГ МЭН',
   menu_podtitul: 'Свинтус под водой',
@@ -225,6 +228,17 @@ TEXTY.ru = {
     { postava: 'cunas', mluvi: 'cunas', text: 'Моя акула! Рассыпалась на винтики!', vypravec: 'Кабина со Свинтусом улетела прочь…' },
     { postava: 'bobanek', mluvi: 'bobanek', text: 'Шеф Дог Мэн, вот это пузыри! Можно, я оставлю себе один винтик?' },
     { postava: 'dogman', mluvi: 'dogman', text: 'ГАВ-ГАВ!', vypravec: 'Море снова стало чуточку безопаснее.' },
+  ],
+  komiks_pred_elektrarnou: [
+    { postava: 'cunas', mluvi: 'cunas', text: 'Хи-хи! Моя электростанция питает всех моих роботов. А сторожат её электрические угри!' },
+    { postava: 'uhor', vypravec: 'Электрический угорь немного заряжается (мигает и искрит), а потом пускает молнии вокруг.' },
+    { postava: 'petulka', mluvi: 'petulka', text: 'У электростанции три этажа и три запертые двери. А ключики спрятаны в другом месте!' },
+    { postava: 'dogman', mluvi: 'dogman', text: 'ГАВ!', vypravec: 'Найди ключик, вернись к двери и доплыви до подводной лодки.' },
+  ],
+  komiks_po_elektrarne: [
+    { postava: 'uhor', vypravec: 'Угри на свободе, а электростанция обесточена.' },
+    { postava: 'cunas', mluvi: 'cunas', text: 'Кто отключил мне ток?! Теперь все мои роботы разрядятся!' },
+    { postava: 'dogman', mluvi: 'dogman', text: 'ГАВ-ГАВ!', vypravec: 'Ещё один план Свинтуса провалился.' },
   ],
   komiks_preskocit: 'Пропустить ▶▶',
   komiks_pokracuj: 'Нажми или пробел ▶',

@@ -14,6 +14,7 @@ const POSTAVY = {
   chapadlo:   { vyska: 440, pomer: 92 / 440 },
   zralok:     { vyska: 300, pomer: 1040 / 436 },
   maly_zralok: { vyska: 120, pomer: 1040 / 436 },
+  uhor:       { vyska: 132, pomer: 640 / 220 },
 };
 
 class ZavadeciScena extends Phaser.Scene {
