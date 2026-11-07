@@ -35,7 +35,7 @@ TEXTY.ru = {
   menu_hrat: 'ИГРАТЬ',
   menu_vybrat: '☰ ВЫБРАТЬ УРОВЕНЬ',
   menu_sin_slavy: '🏆 ЗАЛ СЛАВЫ',
-  menu_napoveda_dotyk: 'Слева веди пальцем = ходьба   ·   Справа нажми = прыжок, 2 раза = {schopnost}',
+  menu_napoveda_dotyk: 'Слева веди пальцем = ходьба   ·   Справа нажми = прыжок   ·   Кнопка справа внизу = {schopnost}',
   menu_napoveda_klavesy: 'Стрелки = ходьба   ·   Пробел = прыжок   ·   X = {schopnost}   ·   Esc = меню',
   menu_cela_obrazovka: '⛶ весь экран',
   menu_zrusit_celou: '✕ выйти из полного экрана',
@@ -52,7 +52,7 @@ TEXTY.ru = {
   sin_server_neodpovida: 'Сервер Зала славы не отвечает ({chyba}), показываю только результаты с этого устройства.',
 
   napoveda_tahni: '◀ веди ▶\nходьба',
-  napoveda_tukni: 'нажми = прыжок\n2 раза = {schopnost}',
+  napoveda_tukni: 'нажми = прыжок\nкнопка = {schopnost}',
   lista_kyslik: 'ВОЗДУХ',
   lista_svetlo: 'СВЕТ',
   pauza: 'ПАУЗА',

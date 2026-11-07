@@ -216,7 +216,7 @@ class ElektrickyUhor extends Nepritel {
         this.stav = 'nabiji';
         this.konecStavu = cas + U.nabijeni;
         s.setVelocity(0, 0);
-        Zvuky.nabijeni();
+        Zvuky.nabijeni(this.hlasitost(hrac));
       }
       return;
     }
@@ -228,8 +228,9 @@ class ElektrickyUhor extends Nepritel {
         this.stav = 'vyboj';
         this.konecStavu = cas + U.vyboj;
         s.setTint(0xd0ebff);
-        Zvuky.blesk();
-        this.scene.cameras.main.shake(150, 0.004);
+        const sila = this.hlasitost(hrac);
+        Zvuky.blesk(sila);
+        if (sila > 0.5) this.scene.cameras.main.shake(150, 0.004);
       }
       return;
     }
@@ -242,6 +243,12 @@ class ElektrickyUhor extends Nepritel {
       this.blesky.clear();
       this.dalsiVyboj = cas + Phaser.Math.Between(...U.klid);
     }
+  }
+
+  // úhoře je slyšet jen zblízka: hned u něj naplno, dál tišeji, od N.UHOR.slyset vůbec
+  hlasitost(hrac) {
+    const d = Phaser.Math.Distance.Between(this.sprite.x, this.sprite.y, hrac.x, hrac.y);
+    return Phaser.Math.Clamp((N.UHOR.slyset - d) / (N.UHOR.slyset - N.UHOR.dosah), 0, 1);
   }
 
   // klikaté čáry od úhoře do všech stran

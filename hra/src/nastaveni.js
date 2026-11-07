@@ -69,6 +69,7 @@ const N = {
     nabijeni: 1100,      // jak dlouho jiskří a bliká, než vypustí blesky (varování)
     vyboj: 650,          // jak dlouho blesky trvají
     dosah: 125,          // jak daleko od středu úhoře blesky zasáhnou
+    slyset: 300,         // odkud je slyšet bzučení a blesky (dál je ticho, blíž hlasitěji)
     omraceni: 3500,      // na jak dlouho ho omráčí skok shora nebo štěk
   },
 

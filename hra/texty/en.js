@@ -35,7 +35,7 @@ TEXTY.en = {
   menu_hrat: 'PLAY',
   menu_vybrat: '☰ CHOOSE LEVEL',
   menu_sin_slavy: '🏆 HALL OF FAME',
-  menu_napoveda_dotyk: 'Drag on the left = walk   ·   Tap on the right = jump, double tap = {schopnost}',
+  menu_napoveda_dotyk: 'Drag on the left = walk   ·   Tap on the right = jump   ·   Bottom right button = {schopnost}',
   menu_napoveda_klavesy: 'Arrows = walk   ·   Space = jump   ·   X = {schopnost}   ·   Esc = menu',
   menu_cela_obrazovka: '⛶ full screen',
   menu_zrusit_celou: '✕ exit full screen',
@@ -52,7 +52,7 @@ TEXTY.en = {
   sin_server_neodpovida: 'The Hall of Fame server is not answering ({chyba}), showing only times from this device.',
 
   napoveda_tahni: '◀ drag ▶\nwalk',
-  napoveda_tukni: 'tap = jump\ndouble tap = {schopnost}',
+  napoveda_tukni: 'tap = jump\nbutton = {schopnost}',
   lista_kyslik: 'OXYGEN',
   lista_svetlo: 'LIGHT',
   pauza: 'PAUSE',

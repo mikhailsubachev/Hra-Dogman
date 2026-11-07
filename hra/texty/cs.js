@@ -39,7 +39,7 @@ TEXTY.cs = {
   menu_hrat: 'HRÁT',
   menu_vybrat: '☰ VYBRAT ÚROVEŇ',
   menu_sin_slavy: '🏆 SÍŇ SLÁVY',
-  menu_napoveda_dotyk: 'Vlevo táhni palcem = chůze   ·   Vpravo ťukni = skok, 2× ťukni = {schopnost}',
+  menu_napoveda_dotyk: 'Vlevo táhni palcem = chůze   ·   Vpravo ťukni = skok   ·   Tlačítko vpravo dole = {schopnost}',
   menu_napoveda_klavesy: 'Šipky = chůze   ·   Mezerník = skok   ·   X = {schopnost}   ·   Esc = menu',
   menu_cela_obrazovka: '⛶ celá obrazovka',
   menu_zrusit_celou: '✕ zrušit celou obrazovku',
@@ -57,7 +57,7 @@ TEXTY.cs = {
 
   // ovládání a horní lišta
   napoveda_tahni: '◀ táhni ▶\nchůze',
-  napoveda_tukni: 'ťukni = skok\n2× ťukni = {schopnost}',
+  napoveda_tukni: 'ťukni = skok\ntlačítko = {schopnost}',
   lista_kyslik: 'KYSLÍK',
   lista_svetlo: 'SVĚTLO',
   pauza: 'PAUZA',

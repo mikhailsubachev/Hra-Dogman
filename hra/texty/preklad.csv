@@ -30,7 +30,7 @@
 "menu_hrat";"HRÁT";"PLAY";"ИГРАТЬ"
 "menu_vybrat";"☰ VYBRAT ÚROVEŇ";"☰ CHOOSE LEVEL";"☰ ВЫБРАТЬ УРОВЕНЬ"
 "menu_sin_slavy";"🏆 SÍŇ SLÁVY";"🏆 HALL OF FAME";"🏆 ЗАЛ СЛАВЫ"
-"menu_napoveda_dotyk";"Vlevo táhni palcem = chůze   ·   Vpravo ťukni = skok, 2× ťukni = {schopnost}";"Drag on the left = walk   ·   Tap on the right = jump, double tap = {schopnost}";"Слева веди пальцем = ходьба   ·   Справа нажми = прыжок, 2 раза = {schopnost}"
+"menu_napoveda_dotyk";"Vlevo táhni palcem = chůze   ·   Vpravo ťukni = skok   ·   Tlačítko vpravo dole = {schopnost}";"Drag on the left = walk   ·   Tap on the right = jump   ·   Bottom right button = {schopnost}";"Слева веди пальцем = ходьба   ·   Справа нажми = прыжок   ·   Кнопка справа внизу = {schopnost}"
 "menu_napoveda_klavesy";"Šipky = chůze   ·   Mezerník = skok   ·   X = {schopnost}   ·   Esc = menu";"Arrows = walk   ·   Space = jump   ·   X = {schopnost}   ·   Esc = menu";"Стрелки = ходьба   ·   Пробел = прыжок   ·   X = {schopnost}   ·   Esc = меню"
 "menu_cela_obrazovka";"⛶ celá obrazovka";"⛶ full screen";"⛶ весь экран"
 "menu_zrusit_celou";"✕ zrušit celou obrazovku";"✕ exit full screen";"✕ выйти из полного экрана"
@@ -68,9 +68,9 @@ chůze";"◀ drag ▶
 walk";"◀ веди ▶
 ходьба"
 "napoveda_tukni";"ťukni = skok
-2× ťukni = {schopnost}";"tap = jump
-double tap = {schopnost}";"нажми = прыжок
-2 раза = {schopnost}"
+tlačítko = {schopnost}";"tap = jump
+button = {schopnost}";"нажми = прыжок
+кнопка = {schopnost}"
 "lista_kyslik";"KYSLÍK";"OXYGEN";"ВОЗДУХ"
 "lista_svetlo";"SVĚTLO";"LIGHT";"СВЕТ"
 "pauza";"PAUZA";"PAUSE";"ПАУЗА"
