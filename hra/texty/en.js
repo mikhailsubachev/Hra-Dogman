@@ -53,6 +53,7 @@ TEXTY.en = {
 
   napoveda_tahni: '◀ drag ▶\nwalk',
   napoveda_tukni: 'tap = jump\nbutton = {schopnost}',
+  napoveda_tlacitko: 'hold and drag =\nmove the button',
   lista_kyslik: 'OXYGEN',
   lista_svetlo: 'LIGHT',
   pauza: 'PAUSE',

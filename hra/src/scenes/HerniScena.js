@@ -40,7 +40,12 @@ class HerniScena extends Phaser.Scene {
       const vlevo = this.add.text(N.SIRKA * 0.25, N.VYSKA - 90, t('napoveda_tahni'), styl).setOrigin(0.5).setScrollFactor(0).setDepth(200);
       const vpravo = this.add.text(N.SIRKA * 0.75, N.VYSKA - 90, t('napoveda_tukni', { schopnost: Postava.schopnost }), styl).setOrigin(0.5).setScrollFactor(0).setDepth(200);
       const cara = this.add.rectangle(N.SIRKA / 2, N.VYSKA / 2 + 40, 3, N.VYSKA - 160, 0xffffff, 0.35).setScrollFactor(0).setDepth(200);
-      this.tweens.add({ targets: [vlevo, vpravo, cara], alpha: 0, delay: 3500, duration: 800, onComplete: () => [vlevo, vpravo, cara].forEach((o) => o.destroy()) });
+      const tl = this.dotyk.tlacitko;
+      const presun = this.add.text(tl.x, tl.y - 92, t('napoveda_tlacitko'), { ...styl, fontSize: '24px' })
+        .setOrigin(0.5, 1).setScrollFactor(0).setDepth(200);
+      if (presun.getBounds().right > N.SIRKA - 8) presun.setX(N.SIRKA - 8 - presun.width / 2);
+      const napovedy = [vlevo, vpravo, cara, presun];
+      this.tweens.add({ targets: napovedy, alpha: 0, delay: 3500, duration: 800, onComplete: () => napovedy.forEach((o) => o.destroy()) });
     }
   }
 

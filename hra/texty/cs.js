@@ -58,6 +58,7 @@ TEXTY.cs = {
   // ovládání a horní lišta
   napoveda_tahni: '◀ táhni ▶\nchůze',
   napoveda_tukni: 'ťukni = skok\ntlačítko = {schopnost}',
+  napoveda_tlacitko: 'podrž a táhni =\npřesun tlačítka',
   lista_kyslik: 'KYSLÍK',
   lista_svetlo: 'SVĚTLO',
   pauza: 'PAUZA',

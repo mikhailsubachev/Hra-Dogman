@@ -53,6 +53,7 @@ TEXTY.ru = {
 
   napoveda_tahni: '◀ веди ▶\nходьба',
   napoveda_tukni: 'нажми = прыжок\nкнопка = {schopnost}',
+  napoveda_tlacitko: 'держи и тяни =\nпередвинуть кнопку',
   lista_kyslik: 'ВОЗДУХ',
   lista_svetlo: 'СВЕТ',
   pauza: 'ПАУЗА',

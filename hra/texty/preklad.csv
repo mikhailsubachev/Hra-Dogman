@@ -71,6 +71,10 @@ walk";"◀ веди ▶
 tlačítko = {schopnost}";"tap = jump
 button = {schopnost}";"нажми = прыжок
 кнопка = {schopnost}"
+"napoveda_tlacitko";"podrž a táhni =
+přesun tlačítka";"hold and drag =
+move the button";"держи и тяни =
+передвинуть кнопку"
 "lista_kyslik";"KYSLÍK";"OXYGEN";"ВОЗДУХ"
 "lista_svetlo";"SVĚTLO";"LIGHT";"СВЕТ"
 "pauza";"PAUZA";"PAUSE";"ПАУЗА"

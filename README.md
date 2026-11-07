@@ -51,7 +51,7 @@ Užitečné přepínače v adrese: `?dotyk=1` zapne dotykové ovládání i na P
 - 32 kostí, jen 2 bubliny kyslíku a 2 kontrolní bójky. Žádná smrt: po zásahu se Dog Man vrátí na poslední bójku.
 - Stopky během hry a Síň slávy: společná tabulka nejrychlejších hráčů na serveru (zapisují se jen přihlášení), bez serveru tabulka z tohoto zařízení.
 - Hráči: v menu „👤 Přihlásit se“, nový hráč si vymyslí přezdívku a 4místný PIN. Postup se ukládá na server, takže jde pokračovat i na jiném zařízení. Bez přihlášení se hraje jako host.
-- Základní zvuky, dotykové ovládání bez tlačítek (levý palec chůze, pravý palec skok, kulaté tlačítko vpravo dole HAF nebo BUBL), výzva k otočení mobilu na šířku.
+- Základní zvuky, dotykové ovládání bez tlačítek (levý palec chůze, pravý palec skok, plovoucí tlačítko HAF nebo BUBL, které jde podržením a tažením přesunout kamkoli a zařízení si místo pamatuje), výzva k otočení mobilu na šířku.
 
 Hráči a Síň slávy jsou na serveru (viz `server/README.md`). Bez serveru se postup i tabulka ukládají jen v prohlížeči.
 
